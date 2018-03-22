@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <script src="{% static 'js/order.js' %}"></script>
+{% endblock %}
+{% block main %}
+    <h1>Create Order</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="save">
+    </form>
+{% endblock %}

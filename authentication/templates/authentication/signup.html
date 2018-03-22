@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block head %}
+  <link href="{% static 'css\signup.css' %}" rel="stylesheet">
+{% endblock %}
+{% block body %}
+  <h1 class="logo"><a href="{% url 'home' %}">TIS Order Management</a></h1>
+  <div class="signup">
+      <h2>{% trans 'Sign Up' %}</h2>
+      <form method="post" action="{% url 'signup' %}" role="form">
+          {% csrf_token %}
+          {% for field in form.visible_fields %}
+            <div class="form-group{% if field.errors %} has-error{% endif %}">
+                <label for="{{field.label}}">{{field.label}}</label>
+                {{field}}
+                {% if field.help_text %}
+                  <span class="help-block">{{field.help_text|safe}}</span>
+                {% endif %}
+                {% for error in field.errors %}
+                  <label class="form-control">{{error}}</label>
+                {% endfor %}
+            </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-primary btn-lg">{% trans 'Create New User' %}</button>
+      </form>
+  </div>
+
+{% endblock %}
