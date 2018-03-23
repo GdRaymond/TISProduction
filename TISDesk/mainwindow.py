@@ -1,9 +1,12 @@
-import sys
+
 from PyQt5.QtWidgets import QMainWindow,QFileDialog
 from PyQt5.QtGui import QColor
 from TISDesk.TIS_mainwindow import Ui_MainWindow
 from excelway.tis_excel import TIS_Excel
 import os,datetime
+
+from shipments.models import Shipment
+
 
 
 class TISMainWindow(QMainWindow):

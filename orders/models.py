@@ -1,6 +1,5 @@
 from django.db import models
 from products.models import Product
-from products import product_price,size_chart
 from orders import parse_requisiton
 from excelway.read_excel_by_xlrd import read_excel_file
 import glob
