@@ -7,6 +7,8 @@ from dateutil.relativedelta import relativedelta
 import glob
 from orders import parse_requisiton
 from excelway.read_excel_by_xlrd import read_excel_file
+from orders.models import Order
+from shipments.models import Shipment
 
 
 logger=tis_log.get_tis_logger()
@@ -497,7 +499,31 @@ class TIS_Excel():
                     logger.debug('--Correct')
             logger.debug('-Finish file')
 
-
+    def create_from_trace(self, trace_excel):
+        order_list = self.read_order(trace_excel)
+        for order_line in order_list:
+            tis_no = order_line.get('TISNo')
+            colour = order_line.get('Colour')
+            try:
+                order=Order.objects.get(tis_no=tis_no,colour=colour)
+            except Order.DoesNotExist:
+                order=Order(tis_no=tis_no,colour=colour)
+            ship_code=order_line.get('ShipCode')
+            try:
+                shipment=Shipment.objects.get(code__iexact=ship_code)
+            except Shipment.DoesNotExist:
+                shipment=Shipment(code=ship_code)
+            etd = order_line.get('ETD')
+            eta = order_line.get('')
+            instore = order_line.get('')
+            instore_abm = order_line.get('')
+            total_quantity = order_line.get('')
+            volume = order_line.get('')
+            cartons = order_line.get('')
+            mode = order_line.get('')
+            etd_port = order_line.get('')
+            eta_port = order_line.get('')
+            container = order_line.get('')
 
     def test_Excel(self,filename):
         wb=self.excelapp.WorkBooks.open(filename)

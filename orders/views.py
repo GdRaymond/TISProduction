@@ -13,3 +13,4 @@ class OrderCreat(CreateView):
 class OrderList(ListView):
     model=Order
     template_name='order_list.html'
+

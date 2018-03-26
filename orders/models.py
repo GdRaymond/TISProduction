@@ -6,6 +6,7 @@ import glob
 from TISProduction import tis_log
 from shipments.models import Shipment
 from django.utils.translation import ugettext_lazy as _
+from excelway.tis_excel import TIS_Excel
 
 logger=tis_log.get_tis_logger()
 # Create your models here.
@@ -122,6 +123,7 @@ class Order(models.Model):
                     logger.debug(result)
                     logger.debug('--Correct')
             logger.debug('-Finish file')
+
 
 
 
