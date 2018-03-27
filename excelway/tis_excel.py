@@ -514,16 +514,17 @@ class TIS_Excel():
             except Shipment.DoesNotExist:
                 shipment=Shipment(code=ship_code)
             etd = order_line.get('ETD')
-            eta = order_line.get('')
-            instore = order_line.get('')
-            instore_abm = order_line.get('')
-            total_quantity = order_line.get('')
-            volume = order_line.get('')
-            cartons = order_line.get('')
-            mode = order_line.get('')
-            etd_port = order_line.get('')
-            eta_port = order_line.get('')
-            container = order_line.get('')
+            eta = order_line.get('ETA')
+            instore = order_line.get('InStore')
+            instore_abm = order_line.get('ABMInStore')
+            total_quantity = order_line.get('Quantity')
+            volume = order_line.get('Volume')
+            cartons = order_line.get('Cartons')
+            mode = order_line.get('Freight')
+            etd_port = order_line.get('FOBPort')
+            eta_port = order_line.get('ETAPort')
+            ctm_no=order_line.get('CTM')
+
 
     def test_Excel(self,filename):
         wb=self.excelapp.WorkBooks.open(filename)
