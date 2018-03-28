@@ -56,7 +56,7 @@
      <widget class="QPushButton" name="btnTest">
       <property name="geometry">
        <rect>
-        <x>400</x>
+        <x>570</x>
         <y>10</y>
         <width>75</width>
         <height>23</height>
@@ -84,7 +84,7 @@
        <rect>
         <x>210</x>
         <y>10</y>
-        <width>75</width>
+        <width>81</width>
         <height>23</height>
        </rect>
       </property>
@@ -103,6 +103,19 @@
       </property>
       <property name="text">
        <string>Requisition</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnGenerateOrderTrace">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>10</y>
+        <width>91</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>GenOrderTrace</string>
       </property>
      </widget>
     </widget>

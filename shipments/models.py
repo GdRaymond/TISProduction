@@ -30,7 +30,7 @@ class Shipment(models.Model):
     etd=models.DateField(default=datetime.datetime.now().date())
     eta=models.DateField()
     instore=models.DateField()
-    instore_abm=models.DateField()
+    instore_abm=models.DateField(null=True)
     total_quantity=models.IntegerField(default=0)
     volume=models.DecimalField(max_digits=4,decimal_places=1,default=0)
     cartons=models.IntegerField(default=0)

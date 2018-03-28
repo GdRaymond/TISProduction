@@ -5,8 +5,6 @@ from TISDesk.TIS_mainwindow import Ui_MainWindow
 from excelway.tis_excel import TIS_Excel
 import os,datetime
 
-from shipments.models import Shipment
-
 
 
 class TISMainWindow(QMainWindow):
@@ -19,6 +17,7 @@ class TISMainWindow(QMainWindow):
         self.ui.btnCopy.clicked.connect(self.copy_finance)
         self.ui.btnGeneratePrice.clicked.connect(self.generate_price)
         self.ui.btnRequisition.clicked.connect(self.generate_order_from_requisition)
+        self.ui.btnGenerateOrderTrace.clicked.connect(self.create_order_trace)
 
     def openfile(self):
         files=QFileDialog.getOpenFileName(self,'Open file','C:\\Users\\rhe\\PyCharm\\TISOrder\\media')
@@ -92,5 +91,11 @@ class TISMainWindow(QMainWindow):
         requisition_path = QFileDialog.getExistingDirectory(self)
         print(requisition_path)
         TIS_Excel.generate_from_requisition(requisition_path,etd_dict)
+
+    def create_order_trace(self):
+        order_file=QFileDialog.getOpenFileName(self,'Open file',os.path.join(os.path.abspath('..'),'media'))[0]
+        excel=TIS_Excel()
+        result=excel.create_from_trace(order_file)
+        self.ui.textBrowser.append('finish creating '+str(result))
 
 

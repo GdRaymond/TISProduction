@@ -9,6 +9,8 @@ from orders import parse_requisiton
 from excelway.read_excel_by_xlrd import read_excel_file
 from orders.models import Order
 from shipments.models import Shipment
+from products.models import Product
+import datetime
 
 
 logger=tis_log.get_tis_logger()
@@ -475,6 +477,10 @@ class TIS_Excel():
             price_dict[style]={'sell_price':sell_price,'purchase':purchase_price_dict}
             logger.debug('Finish style {0}, get {1}'.format(style,price_dict[style]))
 
+        try:
+            self.close_wb()
+        except Exception as e:
+            print(e)
         return price_dict
 
     @staticmethod
@@ -499,32 +505,95 @@ class TIS_Excel():
                     logger.debug('--Correct')
             logger.debug('-Finish file')
 
-    def create_from_trace(self, trace_excel):
-        order_list = self.read_order(trace_excel)
+    def create_from_trace(self, order_file):
+        if  not order_file or order_file=="":
+            order_file=os.path.join(os.path.abspath('..'),'media/order.xls')
+        logger.debug('\nstart create order form trace excel')
+        result={'new_order':0,'update_order':0,'new_shipment':0,'update_shipment':0,'new_product':0}
+        order_list = self.read_order(order_file)
+        logger.debug('  get order_list, total {0} rows'.format(len(order_list)))
         for order_line in order_list:
+            logger.debug('   start parse order_line {0}'.format(order_line))
             tis_no = order_line.get('TISNo')
+            if not TIS_Excel.is_orderno_valid(tis_no):
+                logger.debug('  skip row No. {0}'.format(order_line.get('row_num')))
+                continue
             colour = order_line.get('Colour')
             try:
                 order=Order.objects.get(tis_no=tis_no,colour=colour)
-            except Order.DoesNotExist:
+                logger.debug('   get order {0}'.format(order.tis_no))
+                result['update_order']+=1
+            except Exception as e:
+                logger.debug('  can not find object {0}'.format(e))
                 order=Order(tis_no=tis_no,colour=colour)
-            ship_code=order_line.get('ShipCode')
-            try:
-                shipment=Shipment.objects.get(code__iexact=ship_code)
-            except Shipment.DoesNotExist:
-                shipment=Shipment(code=ship_code)
-            etd = order_line.get('ETD')
-            eta = order_line.get('ETA')
-            instore = order_line.get('InStore')
-            instore_abm = order_line.get('ABMInStore')
-            total_quantity = order_line.get('Quantity')
-            volume = order_line.get('Volume')
-            cartons = order_line.get('Cartons')
-            mode = order_line.get('Freight')
-            etd_port = order_line.get('FOBPort')
-            eta_port = order_line.get('ETAPort')
-            ctm_no=order_line.get('CTM')
+                logger.debug('   new order {0}'.format(order.tis_no))
+                result['new_order'] += 1
+            if order_line.get('ETD') is None:
+                logger.debug('   This order does not have ETD, skip shipment')
+            else:
+                ship_code=order_line.get('ShipCode')
+                try:
+                    shipment=Shipment.objects.get(code__iexact=ship_code)
+                    logger.debug('   get shipment {0}'.format(shipment))
+                    result['update_shipment'] += 1
+                except Shipment.DoesNotExist:
+                    if ship_code is None or ship_code=="":
+                        mon_year = order_line.get('ETD').strftime("%b %y").upper()
+                        ship_code='{0}-{1}-{2}'.format(order_line.get('Supplier').upper()[:2],mon_year,1) #need further
+                    shipment=Shipment(code=ship_code)
+                    logger.debug('   new shipment {0}'.format(shipment))
+                    result['new_shipment'] += 1
 
+                shipment.etd = order_line.get('ETD')
+                shipment.eta = order_line.get('ETA')
+                shipment.instore = order_line.get('InStore')
+
+                #logger.debug('  type: instore-{0}, abminstore-{1}'.format(type(order_line.get('InStore')),type(order_line.get('ABMInStore'))))
+                if type(order_line.get('ABMInStore')) is  str: #For MTM order, this field will be the str
+                    shipment.instore_abm = order_line.get('InStore')
+                else:
+                    shipment.instore_abm = order_line.get('ABMInStore')
+                shipment.mode = order_line.get('Freight')
+                shipment.etd_port = order_line.get('FOBPort')
+                shipment.eta_port = order_line.get('ETAPort')
+                try:
+                    shipment.save()
+                except Exception as e:
+                    logger.error('  save shipment error {0}'.format(e))
+                    logger.debug('  type of ABMInstore is {0}'.format(type(order_line.get('ABMInStore'))))
+                logger.debug('   shipment {0} saved'.format(shipment))
+                order.shipment=shipment
+
+            style=order_line.get('Style')
+            try:
+                product=Product.objects.get(style_no__iexact=style)
+                logger.debug('   get product {0}'.format(product))
+            except Product.DoesNotExist:
+                commodity=order_line.get('Commodity')
+                product=Product(style_no=style,commodity=commodity)
+                product.save()
+                logger.debug('   new product {0}'.format(product))
+                result['new_product'] += 1
+            order.product=product
+
+            order.internal_no=order_line.get('InternalNo')
+            order.client=order_line.get('Customer')
+            order.supplier=order_line.get('Supplier')
+            order.quantity = order_line.get('Quantity')
+            order.volume = order_line.get('Volume')
+            order.cartons = order_line.get('Cartons')
+            order.ctm_no=order_line.get('CTM')
+            try:
+                order.save()
+            except Exception as e:
+                logger.error('   save order error {0}'.format(e))
+            logger.debug('    order save {0}'.format(order))
+        logger.debug('Finish all orders {0}'.format(result))
+        try:
+            self.close_wb()
+        except Exception as e:
+            print(e)
+        return result
 
     def test_Excel(self,filename):
         wb=self.excelapp.WorkBooks.open(filename)
