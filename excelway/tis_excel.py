@@ -13,6 +13,7 @@ from products.models import Product
 import datetime
 
 
+
 logger=tis_log.get_tis_logger()
 
 class TIS_Excel():
@@ -528,41 +529,33 @@ class TIS_Excel():
                 order=Order(tis_no=tis_no,colour=colour)
                 logger.debug('   new order {0}'.format(order.tis_no))
                 result['new_order'] += 1
-            if order_line.get('ETD') is None:
+            if order_line.get('ETD') is None: #if no ETD then skip the shipment process
                 logger.debug('   This order does not have ETD, skip shipment')
             else:
-                ship_code=order_line.get('ShipCode')
-                try:
-                    shipment=Shipment.objects.get(code__iexact=ship_code)
-                    logger.debug('   get shipment {0}'.format(shipment))
-                    result['update_shipment'] += 1
-                except Shipment.DoesNotExist:
-                    if ship_code is None or ship_code=="":
-                        mon_year = order_line.get('ETD').strftime("%b %y").upper()
-                        ship_code='{0}-{1}-{2}'.format(order_line.get('Supplier').upper()[:2],mon_year,1) #need further
-                    shipment=Shipment(code=ship_code)
-                    logger.debug('   new shipment {0}'.format(shipment))
+                shipment=Shipment.get_shipment(order_line.get('ShipCode'),order_line.get('ETD'),order_line.get('Supplier'),
+                                               order_line.get('Freight'),order_line.get('FOBPort'))
+                if shipment is not None:
                     result['new_shipment'] += 1
+                    shipment.etd = order_line.get('ETD')
+                    shipment.eta = order_line.get('ETA')
+                    shipment.instore = order_line.get('InStore')
 
-                shipment.etd = order_line.get('ETD')
-                shipment.eta = order_line.get('ETA')
-                shipment.instore = order_line.get('InStore')
-
-                #logger.debug('  type: instore-{0}, abminstore-{1}'.format(type(order_line.get('InStore')),type(order_line.get('ABMInStore'))))
-                if type(order_line.get('ABMInStore')) is  str: #For MTM order, this field will be the str
-                    shipment.instore_abm = order_line.get('InStore')
-                else:
-                    shipment.instore_abm = order_line.get('ABMInStore')
-                shipment.mode = order_line.get('Freight')
-                shipment.etd_port = order_line.get('FOBPort')
-                shipment.eta_port = order_line.get('ETAPort')
-                try:
-                    shipment.save()
-                except Exception as e:
-                    logger.error('  save shipment error {0}'.format(e))
-                    logger.debug('  type of ABMInstore is {0}'.format(type(order_line.get('ABMInStore'))))
-                logger.debug('   shipment {0} saved'.format(shipment))
-                order.shipment=shipment
+                    #logger.debug('  type: instore-{0}, abminstore-{1}'.format(type(order_line.get('InStore')),type(order_line.get('ABMInStore'))))
+                    if type(order_line.get('ABMInStore')) is  str: #For MTM order, this field will be the str
+                        shipment.instore_abm = order_line.get('InStore')
+                    else:
+                        shipment.instore_abm = order_line.get('ABMInStore')
+                    shipment.mode = order_line.get('Freight')
+                    shipment.etd_port = order_line.get('FOBPort')
+                    shipment.eta_port = order_line.get('ETAPort')
+                    try:
+                        logger.debug('  start saving shipment:{0},{1}'.format(shipment.code,shipment.etd))
+                        shipment.save()
+                    except Exception as e:
+                        logger.error('  save shipment error {0}'.format(e))
+                        logger.debug('  type of ABMInstore is {0}'.format(type(order_line.get('ABMInStore'))))
+                    logger.debug('   shipment {0} saved'.format(shipment))
+                    order.shipment=shipment
 
             style=order_line.get('Style')
             try:

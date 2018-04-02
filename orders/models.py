@@ -1,13 +1,17 @@
 from django.db import models
 from products.models import Product
+
 from orders import parse_requisiton
 from excelway.read_excel_by_xlrd import read_excel_file
 import glob
-from TISProduction import tis_log
 from shipments.models import Shipment
 from django.utils.translation import ugettext_lazy as _
+import re
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
+from TISProduction import tis_log
 logger=tis_log.get_tis_logger()
 # Create your models here.
 
@@ -129,6 +133,10 @@ class Order(models.Model):
 
 
 
+
+
+
+
 class FabricTrim(models.Model):
     colour_solid=models.TextField(max_length=20)
     order=models.ForeignKey(Order,on_delete=models.CASCADE,)
@@ -181,3 +189,8 @@ class SampleCheck(models.Model):
         verbose_name = _("Checking")
         verbose_name_plural = _("Checkings")
         ordering=("check_date",)
+
+@receiver(post_save,sender=Order)
+def create_fabric_trim(sender,created,instance,**kwargs):
+    if created:
+        colours=instance.colour.split('')
