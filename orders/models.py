@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 import re
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from products import product_price
 
 
 from TISProduction import tis_log
@@ -193,4 +194,10 @@ class SampleCheck(models.Model):
 @receiver(post_save,sender=Order)
 def create_fabric_trim(sender,created,instance,**kwargs):
     if created:
-        colours=instance.colour.split('')
+        colours=instance.colour.split('/')
+        logger.debug('   new order, analyse colours {0}'.format(colours))
+        for colour in colours:
+            colour_name=product_price.check_colour_abbr(colour.strip().upper())
+            fabric_trim=FabricTrim(colour_solid=colour_name,order=instance)
+            fabric_trim.save()
+            logger.debug('   fabric trim saved {0}'.format(fabric_trim))
