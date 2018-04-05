@@ -525,9 +525,9 @@ class TIS_Excel():
                 logger.debug('   get order {0}'.format(order.tis_no))
                 result['update_order']+=1
             except Exception as e:
-                logger.debug('  can not find object {0}'.format(e))
+                logger.debug('  There is current order {0}/{1}'.format(tis_no,colour))
                 order=Order(tis_no=tis_no,colour=colour)
-                logger.debug('   new order {0}'.format(order.tis_no))
+                logger.debug('   Create order {0}/{1}'.format(order.tis_no,order.colour))
                 result['new_order'] += 1
             if order_line.get('ETD') is None: #if no ETD then skip the shipment process
                 logger.debug('   This order does not have ETD, skip shipment')
