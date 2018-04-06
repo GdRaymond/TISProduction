@@ -10,7 +10,8 @@ from excelway.read_excel_by_xlrd import read_excel_file
 from orders.models import Order
 from shipments.models import Shipment
 from products.models import Product
-import datetime
+from products.product_price import seek_colour
+import datetime,re
 
 
 
@@ -506,6 +507,31 @@ class TIS_Excel():
                     logger.debug('--Correct')
             logger.debug('-Finish file')
 
+    @staticmethod
+    def parse_testreport(content):
+        logger.debug('   start to parse the test report field: {0}'.format(content))
+        lines=content.split('\n')
+        reports=[]
+        for line in lines:
+            match=re.search(r'(\d{4}) {1,3}(\d{2}) {1,3}(\d{2}).*(NQA\d+|CS\d+)(.*)',line,re.I)
+            if match:
+                logger.debug('  matched')
+                report={}
+                try:
+                    report['comment_date']=datetime.date(year=int(match.group(1)),month=match.group(2),day=match.group(3))
+                    colours=seek_colour(match.group(5))
+                    if colours:
+                        report['colours']=colours
+                    else:
+                        report['colours']='ALL'
+                    report['reference']=match.group(4).strip()
+                    reports.append(report)
+                except Exception as e:
+                    logger.debug('  error in match test report:{0}'.format(e))
+        logger.debug('   finish parse report field: {0}'.format(reports))
+        return reports
+
+
     def create_from_trace(self, order_file):
         if  not order_file or order_file=="":
             order_file=os.path.join(os.path.abspath('..'),'media/order.xls')
@@ -581,6 +607,12 @@ class TIS_Excel():
             except Exception as e:
                 logger.error('   save order error {0}'.format(e))
             logger.debug('    order save {0}'.format(order))
+
+            '''
+            After order saved, we already got the fabri_trim saved automatically. Then we can create the sample check
+            for the fabric. If there is already test report in the excel, it means we can create a check of approve and 
+            put the test report No. to reference field.
+            '''
         logger.debug('Finish all orders {0}'.format(result))
         try:
             self.close_wb()
