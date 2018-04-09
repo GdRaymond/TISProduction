@@ -201,3 +201,17 @@ def create_fabric_trim(sender,created,instance,**kwargs):
             fabric_trim=FabricTrim(colour_solid=colour_name,order=instance)
             fabric_trim.save()
             logger.debug('   fabric trim saved {0}'.format(fabric_trim))
+
+def create_fabric_check(tis_no, test_report_group):
+    trims=FabricTrim.objects.filter(order_id=tis_no)
+    for trim in trims:
+        for test_report in test_report_group:
+            colours=test_report.get('colours')
+            if colours=='ALL' or trim.colour_solid in colours:
+                comment=test_report.get('comment')
+                if comment:
+                    comment_words=comment.split(' ')
+
+                else: #no comment means this test report is approved completely
+                    status='A'
+                test_report_check=SampleCheck(type='T',)

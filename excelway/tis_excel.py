@@ -240,8 +240,6 @@ class TIS_Excel():
                 common_info['fob_port']=line.get('FOBPort')
                 common_info['fabric']=line.get('Material')
                 common_info['ship_code']=line.get('ShipCode')
-        if len(order_lines)>2:
-            colours='Assorted'
         order_recap={'total_quantity':total_quantity,'colours':colours[1:]}
         order_recap.update(common_info)
         logger.debug('result={0}'.format(order_recap))
@@ -332,8 +330,9 @@ class TIS_Excel():
                                 logger.debug('found_row_num is {0}'.format(found_row_num))
                                 self.ws_finance.Rows('{0}'.format(found_row_num)).Copy()
                                 new_row_num=addition_row+finance_last_row
-                                logger.debug('start to copy from row {0} to {1}, Select {2}'.format(found_row_num,new_row_num,new_row_num))
-                                self.ws_finance.Select()
+                                logger.debug('start to copy from row {0} to {1}, Select finace sheet'.format(found_row_num,new_row_num))
+                                #self.ws_finance.Select()
+                                logger.debug(' Select {0}'.format(new_row_num))
                                 self.ws_finance.Rows('{0}'.format(new_row_num)).Select()
                                 logger.debug('start to Paste Row')
                                 self.ws_finance.Paste()
@@ -518,13 +517,14 @@ class TIS_Excel():
                 logger.debug('  matched')
                 report={}
                 try:
-                    report['comment_date']=datetime.date(year=int(match.group(1)),month=match.group(2),day=match.group(3))
+                    report['comment_date']=datetime.date(year=int(match.group(1)),month=int(match.group(2)),day=int(match.group(3)))
                     colours=seek_colour(match.group(5))
                     if colours:
                         report['colours']=colours
                     else:
                         report['colours']='ALL'
                     report['reference']=match.group(4).strip()
+                    report['comment']=match.group(5).strip()
                     reports.append(report)
                 except Exception as e:
                     logger.debug('  error in match test report:{0}'.format(e))
@@ -613,6 +613,14 @@ class TIS_Excel():
             for the fabric. If there is already test report in the excel, it means we can create a check of approve and 
             put the test report No. to reference field.
             '''
+            if order_line.get('TestReport'):
+                current_test_report=TIS_Excel.parse_testreport(order_line.get('TestReport'))
+                if current_test_report:
+                    logger.debug('   get current_test_report is {0}'.format(current_test_report))
+                else:
+                    logger.debug('   the test report field  does not match')
+            else:
+                logger.debug('   the test report field  is None')
         logger.debug('Finish all orders {0}'.format(result))
         try:
             self.close_wb()
