@@ -202,16 +202,70 @@ def create_fabric_trim(sender,created,instance,**kwargs):
             fabric_trim.save()
             logger.debug('   fabric trim saved {0}'.format(fabric_trim))
 
-def create_fabric_check(tis_no, test_report_group):
-    trims=FabricTrim.objects.filter(order_id=tis_no)
+def create_fabric_check(order_id, test_report_group):
+    '''
+    from trace excel parse the test report record to databas
+    :param tis_no: 'TIS18-SO1234'
+    :param test_report_group: [{'comment_date':2018-1-1,'colours':['ORANGE','NAVY'],'reference':'NQA123','comment':'NAVY APPROVE ORANGE REJECTED'},{{'comment_date':2018-1-7,'colours':['ORANGE'],'reference':'NQA234','comment':'ORANGE APP'}]
+    :return: number of saving sample check
+    '''
+    logger.debug('  start to create test report check for order {0} with report comments {1}'.format(order_id,test_report_group))
+    try:
+        trims=FabricTrim.objects.filter(order_id=order_id) #[{colour_solid=ORANGE,orderid},{colour_solid=ORANGE,orderid}]
+    except Exception as e:
+        logger.debug('  error when query for Fabric tirm : {0}'.format(e))
+    logger.debug('    trims for order {0} is {1}'.format(order_id,trims))
+    result=0
     for trim in trims:
-        for test_report in test_report_group:
-            colours=test_report.get('colours')
-            if colours=='ALL' or trim.colour_solid in colours:
-                comment=test_report.get('comment')
+        logger.debug('    check trim colour {0}'.format(trim.colour_solid))
+        for test_report in test_report_group: #{'comment_date':2018-1-1,'colours':['ORANGE','NAVY'],'reference':'NQA123','comment':'NAVY APPROVE ORANGE REJECTED'}
+            logger.debug('    test report {0}'.format(test_report))
+            colours=test_report.get('colours') #['ORANGE','NAVY']
+            logger.debug('    colours={0}'.format(colours))
+            if colours=='ALL' or trim.colour_solid in colours: #ORANGE
+                comment=test_report.get('comment') #NAVY APPROVE ORANGE REJECTED
+                logger.debug('    comment is {0}'.format(comment))
                 if comment:
-                    comment_words=comment.split(' ')
+                    comment_words=comment.split(' ')#['NAVY', 'APPROVE', 'ORANGE', 'REJECTED']
+                    logger.debug('   comment_words list is {0}'.format(comment_words))
+                    if trim.colour_solid in comment_words:
+                        index_colour=comment_words.index(trim.colour_solid) # 2
+                        logger.debug('      find the colour in comments words index {0}'.format(index_colour))
+                        if len(comment_words)>index_colour+1:
+                            comment_colour=comment_words[index_colour+1].strip().upper()#'REJECTED'
+                            logger.debug('      comment for colour is {0}'.format(comment_colour))
+                            if comment_colour[:3]=='REJ':
+                                status='R'
+                                logger.debug('      status R because comment REJ following colour')
+                            else:
+                                status='A'
+                                logger.debug('      status A because no comment following colour')
+                        else:
+                            status='A'
+                            logger.debug('      status A because no text following colour')
+                    else: # no colour name in comment then search the APPROVE OR REJECT Word
+                        for word in comment_words: #only asserted by the 1st word containing APP or REJ
+                                if word[:3]=='APP':
+                                    status='A'
+                                    logger.debug('      status A because no colour in comment but with APP')
+                                    break
+                                elif word[:3]=='REJ':
+                                    status='R'
+                                    logger.debug('      status R because no colour in comment but with REJ')
+                                    break
+                        else: # can not find APP or REJ in comments, then assume approve
+                            status='A'
+                            logger.debug('      status A because no colour in comment no APP or REJ')
 
                 else: #no comment means this test report is approved completely
                     status='A'
-                test_report_check=SampleCheck(type='T',)
+                    logger.debug('      status A because no comment')
+                test_report_check=SampleCheck(type='T',status=status,check_date=test_report.get('comment_date')
+                                              ,comment=comment,ref=test_report.get('reference'),fabric=trim)
+                test_report_check.save()
+                result+=1
+            else: # no colour match or no ALL
+                logger.debug('   not match colour or ALL')
+
+    logger('  finish test report parse')
+    return result

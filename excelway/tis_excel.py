@@ -7,7 +7,7 @@ from dateutil.relativedelta import relativedelta
 import glob
 from orders import parse_requisiton
 from excelway.read_excel_by_xlrd import read_excel_file
-from orders.models import Order
+from orders.models import Order,create_fabric_check
 from shipments.models import Shipment
 from products.models import Product
 from products.product_price import seek_colour
@@ -614,9 +614,11 @@ class TIS_Excel():
             put the test report No. to reference field.
             '''
             if order_line.get('TestReport'):
-                current_test_report=TIS_Excel.parse_testreport(order_line.get('TestReport'))
-                if current_test_report:
-                    logger.debug('   get current_test_report is {0}'.format(current_test_report))
+                current_test_reports=TIS_Excel.parse_testreport(order_line.get('TestReport'))
+                if current_test_reports:
+                    #logger.debug('   get current_test_report is {0}'.format(current_test_reports))
+                    result=create_fabric_check(order_id=order.id,test_report_group=current_test_reports)
+                    logger('   saved {0} sample check records'.format(result))
                 else:
                     logger.debug('   the test report field  does not match')
             else:
