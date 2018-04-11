@@ -226,7 +226,7 @@ def create_fabric_check(order_id, test_report_group):
                 comment=test_report.get('comment') #NAVY APPROVE ORANGE REJECTED
                 logger.debug('    comment is {0}'.format(comment))
                 if comment:
-                    comment_words=comment.split(' ')#['NAVY', 'APPROVE', 'ORANGE', 'REJECTED']
+                    comment_words=[word.strip().upper() for word in comment.split(' ')]#['NAVY', 'APPROVE', 'ORANGE', 'REJECTED']
                     logger.debug('   comment_words list is {0}'.format(comment_words))
                     if trim.colour_solid in comment_words:
                         index_colour=comment_words.index(trim.colour_solid) # 2
@@ -260,12 +260,15 @@ def create_fabric_check(order_id, test_report_group):
                 else: #no comment means this test report is approved completely
                     status='A'
                     logger.debug('      status A because no comment')
-                test_report_check=SampleCheck(type='T',status=status,check_date=test_report.get('comment_date')
-                                              ,comment=comment,ref=test_report.get('reference'),fabric=trim)
-                test_report_check.save()
+                try:
+                    test_report_check=SampleCheck(type='T',status=status,check_date=test_report.get('comment_date')
+                                              ,comment=comment,ref=test_report.get('reference'),fabric=trim,order_id=order_id)
+                    test_report_check.save()
+                except Exception as e:
+                    logger.debug('    error when save the test_report_check: {0}'.format(e))
                 result+=1
             else: # no colour match or no ALL
                 logger.debug('   not match colour or ALL')
 
-    logger('  finish test report parse')
+    logger.debug('  finish test report parse')
     return result

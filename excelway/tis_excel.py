@@ -549,12 +549,15 @@ class TIS_Excel():
             try:
                 order=Order.objects.get(tis_no=tis_no,colour=colour)
                 logger.debug('   get order {0}'.format(order.tis_no))
-                result['update_order']+=1
-            except Exception as e:
-                logger.debug('  There is current order {0}/{1}'.format(tis_no,colour))
+                result['update_order'] = result['update_order'] + 1
+            except Order.DoesNotExist:
+                logger.debug('  There is no current order {0}/{1}'.format(tis_no,colour))
                 order=Order(tis_no=tis_no,colour=colour)
                 logger.debug('   Create order {0}/{1}'.format(order.tis_no,order.colour))
                 result['new_order'] += 1
+            except Exception as e:
+                logger.debug('   error when query order : {0}'.format(e))
+
             if order_line.get('ETD') is None: #if no ETD then skip the shipment process
                 logger.debug('   This order does not have ETD, skip shipment')
             else:
@@ -617,8 +620,8 @@ class TIS_Excel():
                 current_test_reports=TIS_Excel.parse_testreport(order_line.get('TestReport'))
                 if current_test_reports:
                     #logger.debug('   get current_test_report is {0}'.format(current_test_reports))
-                    result=create_fabric_check(order_id=order.id,test_report_group=current_test_reports)
-                    logger('   saved {0} sample check records'.format(result))
+                    qauntity_sample_check=create_fabric_check(order_id=order.id,test_report_group=current_test_reports)
+                    logger.debug('   saved {0} sample check records'.format(qauntity_sample_check))
                 else:
                     logger.debug('   the test report field  does not match')
             else:
