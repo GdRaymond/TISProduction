@@ -6,7 +6,7 @@ from excelway.read_excel_by_xlrd import read_excel_file
 import glob
 from shipments.models import Shipment
 from django.utils.translation import ugettext_lazy as _
-import re
+import re,datetime
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from products import product_price
@@ -167,7 +167,7 @@ class SampleCheck(models.Model):
     NONEED='N'
     NEED='Y'
     SENT='S'
-    RECEIVED='R'
+    RECEIVED='G'
     APPROVED='A'
     REJECTED='R'
     STATUS=(
@@ -180,11 +180,11 @@ class SampleCheck(models.Model):
     )
     type=models.CharField(max_length=1,choices=TYPE)
     status=models.CharField(max_length=1,choices=STATUS,default=NONEED)
-    check_date=models.DateTimeField(auto_now_add=True)
+    check_date=models.DateField(default=datetime.date.today())
     comment=models.TextField(max_length=500,null=True,blank=True)
-    ref=models.TextField(max_length=100)
+    ref=models.TextField(max_length=100,null=True,blank=True)
     order=models.ForeignKey(Order,on_delete=models.CASCADE,)
-    fabric=models.ForeignKey(FabricTrim,on_delete=models.CASCADE,)
+    fabric=models.ForeignKey(FabricTrim,on_delete=models.CASCADE,null=True)
 
     class Meta:
         verbose_name = _("Checking")
@@ -202,7 +202,7 @@ def create_fabric_trim(sender,created,instance,**kwargs):
             fabric_trim.save()
             logger.debug('   fabric trim saved {0}'.format(fabric_trim))
 
-def create_fabric_check(order_id, test_report_group):
+def create_test_report_check(order_id, test_report_group):
     '''
     from trace excel parse the test report record to databas
     :param tis_no: 'TIS18-SO1234'
@@ -271,4 +271,38 @@ def create_fabric_check(order_id, test_report_group):
                 logger.debug('   not match colour or ALL')
 
     logger.debug('  finish test report parse')
+    return result
+
+def create_garment_sample_check(type,order_id,comment):
+    result=0
+    logger.debug('  start to create garment sample check {0}-{1}-{2}'.format(type,order_id,comment))
+    if not comment:
+        return result
+    match=re.search(r'.*(?P<day>\d{1,2})\s+(?P<mon>\w+)\s+(?P<year>\d{4}).*',comment)
+    if match:
+        mon=int(datetime.datetime.strptime(match.group('mon'),'%b').strftime('%m'))
+        year=int(match.group('year'))
+        day=int(match.group('day'))
+        check_date=datetime.date(year=year,month=mon,day=day)
+        logger.debug('  parse check date {0}'.format(check_date))
+    comment_words=[word.strip().upper() for word in comment.split(' ')]
+    for word in comment_words:
+        if word[:3]=='APP':
+            status='A'
+            logger.debug('  status A because find APP in comment')
+            break
+        elif word[:3]=='REJ':
+            status='R'
+            logger.debug('  status R because find REJ in comment')
+            break
+    else: #can not find APP or REJ
+        logger.debug('  status A because NOT find APP or REJ in comment')
+        status='A'
+    try:
+        garment_check_dict={'type':type,'status':status,'check_date':check_date,'comment':comment,'order_id':order_id}
+        garment_check=SampleCheck.objects.create(**garment_check_dict)
+        result=1
+        logger.debug('  finished save garment check {0}'.format(garment_check))
+    except Exception as e:
+        logger.debug('  error when saveing garment check {0}'.format(e))
     return result

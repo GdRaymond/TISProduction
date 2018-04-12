@@ -7,7 +7,7 @@ from dateutil.relativedelta import relativedelta
 import glob
 from orders import parse_requisiton
 from excelway.read_excel_by_xlrd import read_excel_file
-from orders.models import Order,create_fabric_check
+from orders.models import Order,create_test_report_check,create_garment_sample_check
 from shipments.models import Shipment
 from products.models import Product
 from products.product_price import seek_colour
@@ -512,7 +512,7 @@ class TIS_Excel():
         lines=content.split('\n')
         reports=[]
         for line in lines:
-            match=re.search(r'(\d{4}) {1,3}(\d{2}) {1,3}(\d{2}).*(NQA\d+|CS\d+)(.*)',line,re.I)
+            match=re.search(r'(\d{4})\s+(\d{2})\s+(\d{2}).*(NQA\d+|CS\d+)(.*)',line,re.I)
             if match:
                 logger.debug('  matched')
                 report={}
@@ -620,12 +620,30 @@ class TIS_Excel():
                 current_test_reports=TIS_Excel.parse_testreport(order_line.get('TestReport'))
                 if current_test_reports:
                     #logger.debug('   get current_test_report is {0}'.format(current_test_reports))
-                    qauntity_sample_check=create_fabric_check(order_id=order.id,test_report_group=current_test_reports)
+                    qauntity_sample_check=create_test_report_check(order_id=order.id,test_report_group=current_test_reports)
                     logger.debug('   saved {0} sample check records'.format(qauntity_sample_check))
                 else:
                     logger.debug('   the test report field  does not match')
             else:
                 logger.debug('   the test report field  is None')
+
+            '''
+            Save PP sample check
+            '''
+            if order_line.get('PPSample'):
+                quantity_garment_ppcheck=create_garment_sample_check('P',order.id,order_line.get('PPSample'))
+                logger.debug('  saved {0} sample check records'.format(quantity_garment_ppcheck))
+            else:
+                logger.debug('  the shipping sample field is None')
+            '''
+            Save shipping sample check
+            '''
+            if order_line.get('SSSample'):
+                quantity_garment_sscheck=create_garment_sample_check('S',order.id,order_line.get('SSSample'))
+                logger.debug('  saved {0} sample check records'.format(quantity_garment_sscheck))
+            else:
+                logger.debug('  the shipping sample field is None')
+
         logger.debug('Finish all orders {0}'.format(result))
         try:
             self.close_wb()
