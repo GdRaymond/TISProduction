@@ -1,0 +1,241 @@
+Client,Style,Fabric usage,pcs/carton,volume,weight,material
+ABF,MU55,2,18,0.06,8,"65% Polyester / 33% Cotton / 2% Lycra, 32x32+40D 130x70, 150gsm, Huntsman Hydrophilic"
+ABF,FU41,2,18,0.06,8,"65% Polyester / 33% Cotton / 2% Lycra, 32x32+40D 130x70, 150gsm, Huntsman Hydrophilic"
+ABF,MU54,1.75,18,0.06,8,"65% Polyester / 33% Cotton / 2% Lycra, 32x32+40D 130x70, 150gsm, Huntsman Hydrophilic"
+ABF,FU40,1.75,18,0.06,8,"65% Polyester / 33% Cotton / 2% Lycra, 32x32+40D 130x70, 150gsm, Huntsman Hydrophilic"
+ABF,MU41,2,10,0.189,13,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+ABF,MU50,1.58,20,0.06,8,65% Polyester / 35% Cotton 136x72 / 45x45 115gsm  
+ABF,MU51,,18,0.06,,100% Cotton Twill 130x70 / 32sx32s 150gsm
+ABF,MU52,1.85,20,0.06,8,65% Polyester / 35% Cotton 136x72 / 45x45 115gsm  
+ABF,MU53,,18,0.06,,100% Cotton Twill 130x70 / 32sx32s 150gsm
+ABF,FU27,2,10,0.189,12,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+ABF,FU30,,20,0.06,8,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+ABF,FU36,1.49,20,0.06,8,65% Polyester / 35% Cotton 136x72 / 45x45 115gsm  
+ABF,FU37,1.58,20,0.06,8,100% Cotton Twill 130x70 / 32sx32s 150gsm
+ABF,FU38,1.75,20,0.06,8,65% Polyester / 35% Cotton 136x72 / 45x45 115gsm  
+ABF,FU39,1.85,20,0.06,8,100% Cotton Twill 130x70 / 32sx32s 150gsm
+ABF,UA39,,50,0.0555,12,100% Polyester Warp Knit
+ABF,UU50,,30,0.06,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+ABF,UU52,,30,0.06,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+ABF,UU54,,10,0.06,,"201D Nylon Oxford with PU coating, 300g/M2*24HRS "
+ACIC,Spray Jacket,,10,0.06,,"201D Nylon Oxford with PU coating, 300g/M2*24HRS "
+ABF,UU53,,35,0.04725,,100% Cotton Jersey 180gsm 
+ABF,UU55,,10,0.07,,PU with Polyester knitted backing EN471
+ABF,UU57,,8,0.06,8.5,Polyester soft shell with micro polar fleece inner and bonded with PTFE membrane
+ABF,UU63,,7,0.06,9,Polyester soft shell with micro polar fleece inner and bonded with PTFE membrane
+ABF,UU73,,50,0.06,,"100% Cotton twill, 20x16 / 128x60, 230gsm"
+ABF,UU77,2.15,25,0.06,,"100% Cotton Mini Twill, 130x70 / 32sx32s 150gsm"
+ABF,UU74,,25,0.06,,"100% Cotton Mini Twill, 130x70 / 32sx32s 150gsm"
+ABF,UA78,,40,0.0324,6.5,100% Polyester Warp Knit
+ABF,UL30,,20,0.06,,"100% Cotton twill, 20x16 / 128x60, 230gsm"
+ABF,UL32,,20,0.0456,,PU with Polyester knitted backing EN471
+ABF,UL33,,25,0.06,,"100% Cotton twill, 20x16 / 128x60, 230gsm"
+ABF,UL40,1.75,20,0.0552,13.6,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+ABF,UL40 (DDU),1.75,20,0.0552,13.6,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+ABF,FL24,1.75,20,0.0552,12.3,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+ABF,FL24 (DDU),1.75,20,0.0552,12.3,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+ABF,FL13,1.75,20,0.0552,12.4,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+ABF,FL11,1.1,30,0.06,12.5,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+ABF,FL21,1.6,20,0.06,12.4,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+ABF,ML30,1.6,20,0.06,12.4,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+ABF,CTU BADGE,,1000,0.03328,6.8,other
+ABF,UA80,,1000,0.037752,7.2,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+ABF,SES Sliders,,1000,0.037752,7.2,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+ABF,UA25,,60,0.047969375,13,other
+ABF,Buckle,,200,0.014896,13,other
+QPS,QPSTO,1.75,20,0.05415,13,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+QPS,QPSFT,2,20,0.056316,12.2,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+QPS,QPSFO,1.65,20,0.05415,12.5,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+QPS,QPSSO,1.2,20,0.04256,10.1,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+QPS,QPSDTM,1.6,20,0.05415,12,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+QPS,QPSDSF,1.6,20,0.05415,12,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+QPS,QPSPL (S/S),,30,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,QPSPL (L/S),,25,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,QPSPL-FUL-SS,,30,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,QPSPL-FUL-LS,,25,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,QPSPL-WHO-SS,,30,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,QPSPL-WHO-LS,,25,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,QPSPL-PLO-SS,,30,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,QPSPL-PLO-LS,,25,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,QPSPL-TIPSO-LS,,25,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,QPSPL-PS-SS,,30,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,QPSPL-PS-LS,,25,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,SERPCC PL-SS,,30,0.06,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,SERPCC PL-LS,,30,0.06,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,QPSFS,,20,0.041125,10,"65% Polyester / 33% Cotton / 2% Elastane, 32x32+40D 130x70, 150gsm Dyed in VAT with Teflon Hydrophillic"
+QPS,QPS-TIE-EXE-L,,100,0.04805,6,100% polyester 
+QPS,QPS-TIE-EXE-R,,100,0.04805,6,100% polyester 
+QPS,QPS-TIE-EXE-S,,100,0.04805,6,100% polyester 
+QPS,QPS-TIE-P-MR,,100,0.04805,6,100% polyester 
+QPS,QPS-TIE-P-ML,,100,0.04805,6,100% polyester 
+QPS,QPS-TIE-P-F,,100,0.04805,6,100% polyester 
+QPS,QPSPF,,10,0.06,13,"100% Polyester 395gsm polar fleece laminated with water repellent finishing, T/C Woven fabric patch"
+QPS,QPSTM,2.5,10,0.189,13,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+QPS,QPS cap,,100,0.07623,12,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+QPS,QPSTF,2.5,10,0.189,12,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+QPS,PS63,,8,0.07581,9,Polyester soft shell with micro polar fleece inner and bonded with PTFE membrane
+QPS,QPSDDJ,,9,0.07581,9,Polyester soft shell with micro polar fleece inner and bonded with PTFE membrane
+QFES,SESDDJ,,10,0.07581,9,Polyester soft shell with micro polar fleece inner and bonded with PTFE membrane
+QFES,RFSDDJ,,11,0.07581,9,Polyester soft shell with micro polar fleece inner and bonded with PTFE membrane
+QFES,SESPL-SS,,30,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QFES,QFESDTM,1.6,20,0.05415,12,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+QFES,RFSPL-SS,,30,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QFES,SESOU,4,8,0.03774,12,"100% Cotton ripstop, 20x16 / 100x56, 200gsm"
+QFES,SESTPF,2.29,12,0.05415,9,"100% Cotton ripstop, 20x16 / 100x56, 200gsm"
+QFES,SESTPM,2.29,12,0.05415,13,"100% Cotton ripstop, 20x16 / 100x56, 200gsm"
+QFES,SESSPF,2.04,20,0.05415,12,"100% Cotton ripstop, 50/2x5//2  / 98x66, 145gsm"
+QFES,SESSPM,2.04,30,0.05415,13,"100% Cotton ripstop, 50/2x5//2  / 98x66, 145gsm"
+QFES,QFES badge,,1000,0.03328,6.8,other
+QFES,RFS badge,,1000,0.03328,6.8,other
+ComRec,CRPL-SS,,30,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+VC,VC MALE SS,,20,0.05712,10,65% Polyester / 35% Cotton 78x65 / 45/2x32/1 135gsm 
+VC,VC MALE LS,,20,0.05712,11.5,65% Polyester / 35% Cotton 78x65 / 45/2x32/1 135gsm 
+VC,VC FEMALE SS,,40,0.05712,11.5,65% Polyester / 35% Cotton 78x65 / 45/2x32/1 135gsm 
+VP,VPSSMO1,1.6148,20,0.05712,10,"65% Polyester, 33% Cotton, 2% Elastane, 32x32+40D, 130x70, twill weave, 150gsm"
+VP,VPLSMO1,1.8956,20,0.05712,10,"65% Polyester, 33% Cotton, 2% Elastane, 32x32+40D, 130x70, twill weave, 150gsm"
+VP,VPSSFO1,,20,0.05712,10,"65% Polyester, 33% Cotton, 2% Elastane, 32x32+40D, 130x70, twill weave, 150gsm"
+VP,VPLSFO1,,20,0.05712,10,"65% Polyester, 33% Cotton, 2% Elastane, 32x32+40D, 130x70, twill weave, 150gsm"
+VP,VP badge,,1000,0.03328,6.8,other
+VP,PSO badge,,1000,0.03328,6.8,other
+OVERBOOTS,SOX-SAVERS-O,,250,0.06804,13,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RMPC006,,16,0.041125,6,"Cotton chambray, 21x61, 62x48, 135gsm"
+RITEMATE,RMPC007,,16,0.041125,6,"Cotton chambray, 21x61, 62x48, 135gsm"
+RITEMATE,RMPC008,,16,0.041125,6,"100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC008S,,16,0.041125,6,"100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC009,,16,0.041125,6,"100% Fine Cotton, Y/D CHECKS, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC009S,,16,0.041125,6,"100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC010,,16,0.041125,6,"100% Fine Cotton, Y/D CHECKS, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC010S,,16,0.041125,6,"100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC011,,16,0.041125,6,"100% Fine Cotton, Y/D CHECKS, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC011S,,16,0.041125,6,"100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC012,,16,0.041125,6,"100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC013,,16,0.041125,6,"100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC014,,20,0.0624,13,"98% Cotton, 2% elastane twill, 12X16+70D 75X56"
+RITEMATE,RMPC015,,20,0.0624,13,"98% Cotton, 2% elastane twill, 12X16+70D 75X56"
+RITEMATE,RMPC017,,16,0.041125,,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+RITEMATE,RMPC018,,16,0.04277,,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+RITEMATE,RMPC017S,,16,0.041125,,"100% Cotton Poplin, 50x050 / 144x80, 105gsm"
+RITEMATE,RMPC019,,20,0.041125,,100% cotton Pique combed 220gsm Enzyme wash + tender hand feel
+RITEMATE,RMPC020,,20,0.041125,,100% cotton Pique combed 220gsm Enzyme wash + tender hand feel
+RITEMATE,RMPC021,,20,0.041125,,100% cotton Pique combed 220gsm Enzyme wash + tender hand feel
+RITEMATE,RMPC022,,20,0.041125,,100% cotton Pique combed 220gsm Enzyme wash + tender hand feel
+RITEMATE,RMPC023,,12,0.0945,11,"98% Cotton, 2% elastane twill, 12X16+70D 75X56"
+RITEMATE,RMPC024,,10,0.07581,11,Shell - 100% Polyester Micro Fibre ; Padding -100% Polyfill 200gsm
+RITEMATE,RMPC025,,10,0.07581,11,Shell - 100% Polyester Micro Fibre ; Padding -100% Polyfill 200gsm
+RITEMATE,RM4245,,40,0.0324,6.5,100% polyester wrap knit
+RITEMATE,RM4245T,,40,0.0324,6.5,100% polyester wrap knit
+RITEMATE,RM2346S,,30,0.06,13,52% cotton back 48% polyester face 180gsm Hydrophilic Finish
+RITEMATE,RM2346,,25,0.06,13,52% cotton back 48% polyester face 180gsm Hydrophilic Finish
+RITEMATE,RM3122,,30,0.06,13,52% cotton back 48% polyester face 180gsm Hydrophilic Finish
+RITEMATE,RM6012,,18,0.06,13,"100%polyester on face, 80/20 T/C back fleece, 300gsm"
+RITEMATE,RM6012R,,16,0.06,13,"100%polyester on face, 80/20 T/C back fleece, 300gsm"
+RITEMATE,RM1000,,20,0.041125,11,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM1000S,,20,0.041125,10,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM100CF,,20,0.041125,10,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM100CFS,,20,0.041125,10,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM105CF,,20,0.041125,11,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM105CFS,,20,0.041125,11,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM105CFR,,20,0.041125,11,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM1040R,,20,0.041125,11,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM1040,,20,0.041125,12,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM104CFR,,20,0.041125,11,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM1050R,,20,0.041125,12,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM1050RS,,20,0.041125,10,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM1050,,20,0.041125,12,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM1050S,,20,0.041125,10,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM4050R,,40,0.041125,12,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+RITEMATE,RM106XR,,20,0.041125,11,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM107V2,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+RITEMATE,RM107V2R,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+RITEMATE,RM107V2S,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+RITEMATE,RM107V2RS,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+RITEMATE,RM108V3,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+RITEMATE,RM108V3R,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+RITEMATE,RM109VXR,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+RITEMATE,RM208V2R,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+RITEMATE,RM208V3R,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+RITEMATE,RM73N1R,,5,0.06,11,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+RITEMATE,RM7654R,,12,0.0945,11,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+RITEMATE,RM5071R,,8,0.06,13,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+RITEMATE,RM123FOF,,21,0.06048,10,100% Cotton 20x10 40x42 155gsm brushed printing check
+Hutchinson,HUT123FOF,,21,0.06048,10,100% Cotton 20x10 40x42 155gsm brushed printing check
+Hutchinson,HUT123FOF-F,,21,0.06048,10,100% Cotton 20x10 40x42 155gsm brushed printing check
+RITEMATE,RM123FCF,,21,0.06048,10,100% Cotton 20x10 40x42 155gsm brushed printing check
+RITEMATE,RM123QS,,14,0.1575,11,"100% Cotton 20x10 40x42 155gsm brushed printing check, 150gsm Polyfill"
+RITEMATE,RM123V,,14,0.0784,11,"100% Cotton 20x10 40x42 155gsm brushed printing check, 150gsm Polyfill"
+RITEMATE,RM106DJ,,20,0.06912,20,100% Cotton Twill 7sx6s 72x46 14.50zs (490gsm)
+RITEMATE,RM106DJR,,20,0.06912,20,100% Cotton Twill 7sx6s 72x46 14.50zs (490gsm)
+RITEMATE,RM112TSD,,20,0.066,17,"98% Cotton / 2% Spandex 450gsm after washing, 78x50/7X10+70D"
+RITEMATE,RM1002,,20,0.0528,13,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+RITEMATE,RM1002S,,25,0.0528,11,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+RITEMATE,RM1002R,,20,0.048,14,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+RITEMATE,RM411CP,1.8,15,0.06,15,100% Cotton Canvas Double pre-shrunk canvas 7+7x7 / 180x31 345gsm Silicon wash
+RITEMATE,RM411CS,,25,0.0552,12.5,100% Cotton Canvas Double pre-shrunk canvas 7+7x7 / 180x31 345gsm Silicon wash
+RITEMATE,RM1004,,20,0.063,15,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+RITEMATE,RM1004R,,20,0.063,15,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+RITEMATE,RM1004RLW,,20,0.063,15,100% COTTON TWILL 20X20 108X56 190gsm
+RITEMATE,RM1004S,,25,0.06336,12,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+RITEMATE,RM33EWLS,,25,0.0528,10,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+RITEMATE,RM301EWS,,25,0.0528,10,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+RITEMATE,RM8080,,20,0.0624,15,"100% Cotton Twill 20X20 108X56 190gsm, soft treatment, garment wash"
+RITEMATE,RM4040,,25,0.0624,13,"100% Cotton Twill 20X20 108X56 190gsm, soft treatment, garment wash"
+RITEMATE,RM2020,,25,0.0624,13,"100% Cotton Twill 20X20 108X56 190gsm, soft treatment, garment wash"
+RITEMATE,RMPC016,,20,0.06912,16,"99% Cotton, 1% Elastane, about 11.3OZ before wash"
+RITEMATE,RM110SD,,20,0.06912,16,"98% Cotton / 2% Spandex 450gsm after washing, 78x50/7X10+70D"
+RITEMATE,RM220LSD,,20,0.06912,10,"98% Cotton / 2% Spandex 450gsm after washing, 78x50/7X10+70D"
+RITEMATE,RM1008M,,10,0.03774,15,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+RITEMATE,RM908CR,,10,0.03774,15,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+RITEMATE,RM909AR,,10,0.0648,12,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+GOLDERS,GB402EWS,,40,0.0528,7,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+GOLDERS,GB403EWS,,40,0.0528,7,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+GOLDERS,GB302EWS,,30,0.0528,8.5,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+GOLDERS,GB303EWS,,30,0.0528,8.5,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+GOLDERS,GS301M,,25,0.0528,10,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+GOLDERS,GS301W,,25,0.0528,10,100% Cotton Drill 150gsm
+GOLDERS,GB601S,,40,0.041125,12,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+GOLDERS,GB602S,,40,0.041125,12,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+McAullif,MCAB01,,40,0.051408,8.5,"50% Cotton Back, 50% Cool Dry Polyester Face, 180 gsm, Hydrophilic finish"
+McAullif,MCAM01,,30,0.051408,8.5,"50% Cotton Back, 50% Cool Dry Polyester Face, 180 gsm, Hydrophilic finish"
+McAullif,MCAB03,,50,0.06,13,"100% polyester Warp Knit, 145gsm Hydrophilic finish "
+McAullif,MCAM03,,40,0.06,13,"100% polyester Warp Knit, 145gsm Hydrophilic finish "
+RITEMATE,RM108V3R,,20,0.042,,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+RITEMATE,RM109VXR,,20,0.042,,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+RITEMATE,RM200CF,,24,0.041125,,"100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash"
+RITEMATE,RM200CFS,,28,0.041125,,"100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash"
+RITEMATE,RM300CF,,26,0.041125,,"100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash"
+RITEMATE,RM400CF,,40,0.041125,,"100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash"
+RITEMATE,RM500BT,,24,0.041125,,"100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash"
+RITEMATE,RM500BTS,,28,0.041125,,"100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash"
+Allens,ALL-157V2,,20,0.042,11,100% COTTON TWILL 20X20 108X56 190gsm
+Allens,ALL-157V2R,,20,0.042,11,100% COTTON TWILL 20X20 108X56 190gsm
+Allens,ALL-258V2R,,20,0.042,11,100% COTTON TWILL 20X20 108X56 190gsm
+Iggudens,IGG001X,,20,0.041125,12,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+Iggudens,IGG002,,20,0.041125,12,100% COTTON TWILL 20X20 108X56 190gsm
+Iggudens,IGG004XJ,,8,0.06,13,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+John Ellignsen,JEASH-01,,40,0.042,12,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JEASH-02,,30,0.08208,10,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JEGAP-03,,40,0.042,12,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JEGAP-04,,30,0.08208,10,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JEGAP-05,,30,0.08208,10,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JEPINE-02,,40,0.042,12,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JEATOOW-01,,40,0.042,12,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JEATOOW-02,,40,0.042,12,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JEATOOW-ART,,40,0.042,12,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JEAWAV-01,,30,0.08208,10,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JEA-BLW,,30,0.08208,10,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JEA-MLW,,30,0.08208,10,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JEA-BSW,,30,0.08208,10,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JEA-MSW,,30,0.08208,10,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JESLC-01,,30,0.08208,10,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JEPWB-02,,40,0.042,12,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+Atlas,07288,,20,0.041125,10,100% COTTON TWILL 20X20 108X56 190gsm
+Atlas,07299,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+Atlas,07399,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+Atlas,07399X,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+Atlas,07388X,,20,0.041125,10,100% COTTON TWILL 20X20 108X56 190gsm
+Atlas,07388,,20,0.041125,10,100% COTTON TWILL 20X20 108X56 190gsm
+Atlas,07499,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
+Atlas,AW1002,,20,0.0528,13,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+Atlas,AW1002R,,20,0.0528,13,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+Atlas,AW1004,,20,0.0528,13,100% Cotton Drill 90x46 / 14sx7s in 310gsm
+Atlas,AW1004R,,20,0.0528,13,100% Cotton Drill 90x46 / 14sx7s in 310gsm

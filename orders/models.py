@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from products.models import Product
 
 from orders import parse_requisiton
@@ -23,7 +24,10 @@ class Order(models.Model):
     ctm_no=models.CharField(max_length=50,null=True)
     client=models.TextField(max_length=50)
     supplier=models.TextField(max_length=50)
-    product=models.ForeignKey(Product,on_delete=models.PROTECT)
+    if settings.DEBUG:
+        product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    else:
+        product=models.ForeignKey(Product,on_delete=models.PROTECT)
     colour=models.TextField(max_length=20)
     quantity=models.IntegerField()
     shipment=models.ForeignKey(Shipment,on_delete=models.SET_NULL,null=True)
