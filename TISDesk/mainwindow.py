@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QMainWindow,QFileDialog
 from PyQt5.QtGui import QColor
 from TISDesk.TIS_mainwindow import Ui_MainWindow
 from excelway.tis_excel import TIS_Excel
+from products import product_price
 import os,datetime
 
 
@@ -18,6 +19,7 @@ class TISMainWindow(QMainWindow):
         self.ui.btnGeneratePrice.clicked.connect(self.generate_price)
         self.ui.btnRequisition.clicked.connect(self.generate_order_from_requisition)
         self.ui.btnGenerateOrderTrace.clicked.connect(self.create_order_trace)
+        self.ui.btnInitProducts.clicked.connect(self.init_products)
 
     def openfile(self):
         files=QFileDialog.getOpenFileName(self,'Open file','C:\\Users\\rhe\\PyCharm\\TISOrder\\media')
@@ -97,5 +99,9 @@ class TISMainWindow(QMainWindow):
         excel=TIS_Excel()
         result=excel.create_from_trace(order_file)
         self.ui.textBrowser.append('finish creating '+str(result))
+
+    def init_products(self):
+        product_list=product_price.parse_product()
+        product_price.init_products_db(product_list)
 
 

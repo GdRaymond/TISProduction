@@ -594,7 +594,7 @@ class TIS_Excel():
                 commodity=order_line.get('Commodity')
                 product=Product(style_no=style,commodity=commodity)
                 product.save()
-                logger.debug('   new product {0}'.format(product))
+                logger.error('  This is a new product {0}, system will add style No. to database, please complete other info'.format(product))
                 result['new_product'] += 1
             order.product=product
 

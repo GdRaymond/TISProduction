@@ -5,15 +5,15 @@ ABF,MU54,1.75,18,0.06,8,"65% Polyester / 33% Cotton / 2% Lycra, 32x32+40D 130x70
 ABF,FU40,1.75,18,0.06,8,"65% Polyester / 33% Cotton / 2% Lycra, 32x32+40D 130x70, 150gsm, Huntsman Hydrophilic"
 ABF,MU41,2,10,0.189,13,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
 ABF,MU50,1.58,20,0.06,8,65% Polyester / 35% Cotton 136x72 / 45x45 115gsm  
-ABF,MU51,,18,0.06,,100% Cotton Twill 130x70 / 32sx32s 150gsm
+ABF,MU51,,18,0.06,,100% Cotton Mini Twill, 130x70 / 32sx32s 150gsm
 ABF,MU52,1.85,20,0.06,8,65% Polyester / 35% Cotton 136x72 / 45x45 115gsm  
-ABF,MU53,,18,0.06,,100% Cotton Twill 130x70 / 32sx32s 150gsm
+ABF,MU53,,18,0.06,,100% Cotton Mini Twill, 130x70 / 32sx32s 150gsm
 ABF,FU27,2,10,0.189,12,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
 ABF,FU30,,20,0.06,8,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
 ABF,FU36,1.49,20,0.06,8,65% Polyester / 35% Cotton 136x72 / 45x45 115gsm  
-ABF,FU37,1.58,20,0.06,8,100% Cotton Twill 130x70 / 32sx32s 150gsm
+ABF,FU37,1.58,20,0.06,8,100% Cotton Mini Twill, 130x70 / 32sx32s 150gsm
 ABF,FU38,1.75,20,0.06,8,65% Polyester / 35% Cotton 136x72 / 45x45 115gsm  
-ABF,FU39,1.85,20,0.06,8,100% Cotton Twill 130x70 / 32sx32s 150gsm
+ABF,FU39,1.85,20,0.06,8,100% Cotton Mini Twill, 130x70 / 32sx32s 150gsm
 ABF,UA39,,50,0.0555,12,100% Polyester Warp Knit
 ABF,UU50,,30,0.06,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
 ABF,UU52,,30,0.06,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
@@ -30,23 +30,23 @@ ABF,UA78,,40,0.0324,6.5,100% Polyester Warp Knit
 ABF,UL30,,20,0.06,,"100% Cotton twill, 20x16 / 128x60, 230gsm"
 ABF,UL32,,20,0.0456,,PU with Polyester knitted backing EN471
 ABF,UL33,,25,0.06,,"100% Cotton twill, 20x16 / 128x60, 230gsm"
-ABF,UL40,1.75,20,0.0552,13.6,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
-ABF,UL40 (DDU),1.75,20,0.0552,13.6,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
-ABF,FL24,1.75,20,0.0552,12.3,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
-ABF,FL24 (DDU),1.75,20,0.0552,12.3,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
-ABF,FL13,1.75,20,0.0552,12.4,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+ABF,UL40,1.75,20,0.0552,13.6,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")"
+ABF,UL40 (DDU),1.75,20,0.0552,13.6,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")"
+ABF,FL24,1.75,20,0.0552,12.3,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")"
+ABF,FL24 (DDU),1.75,20,0.0552,12.3,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")"
+ABF,FL13,1.75,20,0.0552,12.4,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")"
 ABF,FL11,1.1,30,0.06,12.5,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
 ABF,FL21,1.6,20,0.06,12.4,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
 ABF,ML30,1.6,20,0.06,12.4,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
 ABF,CTU BADGE,,1000,0.03328,6.8,other
-ABF,UA80,,1000,0.037752,7.2,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
-ABF,SES Sliders,,1000,0.037752,7.2,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+ABF,UA80,,1000,0.037752,7.2,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")"
+ABF,SES Sliders,,1000,0.037752,7.2,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")"
 ABF,UA25,,60,0.047969375,13,other
 ABF,Buckle,,200,0.014896,13,other
-QPS,QPSTO,1.75,20,0.05415,13,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
-QPS,QPSFT,2,20,0.056316,12.2,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
-QPS,QPSFO,1.65,20,0.05415,12.5,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
-QPS,QPSSO,1.2,20,0.04256,10.1,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+QPS,QPSTO,1.75,20,0.05415,13,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")"
+QPS,QPSFT,2,20,0.056316,12.2,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")"
+QPS,QPSFO,1.65,20,0.05415,12.5,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")"
+QPS,QPSSO,1.2,20,0.04256,10.1,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")"
 QPS,QPSDTM,1.6,20,0.05415,12,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
 QPS,QPSDSF,1.6,20,0.05415,12,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
 QPS,QPSPL (S/S),,30,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
@@ -71,7 +71,7 @@ QPS,QPS-TIE-P-ML,,100,0.04805,6,100% polyester
 QPS,QPS-TIE-P-F,,100,0.04805,6,100% polyester 
 QPS,QPSPF,,10,0.06,13,"100% Polyester 395gsm polar fleece laminated with water repellent finishing, T/C Woven fabric patch"
 QPS,QPSTM,2.5,10,0.189,13,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
-QPS,QPS cap,,100,0.07623,12,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61"")"
+QPS,QPS cap,,100,0.07623,12,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")"
 QPS,QPSTF,2.5,10,0.189,12,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
 QPS,PS63,,8,0.07581,9,Polyester soft shell with micro polar fleece inner and bonded with PTFE membrane
 QPS,QPSDDJ,,9,0.07581,9,Polyester soft shell with micro polar fleece inner and bonded with PTFE membrane
@@ -122,8 +122,8 @@ RITEMATE,RMPC022,,20,0.041125,,100% cotton Pique combed 220gsm Enzyme wash + ten
 RITEMATE,RMPC023,,12,0.0945,11,"98% Cotton, 2% elastane twill, 12X16+70D 75X56"
 RITEMATE,RMPC024,,10,0.07581,11,Shell - 100% Polyester Micro Fibre ; Padding -100% Polyfill 200gsm
 RITEMATE,RMPC025,,10,0.07581,11,Shell - 100% Polyester Micro Fibre ; Padding -100% Polyfill 200gsm
-RITEMATE,RM4245,,40,0.0324,6.5,100% polyester wrap knit
-RITEMATE,RM4245T,,40,0.0324,6.5,100% polyester wrap knit
+RITEMATE,RM4245,,40,0.0324,6.5,100% Polyester Warp Knit
+RITEMATE,RM4245T,,40,0.0324,6.5,100% Polyester Warp Knit
 RITEMATE,RM2346S,,30,0.06,13,52% cotton back 48% polyester face 180gsm Hydrophilic Finish
 RITEMATE,RM2346,,25,0.06,13,52% cotton back 48% polyester face 180gsm Hydrophilic Finish
 RITEMATE,RM3122,,30,0.06,13,52% cotton back 48% polyester face 180gsm Hydrophilic Finish
