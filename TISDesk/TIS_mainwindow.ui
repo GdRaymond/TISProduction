@@ -7,11 +7,15 @@
     <x>0</x>
     <y>0</y>
     <width>1364</width>
-    <height>946</height>
+    <height>695</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>TIS Tools</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>TIS.PNG</normaloff>TIS.PNG</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
@@ -20,7 +24,7 @@
       <x>10</x>
       <y>0</y>
       <width>1341</width>
-      <height>901</height>
+      <height>661</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -36,7 +40,7 @@
         <x>10</x>
         <y>40</y>
         <width>1311</width>
-        <height>821</height>
+        <height>591</height>
        </rect>
       </property>
      </widget>

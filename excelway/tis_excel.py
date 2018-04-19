@@ -532,18 +532,26 @@ class TIS_Excel():
         return reports
 
 
-    def create_from_trace(self, order_file):
+    def create_from_trace(self, order_file,signal_display=None):
         if  not order_file or order_file=="":
             order_file=os.path.join(os.path.abspath('..'),'media/order.xls')
-        logger.debug('\nstart create order form trace excel')
+        logger.info('\nstart create order form trace excel')
+        if signal_display:
+            signal_display.emit({'msg':'\nstart create order form trace excel','level':'INFO'})
         result={'new_order':0,'update_order':0,'new_shipment':0,'update_shipment':0,'new_product':0}
         order_list = self.read_order(order_file)
-        logger.debug('  get order_list, total {0} rows'.format(len(order_list)))
+        logger.info('  get order_list, total {0} rows'.format(len(order_list)))
+        if signal_display:
+            signal_display.emit({'msg':'  get order_list, total {0} rows'.format(len(order_list)),'level':'INFO'})
         for order_line in order_list:
-            logger.debug('   start parse order_line {0}'.format(order_line))
+            logger.info('   start parse order_line {0}'.format(order_line))
+            if signal_display:
+                signal_display.emit({'msg':'   start parse order_line {0}'.format(order_line.get('row_num')), 'level': 'INFO'})
             tis_no = order_line.get('TISNo')
             if not TIS_Excel.is_orderno_valid(tis_no):
-                logger.debug('  skip row No. {0}'.format(order_line.get('row_num')))
+                logger.info('  skip row No. {0}'.format(order_line.get('row_num')))
+                if signal_display:
+                    signal_display.emit({'msg':'  skip row No. {0}'.format(order_line.get('row_num')), 'level': 'INFO'})
                 continue
             colour = order_line.get('Colour')
             try:
@@ -553,11 +561,14 @@ class TIS_Excel():
             except Order.DoesNotExist:
                 logger.debug('  There is no current order {0}/{1}'.format(tis_no,colour))
                 order=Order(tis_no=tis_no,colour=colour)
-                logger.debug('   Create order {0}/{1}'.format(order.tis_no,order.colour))
+                logger.info('   Create order {0}/{1}'.format(order.tis_no,order.colour))
+                if signal_display:
+                    signal_display.emit({'msg':'   Create order {0}/{1}'.format(order.tis_no,order.colour), 'level': 'INFO'})
                 result['new_order'] += 1
             except Exception as e:
-                logger.debug('   error when query order : {0}'.format(e))
-
+                logger.error('   error when query order : {0}'.format(e))
+                if signal_display:
+                    signal_display.emit({'msg':'   error when query order : {0}'.format(e), 'level': 'ERROR'})
             if order_line.get('ETD') is None: #if no ETD then skip the shipment process
                 logger.debug('   This order does not have ETD, skip shipment')
             else:
@@ -582,19 +593,27 @@ class TIS_Excel():
                         shipment.save()
                     except Exception as e:
                         logger.error('  save shipment error {0}'.format(e))
+                        if signal_display:
+                            signal_display.emit({'msg':'  save shipment error {0}'.format(e), 'level': 'ERROR'})
                         logger.debug('  type of ABMInstore is {0}'.format(type(order_line.get('ABMInStore'))))
-                    logger.debug('   shipment {0} saved'.format(shipment))
+                    logger.info('   shipment {0} saved'.format(shipment))
+                    if signal_display:
+                        signal_display.emit({'msg':'   shipment {0} saved'.format(shipment), 'level': 'INFO'})
                     order.shipment=shipment
 
             style=order_line.get('Style')
             try:
                 product=Product.objects.get(style_no__iexact=style)
-                logger.debug('   get product {0}'.format(product))
+                logger.info('   get product {0}'.format(product))
+                if signal_display:
+                    signal_display.emit({'msg':'   get product {0}'.format(product), 'level': 'INFO'})
             except Product.DoesNotExist:
                 commodity=order_line.get('Commodity')
                 product=Product(style_no=style,commodity=commodity)
                 product.save()
                 logger.error('  This is a new product {0}, system will add style No. to database, please complete other info'.format(product))
+                if signal_display:
+                    signal_display.emit({'msg':'  This is a new product {0}, system will add style No. to database, please complete other info', 'level': 'ERROR'})
                 result['new_product'] += 1
             order.product=product
 
@@ -609,7 +628,12 @@ class TIS_Excel():
                 order.save()
             except Exception as e:
                 logger.error('   save order error {0}'.format(e))
-            logger.debug('    order save {0}'.format(order))
+                if signal_display:
+                    signal_display.emit({'msg':'   save order error', 'level': 'ERROR'})
+            logger.info('    order save {0}'.format(order))
+            if signal_display:
+                signal_display.emit({'msg':'    order save', 'level': 'INFO'})
+
 
             '''
             After order saved, we already got the fabri_trim saved automatically. Then we can create the sample check
@@ -622,12 +646,18 @@ class TIS_Excel():
                     #logger.debug('   get current_test_report is {0}'.format(current_test_reports))
                     qauntity_sample_check=create_test_report_check(order_id=order.id,test_report_group=current_test_reports)
                     logger.debug('   saved {0} sample check records'.format(qauntity_sample_check))
+                    if signal_display:
+                        signal_display.emit({'msg':'   saved  sample check records', 'level': 'INFO'})
                 else:
                     logger.debug('   the test report field  does not match')
+                    if signal_display:
+                        signal_display.emit({'msg':'   the test report field  does not match', 'level': 'INFO'})
             else:
                 logger.debug('   the test report field  is None')
+                if signal_display:
+                    signal_display.emit({'msg':'   the test report field  is None', 'level': 'INFO'})
 
-            '''
+                '''
             Save PP sample check
             '''
             if order_line.get('PPSample'):
@@ -644,7 +674,10 @@ class TIS_Excel():
             else:
                 logger.debug('  the shipping sample field is None')
 
-        logger.debug('Finish all orders {0}'.format(result))
+        logger.info('Finish all orders {0}'.format(result))
+        if signal_display:
+            signal_display.emit({'msg':'Finish all orders {0}'.format(result), 'level': 'INFO'})
+
         try:
             self.close_wb()
         except Exception as e:

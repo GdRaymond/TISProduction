@@ -4,8 +4,35 @@ from PyQt5.QtGui import QColor
 from TISDesk.TIS_mainwindow import Ui_MainWindow
 from excelway.tis_excel import TIS_Excel
 from products import product_price
-import os,datetime
+import os,datetime,time
+from PyQt5.QtCore import QThread,pyqtSignal
+from TISProduction import tis_log
 
+logger=tis_log.get_tis_logger()
+
+
+class WorkThread(QThread):
+    signal_display=pyqtSignal(dict)
+
+    def __init__(self,job):
+        self.job=job
+        logger.debug('work_thread init start for {0}'.format(job))
+        super(WorkThread,self).__init__()
+        logger.debug('\nwork_thread init end for {0}'.format(job))
+
+    def run(self):
+        logger.debug('work_thread start run for {0}'.format(self.job))
+        self.signal_display.emit({'msg':'****work_thread start run for {0}'.format(self.job),'level':'INFO'})
+        """
+        for i in range(5):
+            time.sleep(1)
+            self.signal_display.emit({'msg':'Already sleep {0} time'.format(i),'level':'DEBUG'})
+        """
+        if self.job=='init_product':
+            product_list=product_price.parse_product(self.signal_display)
+            product_price.init_products_db(product_list,self.signal_display)
+
+        self.signal_display.emit({'msg':'****work_thread finish for {0}'.format(self.job),'level':'INFO'})
 
 
 class TISMainWindow(QMainWindow):
@@ -60,6 +87,12 @@ class TISMainWindow(QMainWindow):
             print('No')
             self.ui.textBrowser.append("No")
 
+    def display(self,text_dict):
+        colour={'DEBUG':'Black','INFO':'Blue','ERROR':'Red'}
+        logger.debug(text_dict)
+        self.ui.textBrowser.setTextColor(QColor(colour.get(text_dict['level'],'black')))
+        self.ui.textBrowser.append(text_dict['msg'])
+
     def test_Excelfuntion(self):
         files=QFileDialog.getOpenFileName(self,'Open file')
         if files[0]:
@@ -101,7 +134,18 @@ class TISMainWindow(QMainWindow):
         self.ui.textBrowser.append('finish creating '+str(result))
 
     def init_products(self):
-        product_list=product_price.parse_product()
-        product_price.init_products_db(product_list)
+        #product_list=product_price.parse_product()
+        #product_price.init_products_db(product_list)
+        try:
+            logger.debug('define WorkThread')
+            self.work_t=WorkThread(job='init_product')
+            logger.debug('connect singla')
+            self.ui.textBrowser.append('connect signal')
+            self.work_t.signal_display.connect(self.display)
+            logger.debug('Start work_thread')
+            self.ui.textBrowser.append('Start work_thread')
+            self.work_t.start()
+        except Exception as e:
+            logger.debug(' error occur using thread {0}'.format(e))
 
 
