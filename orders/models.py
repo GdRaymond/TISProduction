@@ -282,13 +282,16 @@ def create_garment_sample_check(type,order_id,comment):
     logger.debug('  start to create garment sample check {0}-{1}-{2}'.format(type,order_id,comment))
     if not comment:
         return result
-    match=re.search(r'.*(?P<day>\d{1,2})\s+(?P<mon>\w+)\s+(?P<year>\d{4}).*',comment)
+    match=re.search(r'\b(?P<day>\d{1,2})\s+(?P<mon>\w+)\s+(?P<year>\d{4}).*',comment)
     if match:
         mon=int(datetime.datetime.strptime(match.group('mon'),'%b').strftime('%m'))
         year=int(match.group('year'))
         day=int(match.group('day'))
         check_date=datetime.date(year=year,month=mon,day=day)
         logger.debug('  parse check date {0}'.format(check_date))
+    else:
+        logger.debug('  can not match the date, exit')
+        return result
     comment_words=[word.strip().upper() for word in comment.split(' ')]
     for word in comment_words:
         if word[:3]=='APP':

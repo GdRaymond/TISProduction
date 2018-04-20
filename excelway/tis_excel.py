@@ -11,7 +11,7 @@ from orders.models import Order,create_test_report_check,create_garment_sample_c
 from shipments.models import Shipment
 from products.models import Product
 from products.product_price import seek_colour
-import datetime,re
+import datetime,re,string
 
 
 
@@ -328,14 +328,23 @@ class TIS_Excel():
                             if found_style_factory:
                                 found_row_num=finance_non_tisno.get('row_num')
                                 logger.debug('found_row_num is {0}'.format(found_row_num))
-                                self.ws_finance.Rows('{0}'.format(found_row_num)).Copy()
                                 new_row_num=addition_row+finance_last_row
+
+                                 #copy cells one by one
+                                logger.debug('start to copy cells from row {0} to {1}, Select finace sheet'.format(found_row_num,new_row_num))
+                                for column in TIS_Excel.FINANCE_FIELD.keys():                                
+                                    self.ws_finance.Range('{0}{1}'.format(column,found_row_num)).Copy(
+                                                self.ws_finance.Range('{0}{1}'.format(column,new_row_num)))
+                                """
                                 logger.debug('start to copy from row {0} to {1}, Select finace sheet'.format(found_row_num,new_row_num))
                                 #self.ws_finance.Select()
-                                logger.debug(' Select {0}'.format(new_row_num))
+                                #logger.debug(' Select {0}'.format(new_row_num))
+                                self.ws_finance.Rows('{0}'.format(found_row_num)).Copy()
                                 self.ws_finance.Rows('{0}'.format(new_row_num)).Select()
-                                logger.debug('start to Paste Row')
                                 self.ws_finance.Paste()
+                                """
+                                logger.debug('finish copy')
+
                                 logger.debug('start to write  #C{0} with {1}'.format(new_row_num,order_recap.get('ctm')))
                                 self.ws_finance.Range('C{0}'.format(new_row_num)).Value = order_recap.get('ctm')
                                 logger.debug('start to write  #D{0} with {1}'.format(new_row_num,order_recap.get('order_date')))
@@ -664,7 +673,7 @@ class TIS_Excel():
                 quantity_garment_ppcheck=create_garment_sample_check('P',order.id,order_line.get('PPSample'))
                 logger.debug('  saved {0} sample check records'.format(quantity_garment_ppcheck))
             else:
-                logger.debug('  the shipping sample field is None')
+                logger.debug('  the PP sample field is None')
             '''
             Save shipping sample check
             '''
