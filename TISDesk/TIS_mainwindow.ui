@@ -28,11 +28,11 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
-      <string>ReadOrder</string>
+      <string>System</string>
      </attribute>
      <widget class="QTextBrowser" name="textBrowser">
       <property name="geometry">
@@ -138,8 +138,66 @@
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>Tab 2</string>
+      <string>ReadOrder</string>
      </attribute>
+     <widget class="QTableWidget" name="tableWOrder">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>50</y>
+        <width>1331</width>
+        <height>581</height>
+       </rect>
+      </property>
+      <property name="rowCount">
+       <number>10</number>
+      </property>
+      <property name="columnCount">
+       <number>6</number>
+      </property>
+      <row/>
+      <row/>
+      <row/>
+      <row/>
+      <row/>
+      <row/>
+      <row/>
+      <row/>
+      <row/>
+      <row/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+     </widget>
+     <widget class="QPushButton" name="btnShowOrder">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ShowOrder</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnShowShipment">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>10</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ShowShipment</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>

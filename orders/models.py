@@ -280,9 +280,9 @@ def create_test_report_check(order_id, test_report_group):
 def create_garment_sample_check(type,order_id,comment):
     result=0
     logger.debug('  start to create garment sample check {0}-{1}-{2}'.format(type,order_id,comment))
-    if not comment:
+    if not comment :
         return result
-    match=re.search(r'\b(?P<day>\d{1,2})\s+(?P<mon>\w+)\s+(?P<year>\d{4}).*',comment)
+    match=re.search(r'\b(?P<day>\d{1,2})\s+(?P<mon>\w+)\s+(?P<year>\d{4}).*',str(comment))
     if match:
         mon=int(datetime.datetime.strptime(match.group('mon'),'%b').strftime('%m'))
         year=int(match.group('year'))

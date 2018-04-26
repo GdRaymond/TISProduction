@@ -1,12 +1,15 @@
 
-from PyQt5.QtWidgets import QMainWindow,QFileDialog
-from PyQt5.QtGui import QColor
+from PyQt5.QtWidgets import QMainWindow,QFileDialog,QTableWidgetItem
+from PyQt5.QtGui import QColor,QIcon
 from TISDesk.TIS_mainwindow import Ui_MainWindow
 from excelway.tis_excel import TIS_Excel
 from products import product_price
 import os,datetime,time
-from PyQt5.QtCore import QThread,pyqtSignal
+from PyQt5.QtCore import QThread,pyqtSignal,QDate
 from TISProduction import tis_log
+from products import views as product_view
+from orders import views as order_view
+from shipments import views as shipment_view
 
 logger=tis_log.get_tis_logger()
 
@@ -14,8 +17,9 @@ logger=tis_log.get_tis_logger()
 class WorkThread(QThread):
     signal_display=pyqtSignal(dict)
 
-    def __init__(self,job):
+    def __init__(self,job,**kwargs):
         self.job=job
+        self.kwargs=kwargs
         logger.debug('work_thread init start for {0}'.format(job))
         super(WorkThread,self).__init__()
         logger.debug('\nwork_thread init end for {0}'.format(job))
@@ -31,6 +35,17 @@ class WorkThread(QThread):
         if self.job=='init_product':
             product_list=product_price.parse_product(self.signal_display)
             product_price.init_products_db(product_list,self.signal_display)
+        elif self.job=='gen_order_trace':
+            #order_file = QFileDialog.getOpenFileName(self, 'Open file', os.path.join(os.path.abspath('..'), 'media'))[0]
+            order_file=self.kwargs.get('order_file')
+            order_list=self.kwargs.get('order_list')
+            excel = self.kwargs.get('excel')
+            try:
+                logger.debug(' read order file in run')
+                #order_list=excel.read_order(order_file)
+                result = excel.create_from_trace(order_file,order_list, self.signal_display)
+            except Exception as e:
+                logger.debug(' error occure when read order {0}'.format(e))
 
         self.signal_display.emit({'msg':'****work_thread finish for {0}'.format(self.job),'level':'INFO'})
 
@@ -47,6 +62,7 @@ class TISMainWindow(QMainWindow):
         self.ui.btnRequisition.clicked.connect(self.generate_order_from_requisition)
         self.ui.btnGenerateOrderTrace.clicked.connect(self.create_order_trace)
         self.ui.btnInitProducts.clicked.connect(self.init_products)
+        self.ui.btnShowOrder.clicked.connect(self.show_order)
 
     def openfile(self):
         files=QFileDialog.getOpenFileName(self,'Open file','C:\\Users\\rhe\\PyCharm\\TISOrder\\media')
@@ -130,22 +146,64 @@ class TISMainWindow(QMainWindow):
     def create_order_trace(self):
         order_file=QFileDialog.getOpenFileName(self,'Open file',os.path.join(os.path.abspath('..'),'media'))[0]
         excel=TIS_Excel()
-        result=excel.create_from_trace(order_file)
-        self.ui.textBrowser.append('finish creating '+str(result))
+        order_list=excel.read_order(order_file)
+
+        #result=excel.create_from_trace(order_file)
+        #self.ui.textBrowser.append('finish creating '+str(result))
+        try:
+            logger.debug('define WorkThread gen_order_trace')
+            self.work_t=WorkThread(job='gen_order_trace',order_file=order_file,order_list=order_list,excel=excel)
+            logger.debug('connect signal')
+            self.ui.textBrowser.append('connect signal')
+            self.work_t.signal_display.connect(self.display)
+            logger.debug('Start work_thread gen_order_trace')
+            self.ui.textBrowser.append('Start work_thread gen_order_trace')
+            self.work_t.start()
+        except Exception as e:
+            logger.debug(' error occur using thread gen_order_trace {0}'.format(e))
+        try:
+            self.close_wb()
+        except Exception as e:
+            print(e)
+
 
     def init_products(self):
         #product_list=product_price.parse_product()
         #product_price.init_products_db(product_list)
         try:
-            logger.debug('define WorkThread')
+            logger.debug('define WorkThread init_product')
             self.work_t=WorkThread(job='init_product')
-            logger.debug('connect singla')
+            logger.debug('connect singal')
             self.ui.textBrowser.append('connect signal')
             self.work_t.signal_display.connect(self.display)
             logger.debug('Start work_thread')
-            self.ui.textBrowser.append('Start work_thread')
+            self.ui.textBrowser.append('Start work_thread init_product')
             self.work_t.start()
         except Exception as e:
-            logger.debug(' error occur using thread {0}'.format(e))
+            logger.debug(' error occur using thread init_product {0}'.format(e))
+
+    def show_order(self):
+        orders=order_view.get_orders()
+        logger.debug(' Get orders {0}'.format(len(orders)))
+        self.ui.tableWOrder.setRowCount(len(orders))
+        for index in range(len(orders)):
+            order=orders[index]
+            logger.debug('  start to show order {0}/{1}/{2}'.format(order.tis_no,order.product.style_no,order.quantity))
+            try:
+                self.ui.tableWOrder.setItem(index,0,QTableWidgetItem(order.tis_no))
+                self.ui.tableWOrder.setItem(index,1,QTableWidgetItem(order.product.style_no))
+                self.ui.tableWOrder.setItem(index,2,QTableWidgetItem(order.colour))
+                self.ui.tableWOrder.setItem(index,3,QTableWidgetItem(str(order.quantity)))
+                self.ui.tableWOrder.setItem(index,4,QTableWidgetItem(order.shipment.etd.strftime('%Y %m %d')))
+                item=QTableWidgetItem()
+                item.setIcon(QIcon('TIS.PNG'))
+                self.ui.tableWOrder.setItem(index,5,QTableWidgetItem(item))
+            except Exception as e:
+                logger.error(' error occurs when show order in Table widget {0}'.format(e))
+
+    def show_shipment(self):
+        shipments=shipment_view.get_all_shipment()
+        logger.debug(' Get shipments {0}'.format(len(shipments)))
+        self.ui.tableWOrder.rowcou
 
 

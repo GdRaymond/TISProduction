@@ -14,3 +14,6 @@ class OrderList(ListView):
     model=Order
     template_name='order_list.html'
 
+def get_orders():
+    return Order.objects.all()
+

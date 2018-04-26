@@ -541,14 +541,14 @@ class TIS_Excel():
         return reports
 
 
-    def create_from_trace(self, order_file,signal_display=None):
+    def create_from_trace(self, order_file,order_list,signal_display=None):
         if  not order_file or order_file=="":
             order_file=os.path.join(os.path.abspath('..'),'media/order.xls')
         logger.info('\nstart create order form trace excel')
         if signal_display:
             signal_display.emit({'msg':'\nstart create order form trace excel','level':'INFO'})
         result={'new_order':0,'update_order':0,'new_shipment':0,'update_shipment':0,'new_product':0}
-        order_list = self.read_order(order_file)
+        #order_list = self.read_order(order_file)
         logger.info('  get order_list, total {0} rows'.format(len(order_list)))
         if signal_display:
             signal_display.emit({'msg':'  get order_list, total {0} rows'.format(len(order_list)),'level':'INFO'})
@@ -632,7 +632,7 @@ class TIS_Excel():
             order.quantity = order_line.get('Quantity')
             order.volume = order_line.get('Volume')
             order.cartons = order_line.get('Cartons')
-            order.ctm_no=order_line.get('CTM')
+            order.ctm_no=str(order_line.get('CTM')).strip('.0') #4500309773.0 for government CTM No. 4500309773, excel will add .0, need trim
             try:
                 order.save()
             except Exception as e:
@@ -654,9 +654,9 @@ class TIS_Excel():
                 if current_test_reports:
                     #logger.debug('   get current_test_report is {0}'.format(current_test_reports))
                     qauntity_sample_check=create_test_report_check(order_id=order.id,test_report_group=current_test_reports)
-                    logger.debug('   saved {0} sample check records'.format(qauntity_sample_check))
+                    logger.debug('   saved {0} test sample check records'.format(qauntity_sample_check))
                     if signal_display:
-                        signal_display.emit({'msg':'   saved  sample check records', 'level': 'INFO'})
+                        signal_display.emit({'msg':'   saved  test sample check records', 'level': 'INFO'})
                 else:
                     logger.debug('   the test report field  does not match')
                     if signal_display:
@@ -671,7 +671,7 @@ class TIS_Excel():
             '''
             if order_line.get('PPSample'):
                 quantity_garment_ppcheck=create_garment_sample_check('P',order.id,order_line.get('PPSample'))
-                logger.debug('  saved {0} sample check records'.format(quantity_garment_ppcheck))
+                logger.debug('  saved {0} pp sample check records'.format(quantity_garment_ppcheck))
             else:
                 logger.debug('  the PP sample field is None')
             '''
@@ -679,7 +679,7 @@ class TIS_Excel():
             '''
             if order_line.get('SSSample'):
                 quantity_garment_sscheck=create_garment_sample_check('S',order.id,order_line.get('SSSample'))
-                logger.debug('  saved {0} sample check records'.format(quantity_garment_sscheck))
+                logger.debug('  saved {0} ss sample check records'.format(quantity_garment_sscheck))
             else:
                 logger.debug('  the shipping sample field is None')
 

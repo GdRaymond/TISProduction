@@ -49,6 +49,17 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tab, "")
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
+        self.tableWOrder = QtWidgets.QTableWidget(self.tab_2)
+        self.tableWOrder.setGeometry(QtCore.QRect(0, 50, 1331, 581))
+        self.tableWOrder.setRowCount(10)
+        self.tableWOrder.setColumnCount(6)
+        self.tableWOrder.setObjectName("tableWOrder")
+        self.btnShowOrder = QtWidgets.QPushButton(self.tab_2)
+        self.btnShowOrder.setGeometry(QtCore.QRect(10, 10, 75, 23))
+        self.btnShowOrder.setObjectName("btnShowOrder")
+        self.btnShowShipment = QtWidgets.QPushButton(self.tab_2)
+        self.btnShowShipment.setGeometry(QtCore.QRect(100, 10, 75, 23))
+        self.btnShowShipment.setObjectName("btnShowShipment")
         self.tabWidget.addTab(self.tab_2, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -60,7 +71,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -73,6 +84,8 @@ class Ui_MainWindow(object):
         self.btnRequisition.setText(_translate("MainWindow", "Requisition"))
         self.btnGenerateOrderTrace.setText(_translate("MainWindow", "GenOrderTrace"))
         self.btnInitProducts.setText(_translate("MainWindow", "InitProduct"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "ReadOrder"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Tab 2"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "System"))
+        self.btnShowOrder.setText(_translate("MainWindow", "ShowOrder"))
+        self.btnShowShipment.setText(_translate("MainWindow", "ShowShipment"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "ReadOrder"))
 

@@ -10,15 +10,16 @@ class Fabric(models.Model):
         verbose_name='Fabric'
         verbose_name_plural='Fabrics'
 
+DEFAULT_FABRIC_ID=44
 class Product(models.Model):
 
     style_no=models.TextField(max_length=50)
     client=models.TextField(max_length=100,null=True,blank=True)
     commodity=models.TextField(max_length=100,null=True,blank=True)
     if settings.DEBUG:
-        fabric = models.ForeignKey(Fabric, on_delete=models.CASCADE)
+        fabric = models.ForeignKey(Fabric, on_delete=models.CASCADE,default=DEFAULT_FABRIC_ID)
     else:
-        fabric = models.ForeignKey(Fabric, on_delete=models.PROTECT)
+        fabric = models.ForeignKey(Fabric, on_delete=models.PROTECT,default=DEFAULT_FABRIC_ID)
     fabric_usage=models.DecimalField(max_digits=4,decimal_places=2,default=0)
     quantity_per_carton=models.IntegerField(default=0)
     volume_per_carton=models.DecimalField(max_digits=4,decimal_places=3,default=0)
@@ -31,3 +32,7 @@ class Product(models.Model):
 
     def __str__(self):
         return self.style_no
+
+    @staticmethod
+    def get_default_fabric():
+        return Fabric.objects.get(fabric='other')

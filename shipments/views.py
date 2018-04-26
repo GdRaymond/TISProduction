@@ -23,3 +23,6 @@ class ShipmentCreate(CreateView):
 
 class ShipmentList(ListView):
     model=Shipment
+
+def get_all_shipment():
+    return Shipment.objects.all().order_by('etd_port','etd')
