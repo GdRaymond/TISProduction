@@ -1,6 +1,6 @@
 
 from PyQt5.QtWidgets import QMainWindow,QFileDialog,QTableWidgetItem
-from PyQt5.QtGui import QColor,QIcon
+from PyQt5.QtGui import QColor,QIcon,QFont
 from TISDesk.TIS_mainwindow import Ui_MainWindow
 from excelway.tis_excel import TIS_Excel
 from products import product_price
@@ -9,6 +9,7 @@ from PyQt5.QtCore import QThread,pyqtSignal,QDate
 from TISProduction import tis_log
 from products import views as product_view
 from orders import views as order_view
+from orders.models import Order
 from shipments import views as shipment_view
 
 logger=tis_log.get_tis_logger()
@@ -62,7 +63,12 @@ class TISMainWindow(QMainWindow):
         self.ui.btnRequisition.clicked.connect(self.generate_order_from_requisition)
         self.ui.btnGenerateOrderTrace.clicked.connect(self.create_order_trace)
         self.ui.btnInitProducts.clicked.connect(self.init_products)
-        self.ui.btnShowOrder.clicked.connect(self.show_order)
+        self.ui.btnShowOrder.clicked.connect(self.show_orders)
+        self.ui.btnShowShipment.clicked.connect(self.show_shipments)
+        self.ui.btnWarehouse.clicked.connect(self.show_shipments_warehouse)
+        self.ui.btnCalVol.clicked.connect(self.cal_allorder_volumes)
+        order_title=['Style','TIS','Colour','Quantity','ABM','CTM','OrderDate','PPS','SSS','Report','Cartons','Volume','Weight','3M']
+        self.ui.tableWOrder.setHorizontalHeaderLabels(order_title)
 
     def openfile(self):
         files=QFileDialog.getOpenFileName(self,'Open file','C:\\Users\\rhe\\PyCharm\\TISOrder\\media')
@@ -182,28 +188,88 @@ class TISMainWindow(QMainWindow):
         except Exception as e:
             logger.debug(' error occur using thread init_product {0}'.format(e))
 
-    def show_order(self):
+    def append_one_order(self,order):
+        row_pos=self.ui.tableWOrder.rowCount()
+        logger.debug('Row Position is {0}'.format(row_pos))
+        self.ui.tableWOrder.insertRow(row_pos)
+        self.ui.tableWOrder.setRowHeight(row_pos, 30)
+        self.ui.tableWOrder.setFont(QFont('Segoe UI', 9))
+        self.ui.tableWOrder.setItem(row_pos,0,QTableWidgetItem(order.product.style_no))
+        self.ui.tableWOrder.setItem(row_pos,1,QTableWidgetItem(order.tis_no))
+        self.ui.tableWOrder.setItem(row_pos,2, QTableWidgetItem(order.colour))
+        self.ui.tableWOrder.setItem(row_pos,3,QTableWidgetItem(str(order.quantity)) )
+        self.ui.tableWOrder.setItem(row_pos,4,QTableWidgetItem(order.internal_no))
+        self.ui.tableWOrder.setItem(row_pos,5,QTableWidgetItem(order.ctm_no))
+        self.ui.tableWOrder.setItem(row_pos,6,QTableWidgetItem(order.order_date.strftime('%d %b %y')) )
+        self.ui.tableWOrder.setItem(row_pos,7,QTableWidgetItem('-'))
+        self.ui.tableWOrder.setItem(row_pos,8,QTableWidgetItem('-') )
+        self.ui.tableWOrder.setItem(row_pos,9,QTableWidgetItem('-') )
+        self.ui.tableWOrder.setItem(row_pos,10,QTableWidgetItem(str(order.cartons)) )
+        self.ui.tableWOrder.setItem(row_pos,11,QTableWidgetItem(str(order.volumes)) )
+        self.ui.tableWOrder.setItem(row_pos,12,QTableWidgetItem(str(order.weights)) )
+        self.ui.tableWOrder.setItem(row_pos,13,QTableWidgetItem(str(order.tape_no)) )
+
+    def append_one_shipment(self,shipment):
+        row_pos=self.ui.tableWOrder.rowCount()
+        logger.debug('Row Position is {0}'.format(row_pos))
+        self.ui.tableWOrder.insertRow(row_pos)
+        try:
+            self.ui.tableWOrder.setSpan(row_pos,0,1,14)
+            self.ui.tableWOrder.setRowHeight(row_pos,50)
+            self.ui.tableWOrder.setFont(QFont('SimHei',11,QFont.Bold))
+        except Exception as e:
+            logger.error(' error occur when set row height and font {0}'.format(e))
+        shipment_info='{0}-{1}-From {2} to {3}, ETD:{4} ETA:{5} Delivery:{6}; {7} with {8} cartons {9}m3 {10}kg'.format(
+            shipment.supplier,shipment.code,shipment.etd_port,shipment.eta_port,shipment.etd,shipment.eta,shipment.instore,
+            shipment.container,shipment.cartons,shipment.volume,shipment.weight
+        )
+        logger.debug('  shipment_info is {0}'.format(shipment_info))
+        try:
+            newItem=QTableWidgetItem(shipment_info)
+            newItem.setBackground(QColor(76, 190, 230)) #blue  grey:131,149,147 green:129,215,65
+            newItem.setFont(QFont('SimHei',11,QFont.Bold))
+            #newItem.setTextColor(QColor(200, 111, 100))
+            self.ui.tableWOrder.setItem(row_pos,0,newItem)
+        except Exception as e:
+            logger.error(' error when set new Item {0}'.format(e))
+        try:
+            orders=shipment.order_set.all()
+            logger.debug(' get orders from shipment {0}'.format(len(orders)))
+            for order in orders:
+                self.append_one_order(order)
+        except Exception as e:
+            logger.error('  error when get orders from shipment {0}'.format(e))
+
+
+    def show_orders(self):
         orders=order_view.get_orders()
         logger.debug(' Get orders {0}'.format(len(orders)))
-        self.ui.tableWOrder.setRowCount(len(orders))
+        #self.ui.tableWOrder.setRowCount(len(orders))
         for index in range(len(orders)):
             order=orders[index]
             logger.debug('  start to show order {0}/{1}/{2}'.format(order.tis_no,order.product.style_no,order.quantity))
             try:
-                self.ui.tableWOrder.setItem(index,0,QTableWidgetItem(order.tis_no))
-                self.ui.tableWOrder.setItem(index,1,QTableWidgetItem(order.product.style_no))
-                self.ui.tableWOrder.setItem(index,2,QTableWidgetItem(order.colour))
-                self.ui.tableWOrder.setItem(index,3,QTableWidgetItem(str(order.quantity)))
-                self.ui.tableWOrder.setItem(index,4,QTableWidgetItem(order.shipment.etd.strftime('%Y %m %d')))
-                item=QTableWidgetItem()
-                item.setIcon(QIcon('TIS.PNG'))
-                self.ui.tableWOrder.setItem(index,5,QTableWidgetItem(item))
+                self.append_one_order(order)
             except Exception as e:
                 logger.error(' error occurs when show order in Table widget {0}'.format(e))
 
-    def show_shipment(self):
+    def show_shipments(self):
         shipments=shipment_view.get_all_shipment()
         logger.debug(' Get shipments {0}'.format(len(shipments)))
-        self.ui.tableWOrder.rowcou
+        for shipment in shipments:
+            logger.debug('  start to show shipment {0}'.format(shipment))
+            self.append_one_shipment(shipment)
+
+    def show_shipments_warehouse(self):
+        shipments=shipment_view.get_next_month_warehouse()
+        logger.debug(' Get shipments {0}'.format(len(shipments)))
+        for shipment in shipments:
+            logger.debug('  start to show shipment {0}'.format(shipment))
+            self.append_one_shipment(shipment)
+
+    def cal_allorder_volumes(self):
+        logger.info('start to cal all order cartons volumes')
+        Order.calculate_allorder_cartons()
+
 
 

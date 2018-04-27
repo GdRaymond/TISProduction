@@ -22,7 +22,7 @@ class TIS_Excel():
     DELAY_TIME=0
     END_STR="INDIA"
     MAX_MTM_QUANTITY=10
-    ORDER_FIELD=OrderedDict([('B','Customer'),('C','Supplier'),('D','Style'),('E','TISNo'),('F','InternalNo'),('G','ShipCode'),('H','ETD'),('I','ETA'),('J','InStore'),('K','ABMInStore'),('L','CTM'),('M','Commodity'),('N','Colour'),('O','Quantity'),('P','Freight'),('Q','FOBPort'),('R','ETAPort'),('S','OrderDate'),('T','PPSample'),('U','SSSample'),('V','TestReport'),('W','Material'),('X','Cartons'),('Y','Volume'),('Z','Weight')])
+    ORDER_FIELD=OrderedDict([('B','Customer'),('C','Supplier'),('D','Style'),('E','TISNo'),('F','InternalNo'),('G','ShipCode'),('H','ETD'),('I','ETA'),('J','InStore'),('K','ABMInStore'),('L','CTM'),('M','Commodity'),('N','Colour'),('O','Quantity'),('P','Freight'),('Q','FOBPort'),('R','ETAPort'),('S','OrderDate'),('T','PPSample'),('U','SSSample'),('V','TestReport'),('W','Material'),('X','Cartons'),('Y','Volume'),('Z','Weight'),('AA','TapeNo')])
     FINANCE_FIELD=OrderedDict([('A','Customer'),('B','Supplier'),('C','CTM'),('D','OrderDate'),('E','TISNo'),('F','InternalNo'),('G','Style'),('H','Commodity'),('I','Quantity'),('J','FreightPrice'),('K','ExchangeRate'),('L','LandCost'),('M','FreightCost'),('N','Sales'),('O','MarkUp'),('P','FOBPort'),('Q','Freight'),('R','ETD'),('S','ETA'),('T','InStore'),('U','FactoryPayMonth'),('V','ClientPayMonth'),('W','SellPrice'),('X','PurchasePrice'),('Y','Deposit'),('Z','FTYInvoice'),('AA','Fabric'),('AB','Colour'),('AC','Remark')])
 
     def __init__(self,**kwargs):
@@ -632,6 +632,9 @@ class TIS_Excel():
             order.quantity = order_line.get('Quantity')
             order.volume = order_line.get('Volume')
             order.cartons = order_line.get('Cartons')
+            order.weights=order_line.get('Weight')
+            order.tape_no=order_line.get('TapeNo')
+            order.order_date=order_line.get('OrderDate')
             order.ctm_no=str(order_line.get('CTM')).strip('.0') #4500309773.0 for government CTM No. 4500309773, excel will add .0, need trim
             try:
                 order.save()

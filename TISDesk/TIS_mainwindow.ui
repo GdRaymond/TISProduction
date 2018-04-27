@@ -47,7 +47,7 @@
      <widget class="QPushButton" name="btn_open">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>660</x>
         <y>10</y>
         <width>75</width>
         <height>23</height>
@@ -73,7 +73,7 @@
      <widget class="QPushButton" name="btnCopy">
       <property name="geometry">
        <rect>
-        <x>120</x>
+        <x>460</x>
         <y>10</y>
         <width>75</width>
         <height>23</height>
@@ -86,7 +86,7 @@
      <widget class="QPushButton" name="btnGeneratePrice">
       <property name="geometry">
        <rect>
-        <x>210</x>
+        <x>10</x>
         <y>10</y>
         <width>81</width>
         <height>23</height>
@@ -99,7 +99,7 @@
      <widget class="QPushButton" name="btnRequisition">
       <property name="geometry">
        <rect>
-        <x>300</x>
+        <x>380</x>
         <y>10</y>
         <width>75</width>
         <height>23</height>
@@ -112,7 +112,7 @@
      <widget class="QPushButton" name="btnGenerateOrderTrace">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>170</x>
         <y>10</y>
         <width>91</width>
         <height>23</height>
@@ -125,7 +125,7 @@
      <widget class="QPushButton" name="btnInitProducts">
       <property name="geometry">
        <rect>
-        <x>480</x>
+        <x>90</x>
         <y>10</y>
         <width>75</width>
         <height>23</height>
@@ -133,6 +133,19 @@
       </property>
       <property name="text">
        <string>InitProduct</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnCalVol">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>10</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>CalAllVolum</string>
       </property>
      </widget>
     </widget>
@@ -150,21 +163,19 @@
        </rect>
       </property>
       <property name="rowCount">
-       <number>10</number>
+       <number>0</number>
       </property>
       <property name="columnCount">
-       <number>6</number>
+       <number>14</number>
       </property>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
       <column/>
       <column/>
       <column/>
@@ -190,12 +201,25 @@
        <rect>
         <x>100</x>
         <y>10</y>
-        <width>75</width>
+        <width>81</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
        <string>ShowShipment</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnWarehouse">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>10</y>
+        <width>111</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>WarehouseSchedule</string>
       </property>
      </widget>
     </widget>

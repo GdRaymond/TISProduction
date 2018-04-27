@@ -30,7 +30,12 @@ class Order(models.Model):
         product=models.ForeignKey(Product,on_delete=models.PROTECT)
     colour=models.TextField(max_length=20)
     quantity=models.IntegerField()
+    cartons=models.IntegerField(default=0)
+    volumes=models.DecimalField(max_digits=5,decimal_places=3,default=0)
+    weights=models.DecimalField(max_digits=7,decimal_places=1,default=0)
+    tape_no=models.TextField(max_length=50,null=True,blank=True)
     shipment=models.ForeignKey(Shipment,on_delete=models.SET_NULL,null=True)
+    order_date=models.DateField()
     purchase_price=models.DecimalField(max_digits=5,decimal_places=2,default=0,null=True)
     sell_price=models.DecimalField(max_digits=5,decimal_places=2,default=0,null=True)
     size1=models.IntegerField(default=0,null=True)
@@ -78,6 +83,17 @@ class Order(models.Model):
     def get_colour_block(self):
         colours=self.colour.split('/')
         return colours
+
+    def calculate_cartons_volumes(self):
+        import math
+        try:
+            self.cartons=math.ceil(self.quantity/self.product.quantity_per_carton)
+            self.volumes = self.cartons * self.product.volume_per_carton
+            self.weights = self.cartons * self.product.weight_per_carton
+            self.save()
+        except Exception as e:
+            logger.error('  error occur when calculate cartons {0}'.format(e))
+
 
     def get_or_create_fabric_trim(self):
         colours=self.get_colour_block()
@@ -133,14 +149,17 @@ class Order(models.Model):
                     logger.debug('--Correct')
             logger.debug('-Finish file')
 
-
-
-
-
-
-
-
-
+    @staticmethod
+    def calculate_allorder_cartons():
+        try:
+            orders=Order.objects.all()
+        except Exception as e:
+            logger.error(' error occur when get all orders {0}'.format(e))
+        logger.debug('  get {0} orders'.format(len(orders)))
+        for order in orders:
+            logger.debug('  calculate cartons for order {0}'.format(order))
+            order.calculate_cartons_volumes()
+        logger.debug('  finish all {0} orders'.format(len(orders)))
 
 class FabricTrim(models.Model):
     colour_solid=models.TextField(max_length=20)
@@ -197,6 +216,14 @@ class SampleCheck(models.Model):
 
 @receiver(post_save,sender=Order)
 def create_fabric_trim(sender,created,instance,**kwargs):
+    """
+    when order is created, then create the fabric check for this order
+    :param sender:
+    :param created:
+    :param instance:
+    :param kwargs:
+    :return:
+    """
     if created:
         colours=instance.colour.split('/')
         logger.debug('   new order, analyse colours {0}'.format(colours))
@@ -205,6 +232,45 @@ def create_fabric_trim(sender,created,instance,**kwargs):
             fabric_trim=FabricTrim(colour_solid=colour_name,order=instance)
             fabric_trim.save()
             logger.debug('   fabric trim saved {0}'.format(fabric_trim))
+
+@receiver(post_save,sender=Order)
+def calculate_volumes(sender,instance,**kwargs):
+    """
+    when order is saved, recalculate the cartons, volumes for  shipment
+    :param sender:
+    :param instance:
+    :param kwargs:
+    :return:
+    """
+    shipment=instance.shipment
+    if shipment:
+        orders=Order.objects.filter(shipment=shipment)
+        cartons=0
+        volumes=0
+        weights=0
+        quantities=0
+        for order in orders:
+            cartons+=order.cartons
+            volumes+=order.volumes
+            weights+=order.weights
+            quantities+=order.quantity
+        shipment.cartons=cartons
+        shipment.volume=volumes
+        shipment.weight=weights
+        shipment.total_quantity=quantities
+        if shipment.mode=='Sea':
+            if volumes>=62:
+                shipment.container='Need Split'
+            elif volumes>44:
+                shipment.container='40HQ'
+            elif volumes>=25:
+                shipment.container='40GP'
+            elif volumes>=12:
+                shipment.container='20GP'
+            else:
+                shipment.container='LCL'
+        shipment.save()
+
 
 def create_test_report_check(order_id, test_report_group):
     '''
