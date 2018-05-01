@@ -3,6 +3,7 @@ from django.urls import reverse
 from products import product_price
 import datetime,re
 from TISProduction import tis_log
+#from orders.models import Order
 logger=tis_log.get_tis_logger()
 
 # Create your models here.
@@ -55,6 +56,9 @@ class Shipment(models.Model):
 
     def get_absolute_url(self):
         return reverse('shipment_detail',kwargs={'pk':self.pk})
+
+
+
 
     @staticmethod
     def get_shipment(ship_code,etd,supplier,freight,etd_port):

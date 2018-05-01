@@ -59,6 +59,9 @@ QPS,QPSPL-PLO-SS,,30,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 g
 QPS,QPSPL-PLO-LS,,25,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
 QPS,QPSPL-TIPSO-LS,,25,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
 QPS,QPSPL-NDW-SS,,25,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,QPSPL-PD-SS,,25,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,QPSPL-PD-LS,,25,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
+QPS,QPSPL-HI-SS,,25,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
 QPS,QPSPL-PS-SS,,30,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
 QPS,QPSPL-PS-LS,,25,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
 QPS,SERPCC PL-SS,,30,0.06,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
@@ -72,6 +75,8 @@ QPS,QPS-TIE-P-ML,,100,0.04805,6,100% polyester
 QPS,QPS-TIE-P-F,,100,0.04805,6,100% polyester 
 QPS,QPSPF,,10,0.06,13,"100% Polyester 395gsm polar fleece laminated with water repellent finishing, T/C Woven fabric patch"
 QPS,QPSTM,2.5,10,0.189,13,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+QPS,QPSMJM,2.5,10,0.189,13,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+QPS,QPSMJF,2.5,10,0.189,13,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
 QPS,QPS cap,,100,0.07623,12,"3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")"
 QPS,QPSTF,2.5,10,0.189,12,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
 QPS,PS63,,8,0.07581,9,Polyester soft shell with micro polar fleece inner and bonded with PTFE membrane
@@ -80,14 +85,22 @@ QFES,SESDDJ,,10,0.07581,9,Polyester soft shell with micro polar fleece inner and
 QFES,RFSDDJ,,11,0.07581,9,Polyester soft shell with micro polar fleece inner and bonded with PTFE membrane
 QFES,SESPL-SS,,30,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
 QFES,QFESDTM,1.6,20,0.05415,12,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+QFES,QFESDSF,1.6,20,0.05415,12,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
 QFES,RFSPL-SS,,30,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
 QFES,SESOU,4,8,0.03774,12,"100% Cotton ripstop, 20x16 / 100x56, 200gsm"
 QFES,SESTPF,2.29,12,0.05415,9,"100% Cotton ripstop, 20x16 / 100x56, 200gsm"
 QFES,SESTPM,2.29,12,0.05415,13,"100% Cotton ripstop, 20x16 / 100x56, 200gsm"
 QFES,SESSPF,2.04,20,0.05415,12,"100% Cotton ripstop, 50/2x5//2  / 98x66, 145gsm"
 QFES,SESSPM,2.04,30,0.05415,13,"100% Cotton ripstop, 50/2x5//2  / 98x66, 145gsm"
+QFES,RFSPF,,10,0.06,13,"100% Polyester 395gsm polar fleece laminated with water repellent finishing, T/C Woven fabric patch"
+QFES,RFSTM,2.5,10,0.189,13,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+QFES,SESPF,,10,0.06,13,"100% Polyester 395gsm polar fleece laminated with water repellent finishing, T/C Woven fabric patch"
+QFES,SESTM,2.5,10,0.189,13,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
+QFES,QFESPF,,10,0.06,13,"100% Polyester 395gsm polar fleece laminated with water repellent finishing, T/C Woven fabric patch"
+QFES,QFESTM,2.5,10,0.189,13,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
 QFES,QFES badge,,1000,0.03328,6.8,other
 QFES,RFS badge,,1000,0.03328,6.8,other
+QFES,RFS-Vinyl-Badge,,1000,0.03328,6.8,other
 ComRec,CRPL-SS,,30,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
 VC,VC MALE SS,,20,0.05712,10,65% Polyester / 35% Cotton 78x65 / 45/2x32/1 135gsm 
 VC,VC MALE LS,,20,0.05712,11.5,65% Polyester / 35% Cotton 78x65 / 45/2x32/1 135gsm 
@@ -159,6 +172,7 @@ RITEMATE,RM73N1R,,5,0.06,11,100% Cotton Drill 90x46 / 14sx7s in 310gsm
 RITEMATE,RM7654R,,12,0.0945,11,100% Cotton Drill 90x46 / 14sx7s in 310gsm
 RITEMATE,RM5071R,,8,0.06,13,100% Cotton Drill 90x46 / 14sx7s in 310gsm
 RITEMATE,RM123FOF,,21,0.06048,10,100% Cotton 20x10 40x42 155gsm brushed printing check
+RITEMATE,3M-8910-50mm,,1000,0.03328,6.8,other
 Hutchinson,HUT123FOF,,21,0.06048,10,100% Cotton 20x10 40x42 155gsm brushed printing check
 Hutchinson,HUT123FOF-F,,21,0.06048,10,100% Cotton 20x10 40x42 155gsm brushed printing check
 RITEMATE,RM123FCF,,21,0.06048,10,100% Cotton 20x10 40x42 155gsm brushed printing check

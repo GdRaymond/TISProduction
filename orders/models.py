@@ -30,9 +30,9 @@ class Order(models.Model):
         product=models.ForeignKey(Product,on_delete=models.PROTECT)
     colour=models.TextField(max_length=20)
     quantity=models.IntegerField()
-    cartons=models.IntegerField(default=0)
-    volumes=models.DecimalField(max_digits=5,decimal_places=3,default=0)
-    weights=models.DecimalField(max_digits=7,decimal_places=1,default=0)
+    cartons=models.IntegerField(default=0,null=True,blank=True)
+    volumes=models.DecimalField(max_digits=5,decimal_places=3,default=0,null=True,blank=True)
+    weights=models.DecimalField(max_digits=7,decimal_places=1,default=0,null=True,blank=True)
     tape_no=models.TextField(max_length=50,null=True,blank=True)
     shipment=models.ForeignKey(Shipment,on_delete=models.SET_NULL,null=True)
     order_date=models.DateField()
@@ -75,7 +75,7 @@ class Order(models.Model):
         ordering=('tis_no','colour')
 
     def __str__(self):
-        return '{0}-{1}-{2}'.format(self.tis_no,self.product.__str__(),self.quantity)
+        return '{0}-{1}-{2}-{3}'.format(self.id,self.tis_no,self.product.__str__(),self.quantity)
 
     def get_tisno_style(self):
         return '{0}-{1}'.format(self.tis_no,self.product.__str__())
@@ -234,7 +234,7 @@ def create_fabric_trim(sender,created,instance,**kwargs):
             logger.debug('   fabric trim saved {0}'.format(fabric_trim))
 
 @receiver(post_save,sender=Order)
-def calculate_volumes(sender,instance,**kwargs):
+def calculate_volumes(sender,created,instance,**kwargs):
     """
     when order is saved, recalculate the cartons, volumes for  shipment
     :param sender:
@@ -242,6 +242,8 @@ def calculate_volumes(sender,instance,**kwargs):
     :param kwargs:
     :return:
     """
+    if created:
+        return None
     shipment=instance.shipment
     if shipment:
         orders=Order.objects.filter(shipment=shipment)

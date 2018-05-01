@@ -66,6 +66,9 @@ class Ui_MainWindow(object):
         self.btnWarehouse = QtWidgets.QPushButton(self.tab_2)
         self.btnWarehouse.setGeometry(QtCore.QRect(190, 10, 111, 23))
         self.btnWarehouse.setObjectName("btnWarehouse")
+        self.btnInspecSchedule = QtWidgets.QPushButton(self.tab_2)
+        self.btnInspecSchedule.setGeometry(QtCore.QRect(310, 10, 111, 23))
+        self.btnInspecSchedule.setObjectName("btnInspecSchedule")
         self.tabWidget.addTab(self.tab_2, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -95,5 +98,6 @@ class Ui_MainWindow(object):
         self.btnShowOrder.setText(_translate("MainWindow", "ShowOrder"))
         self.btnShowShipment.setText(_translate("MainWindow", "ShowShipment"))
         self.btnWarehouse.setText(_translate("MainWindow", "WarehouseSchedule"))
+        self.btnInspecSchedule.setText(_translate("MainWindow", "InspectionSchedule"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "ReadOrder"))
 

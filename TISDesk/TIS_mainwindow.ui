@@ -222,6 +222,19 @@
        <string>WarehouseSchedule</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="btnInspecSchedule">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>10</y>
+        <width>111</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>InspectionSchedule</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>

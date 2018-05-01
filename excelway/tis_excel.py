@@ -563,8 +563,23 @@ class TIS_Excel():
                     signal_display.emit({'msg':'  skip row No. {0}'.format(order_line.get('row_num')), 'level': 'INFO'})
                 continue
             colour = order_line.get('Colour')
+            style=order_line.get('Style')
             try:
-                order=Order.objects.get(tis_no=tis_no,colour=colour)
+                product=Product.objects.get(style_no__iexact=style)
+                logger.info('   get product {0}'.format(product))
+                if signal_display:
+                    signal_display.emit({'msg':'   get product {0}'.format(product), 'level': 'INFO'})
+            except Product.DoesNotExist:
+                commodity=order_line.get('Commodity')
+                product=Product(style_no=style,commodity=commodity)
+                product.save()
+                logger.error('  This is a new product {0}, system will add style No. to database, please complete other info'.format(product))
+                if signal_display:
+                    signal_display.emit({'msg':'  This is a new product {0}, system will add style No. to database, please complete other info', 'level': 'ERROR'})
+                result['new_product'] += 1
+
+            try:
+                order=Order.objects.get(tis_no=tis_no,product=product,colour=colour)
                 logger.debug('   get order {0}'.format(order.tis_no))
                 result['update_order'] = result['update_order'] + 1
             except Order.DoesNotExist:
@@ -578,6 +593,9 @@ class TIS_Excel():
                 logger.error('   error when query order : {0}'.format(e))
                 if signal_display:
                     signal_display.emit({'msg':'   error when query order : {0}'.format(e), 'level': 'ERROR'})
+
+            order.product=product
+
             if order_line.get('ETD') is None: #if no ETD then skip the shipment process
                 logger.debug('   This order does not have ETD, skip shipment')
             else:
@@ -610,29 +628,13 @@ class TIS_Excel():
                         signal_display.emit({'msg':'   shipment {0} saved'.format(shipment), 'level': 'INFO'})
                     order.shipment=shipment
 
-            style=order_line.get('Style')
-            try:
-                product=Product.objects.get(style_no__iexact=style)
-                logger.info('   get product {0}'.format(product))
-                if signal_display:
-                    signal_display.emit({'msg':'   get product {0}'.format(product), 'level': 'INFO'})
-            except Product.DoesNotExist:
-                commodity=order_line.get('Commodity')
-                product=Product(style_no=style,commodity=commodity)
-                product.save()
-                logger.error('  This is a new product {0}, system will add style No. to database, please complete other info'.format(product))
-                if signal_display:
-                    signal_display.emit({'msg':'  This is a new product {0}, system will add style No. to database, please complete other info', 'level': 'ERROR'})
-                result['new_product'] += 1
-            order.product=product
-
             order.internal_no=order_line.get('InternalNo')
             order.client=order_line.get('Customer')
             order.supplier=order_line.get('Supplier')
             order.quantity = order_line.get('Quantity')
-            order.volume = order_line.get('Volume')
-            order.cartons = order_line.get('Cartons')
-            order.weights=order_line.get('Weight')
+            #order.volume = order_line.get('Volume')
+            #order.cartons = order_line.get('Cartons')
+            #order.weights=order_line.get('Weight')
             order.tape_no=order_line.get('TapeNo')
             order.order_date=order_line.get('OrderDate')
             order.ctm_no=str(order_line.get('CTM')).strip('.0') #4500309773.0 for government CTM No. 4500309773, excel will add .0, need trim

@@ -66,7 +66,8 @@ class TISMainWindow(QMainWindow):
         self.ui.btnShowOrder.clicked.connect(self.show_orders)
         self.ui.btnShowShipment.clicked.connect(self.show_shipments)
         self.ui.btnWarehouse.clicked.connect(self.show_shipments_warehouse)
-        self.ui.btnCalVol.clicked.connect(self.cal_allorder_volumes)
+        self.ui.btnInspecSchedule.clicked.connect(self.show_shipments_inspection)
+        self.ui.btnCalVol.clicked.connect(self.cal_allshipment_volumes)
         order_title=['Style','TIS','Colour','Quantity','ABM','CTM','OrderDate','PPS','SSS','Report','Cartons','Volume','Weight','3M']
         self.ui.tableWOrder.setHorizontalHeaderLabels(order_title)
 
@@ -209,7 +210,7 @@ class TISMainWindow(QMainWindow):
         self.ui.tableWOrder.setItem(row_pos,12,QTableWidgetItem(str(order.weights)) )
         self.ui.tableWOrder.setItem(row_pos,13,QTableWidgetItem(str(order.tape_no)) )
 
-    def append_one_shipment(self,shipment):
+    def append_one_shipment(self,shipment,flag_all_order='F'):
         row_pos=self.ui.tableWOrder.rowCount()
         logger.debug('Row Position is {0}'.format(row_pos))
         self.ui.tableWOrder.insertRow(row_pos)
@@ -233,7 +234,10 @@ class TISMainWindow(QMainWindow):
         except Exception as e:
             logger.error(' error when set new Item {0}'.format(e))
         try:
-            orders=shipment.order_set.all()
+            if flag_all_order=='F':  #'F' - get all orders in this shipment
+                orders=shipment.order_set.all()
+            elif flag_all_order=='I': #'I' - for Mike inspection
+                orders=shipment_view.get_orders_inspection_from_shipment(shipment)
             logger.debug(' get orders from shipment {0}'.format(len(orders)))
             for order in orders:
                 self.append_one_order(order)
@@ -242,6 +246,7 @@ class TISMainWindow(QMainWindow):
 
 
     def show_orders(self):
+        self.ui.tableWOrder.setRowCount(0)
         orders=order_view.get_orders()
         logger.debug(' Get orders {0}'.format(len(orders)))
         #self.ui.tableWOrder.setRowCount(len(orders))
@@ -254,6 +259,7 @@ class TISMainWindow(QMainWindow):
                 logger.error(' error occurs when show order in Table widget {0}'.format(e))
 
     def show_shipments(self):
+        self.ui.tableWOrder.setRowCount(0)
         shipments=shipment_view.get_all_shipment()
         logger.debug(' Get shipments {0}'.format(len(shipments)))
         for shipment in shipments:
@@ -261,15 +267,31 @@ class TISMainWindow(QMainWindow):
             self.append_one_shipment(shipment)
 
     def show_shipments_warehouse(self):
+        self.ui.tableWOrder.setRowCount(0)
         shipments=shipment_view.get_next_month_warehouse()
-        logger.debug(' Get shipments {0}'.format(len(shipments)))
+        logger.debug(' Get warehouse shipments {0}'.format(len(shipments)))
         for shipment in shipments:
             logger.debug('  start to show shipment {0}'.format(shipment))
             self.append_one_shipment(shipment)
+        shipment_view.write_all_shipment_warehouse(shipments)
 
-    def cal_allorder_volumes(self):
+    def show_shipments_inspection(self):
+        self.ui.tableWOrder.setRowCount(0)
+        shipments=shipment_view.get_next_month_inspection()
+        logger.debug('  get inspection shipments {0}'.format(len(shipments)))
+        for shipment in shipments:
+            logger.debug('  start to show shipment {0}'.format(shipment))
+            self.append_one_shipment(shipment,'I')
+
+
+
+    def cal_allshipment_volumes(self):
         logger.info('start to cal all order cartons volumes')
-        Order.calculate_allorder_cartons()
+        try:
+            Order.calculate_allorder_cartons()
+            shipment_view.cal_all_shipment_volume()
+        except Exception as e:
+            logger.error('error when cal all shipment vol {0}'.format(e))
 
 
 
