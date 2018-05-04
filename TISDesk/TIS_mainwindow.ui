@@ -18,17 +18,17 @@
     <normaloff>TIS.PNG</normaloff>TIS.PNG</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTabWidget" name="tabWidget">
+   <widget class="QTabWidget" name="tapWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>0</y>
+      <x>-10</x>
+      <y>-60</y>
       <width>1341</width>
       <height>661</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -233,6 +233,34 @@
       </property>
       <property name="text">
        <string>InspectionSchedule</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="editShipment">
+     <attribute name="title">
+      <string>EditShipment</string>
+     </attribute>
+     <widget class="QTableView" name="tableVshipment">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>120</y>
+        <width>771</width>
+        <height>381</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnShipView">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>30</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ShipView</string>
       </property>
      </widget>
     </widget>

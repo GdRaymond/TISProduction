@@ -49,12 +49,13 @@ def get_next_month_warehouse():
 
 def get_next_month_inspection():
     today=datetime.date.today()
+    start_date=today+dateutil.relativedelta.relativedelta(days=+6)
     next_month_date=today+dateutil.relativedelta.relativedelta(months=+1)
     firtday,days=calendar.monthrange(next_month_date.year,next_month_date.month)
     last_day_next_month=datetime.date(year=next_month_date.year,month=next_month_date.month,day=days)
     logger.debug(' get the last day of next month is {0}'.format(last_day_next_month))
     try:
-        shipments=Shipment.objects.filter(etd__gt=today).filter(etd__lt=last_day_next_month)\
+        shipments=Shipment.objects.filter(etd__gt=start_date).filter(etd__lt=last_day_next_month)\
             .order_by('etd').exclude(mode__iexact='Courier')
     except Exception as e:
         logger.error(' error occur when get shipment for warehouse {0}'.format(e))
@@ -115,9 +116,14 @@ def write_all_shipment_warehouse(shipments):
     with open(filename,'w') as dest_file:
         for index in range(len(shipments)):
             shipment=shipments[index]
-            shipment_info = '\n\nShipment-{0}: {1} {2} Delivery:{3} with {4} cartons {5} m3 by {6} ; ETD:{7} From {8}'.format(
-                index+1,shipment.mode,shipment.container, shipment.instore, shipment.cartons, shipment.volume, shipment.supplier,
-            shipment.etd,shipment.etd_port)
+            if str(shipment.mode).strip().upper()=='SEA':
+                shipment_info = '\n\nShipment-{0}: {1}  Delivery:{2} with {3} cartons {4} m3 by {5} ; ETD:{6} From {7}'.\
+                    format(index+1,shipment.container, shipment.instore, shipment.cartons, shipment.volume,\
+                           shipment.supplier,shipment.etd,shipment.etd_port)
+            else:
+                shipment_info = '\n\nShipment-{0}: {1}  Delivery:{2} with {3} cartons {4} m3 by {5} ; ETD:{6} From {7}'.\
+                    format(index + 1, shipment.mode,  shipment.instore, shipment.cartons, shipment.volume,
+                    shipment.supplier,shipment.etd, shipment.etd_port)
             dest_file.write(shipment_info)
             try:
                 orders = shipment.order_set.all()
@@ -130,11 +136,50 @@ def write_all_shipment_warehouse(shipments):
                 logger.error('  error when get orders from shipment {0}'.format(e))
 
 def get_orders_inspection_from_shipment(shipment):
-    if shipment.etd_port.upper()=='NINGBO':
+    logger.debug(' gettting insepction order for shipment {0}-{1} etd_port {2}'.format(shipment.id,shipment,shipment.etd_port))
+    if str(shipment.etd_port).upper().strip()=='NINGBO':
         orders=shipment.order_set.all()
-    elif not shipment.etd_port.upper()=='GUANGZHOU':
+        logger.debug('   As ETD from Ningbo, get all orders {0}'.format(len(orders)))
+    elif not str(shipment.etd_port).upper().strip()=='GUANGZHOU':
         orders=shipment.order_set.filter(~Q(client__iexact='Ritemate'))
+        logger.debug('   As ETD not from Ningbo not AUWIN, excluding Ritemate get orders {0}'.format(len(orders)))
+    else:
+        logger.debug('   As it is Auwin, no need inspect')
+        orders=None
     return orders
+
+def write_inspection_shipment(shipments):
+    file_name=os.path.normpath(os.path.join(settings.BASE_DIR+'\media\warehouse\Mike_{0}.txt'.\
+                                            format(datetime.date.today().strftime('%Y_%m_%d'))))
+    logger.debug('start to write to file for Mike inspection schedule {0}'.format(file_name))
+    with open(file_name,'w') as ins_file:
+        shipment_no=0
+        for index in range(len(shipments)):
+            shipment=shipments[index]
+            orders=get_orders_inspection_from_shipment(shipment)
+            if not orders or len(orders)==0:
+                logger.debug(' skip shipment {0}  '.format(shipment))
+            else:
+                shipment_no+=1
+                logger.debug('  get shipment {0}, No. {1} with {2} orders'.format(shipment,shipment_no,len(orders)))
+                if str(shipment.mode).strip().upper()=='SEA':
+                    shipment_info = '\n\nShipment-{0}: {1} ETD {2} EX {3} in {4}'.format(
+                        shipment_no, shipment.supplier, shipment.etd, shipment.etd_port,shipment.container)
+                else:
+                    shipment_info = '\n\nShipment-{0}: {1} ETD {2} EX {3} in {4}'.format(
+                        shipment_no, shipment.supplier, shipment.etd, shipment.etd_port, shipment.mode)
+                ins_file.write(shipment_info)
+                total_qty=0
+                for order in orders:
+                    order_info = '\n  {0:<13} - {1:<15} - {2:<13} - {3:>5} pcs - {4:>3d} cartons'.format(order.tis_no,
+                                                                                      order.product.style_no,
+                                                                                      order.colour, order.quantity,
+                                                                                      order.cartons)
+                    ins_file.write(order_info)
+                    total_qty+=order.quantity
+                ins_file.write('\n Total Quantity: {0:,} pcs'.format(total_qty))
+    logger.debug('finish writing inspection file')
+
 
 
 

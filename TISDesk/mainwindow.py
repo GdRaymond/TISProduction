@@ -238,6 +238,13 @@ class TISMainWindow(QMainWindow):
                 orders=shipment.order_set.all()
             elif flag_all_order=='I': #'I' - for Mike inspection
                 orders=shipment_view.get_orders_inspection_from_shipment(shipment)
+                if not orders or len(orders)==0:
+                    newItem = QTableWidgetItem(shipment_info)
+                    newItem.setBackground(QColor(131, 149, 147))  # blue  grey:131,149,147 green:129,215,65
+                    newItem.setFont(QFont('SimHei', 11, QFont.Bold))
+                    # newItem.setTextColor(QColor(200, 111, 100))
+                    self.ui.tableWOrder.setItem(row_pos, 0, newItem)
+
             logger.debug(' get orders from shipment {0}'.format(len(orders)))
             for order in orders:
                 self.append_one_order(order)
@@ -282,6 +289,7 @@ class TISMainWindow(QMainWindow):
         for shipment in shipments:
             logger.debug('  start to show shipment {0}'.format(shipment))
             self.append_one_shipment(shipment,'I')
+        shipment_view.write_inspection_shipment(shipments)
 
 
 
