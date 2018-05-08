@@ -21,8 +21,8 @@
    <widget class="QTabWidget" name="tapWidget">
     <property name="geometry">
      <rect>
-      <x>-10</x>
-      <y>-60</y>
+      <x>0</x>
+      <y>0</y>
       <width>1341</width>
       <height>661</height>
      </rect>
@@ -243,18 +243,18 @@
      <widget class="QTableView" name="tableVshipment">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>120</y>
-        <width>771</width>
-        <height>381</height>
+        <x>10</x>
+        <y>40</y>
+        <width>791</width>
+        <height>481</height>
        </rect>
       </property>
      </widget>
      <widget class="QPushButton" name="btnShipView">
       <property name="geometry">
        <rect>
-        <x>40</x>
-        <y>30</y>
+        <x>10</x>
+        <y>10</y>
         <width>75</width>
         <height>23</height>
        </rect>

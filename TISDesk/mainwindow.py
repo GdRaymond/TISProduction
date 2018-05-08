@@ -11,6 +11,9 @@ from products import views as product_view
 from orders import views as order_view
 from orders.models import Order
 from shipments import views as shipment_view
+from shipments.models import Shipment
+from PyQt5.QtSql import QSqlRelationalTableModel,QSqlRelation,QSqlRelationalDelegate
+
 
 logger=tis_log.get_tis_logger()
 
@@ -68,8 +71,12 @@ class TISMainWindow(QMainWindow):
         self.ui.btnWarehouse.clicked.connect(self.show_shipments_warehouse)
         self.ui.btnInspecSchedule.clicked.connect(self.show_shipments_inspection)
         self.ui.btnCalVol.clicked.connect(self.cal_allshipment_volumes)
-        order_title=['Style','TIS','Colour','Quantity','ABM','CTM','OrderDate','PPS','SSS','Report','Cartons','Volume','Weight','3M']
+        order_title=['Style','TIS','Colour','Quantity','ABM','CTM','OrderDate','PPS','SSS','Report','Cartons','Volume','Weight','3M','id']
+        self.ui.tableWOrder.setColumnCount(15)
+        self.ui.tableWOrder.setColumnWidth(14,1)
         self.ui.tableWOrder.setHorizontalHeaderLabels(order_title)
+        self.ui.tableWOrder.itemDoubleClicked.connect(self.edit_shipment)
+        self.ui.btnShipView.clicked.connect(self.show_shipment_view)
 
     def openfile(self):
         files=QFileDialog.getOpenFileName(self,'Open file','C:\\Users\\rhe\\PyCharm\\TISOrder\\media')
@@ -209,6 +216,7 @@ class TISMainWindow(QMainWindow):
         self.ui.tableWOrder.setItem(row_pos,11,QTableWidgetItem(str(order.volumes)) )
         self.ui.tableWOrder.setItem(row_pos,12,QTableWidgetItem(str(order.weights)) )
         self.ui.tableWOrder.setItem(row_pos,13,QTableWidgetItem(str(order.tape_no)) )
+        self.ui.tableWOrder.setItem(row_pos,14,QTableWidgetItem(str(order.id)) )
 
     def append_one_shipment(self,shipment,flag_all_order='F'):
         row_pos=self.ui.tableWOrder.rowCount()
@@ -231,6 +239,8 @@ class TISMainWindow(QMainWindow):
             newItem.setFont(QFont('SimHei',11,QFont.Bold))
             #newItem.setTextColor(QColor(200, 111, 100))
             self.ui.tableWOrder.setItem(row_pos,0,newItem)
+            self.ui.tableWOrder.setItem(row_pos, 14, QTableWidgetItem(str(shipment.id)))
+
         except Exception as e:
             logger.error(' error when set new Item {0}'.format(e))
         try:
@@ -303,3 +313,27 @@ class TISMainWindow(QMainWindow):
 
 
 
+    def show_shipment_view(self):
+        try:
+            self.model=QSqlRelationalTableModel(self)
+            self.model.setTable(Shipment)
+            self.ui.tableVshipment.setModel(self.model)
+            delegate=QSqlRelationalDelegate(self.ui.tableVshipment)
+            self.ui.tableVshipment.setItemDelegate(delegate)
+        except Exception as e:
+            logger.error('error occur when show shipment view : {0}'.format(e))
+
+    def edit_shipment(self,item):
+        try:
+            logger.debug('table widget double clicked {0}-{1}-{2}-{3}-{4}'.format(item.row(),item.column(),item.text()
+                     ,self.ui.tableWOrder.item(item.row(),14).text(),self.ui.tableWOrder.item(item.row(),1).text()))
+        except Exception as e:
+            logger.error('error occur when get id at last coloum-{0}'.format(e))
+        record_id=int(self.ui.tableWOrder.item(item.row(),14).text())
+        if self.ui.tableWOrder.item(item.row(),1): #in order line the col 1 is TIS no, not none
+            #handle order form
+            order=Order.objects.get(id=record_id)
+            logger.debug(' start to edit order {0}'.format(order))
+        else: # None for shipment line
+            shipment=Shipment.objects.get(id=record_id)
+            logger.debug(' start to edit shipment {0}'.format(shipment))
