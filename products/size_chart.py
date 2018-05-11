@@ -83,7 +83,7 @@ type_size={
         'QPS_field':['70R','75R','80R','85R','90R','95R','100R','105R','110R','115R','120R','125R','130R','70S','75S','80S',
                               '85S','90S','95S','100S','105S','70L','75L','80L','85L','90L','95L','100L','105L','110L','115L','120L'],
         'ABF_trousers':['67R','72R','77R','82R','87R','92R','97R','102R','107R','112R','117R','122R','127R','82S','87S',
-                    '92S','97S','102S','107S','112S','117S','122S','127S','132S','74L','79L','84L','89L','94L','99l','104l'],
+                    '92S','97S','102S','107S','112S','117S','122S','127S','132S','74L','79L','84L','89L','94L','99L','104L'],
         'ABF_unisex_shirt':['4XS','3XS','2XS','XS','S','M','L','XL','2XL','3XL','4XL','5XL','6XL','7XL'],
         'VP_male_shirt':['36','37','38','39','40','41','42','44','46','48','50','51','52'],
         
@@ -130,11 +130,23 @@ def get_size_list(style_no=''):
     size_list=type_size.get(garment_type)
     return size_list
 
+def get_size_list_for_show(style_no='')
+    garment_type=get_garment_type(style_no)
+    if not garment_type:
+        return None
+    size_list=get_size_list(style_no)
+    result_list=[]
+    if size_list:
+        for size in size_list:
+            if garment_type in ['']
+
 def get_garment_type(style_no=''):
     garment_type=style_type.get(style_no)
     if garment_type is None:
         return None
     return garment_type
+
+
 
 def get_size_from_code(code=''):
     size_name=size_code.get(code)

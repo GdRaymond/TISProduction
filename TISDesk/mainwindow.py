@@ -1,5 +1,5 @@
 
-from PyQt5.QtWidgets import QMainWindow,QFileDialog,QTableWidgetItem
+from PyQt5.QtWidgets import QMainWindow,QFileDialog,QTableWidgetItem,QAbstractItemView,QDialog
 from PyQt5.QtGui import QColor,QIcon,QFont
 from TISDesk.TIS_mainwindow import Ui_MainWindow
 from excelway.tis_excel import TIS_Excel
@@ -13,6 +13,7 @@ from orders.models import Order
 from shipments import views as shipment_view
 from shipments.models import Shipment
 from PyQt5.QtSql import QSqlRelationalTableModel,QSqlRelation,QSqlRelationalDelegate
+from TISDesk.edit_dialog import Edit_dialog_shipment
 
 
 logger=tis_log.get_tis_logger()
@@ -74,6 +75,7 @@ class TISMainWindow(QMainWindow):
         order_title=['Style','TIS','Colour','Quantity','ABM','CTM','OrderDate','PPS','SSS','Report','Cartons','Volume','Weight','3M','id']
         self.ui.tableWOrder.setColumnCount(15)
         self.ui.tableWOrder.setColumnWidth(14,1)
+        self.ui.tableWOrder.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.tableWOrder.setHorizontalHeaderLabels(order_title)
         self.ui.tableWOrder.itemDoubleClicked.connect(self.edit_shipment)
         self.ui.btnShipView.clicked.connect(self.show_shipment_view)
@@ -326,7 +328,7 @@ class TISMainWindow(QMainWindow):
     def edit_shipment(self,item):
         try:
             logger.debug('table widget double clicked {0}-{1}-{2}-{3}-{4}'.format(item.row(),item.column(),item.text()
-                     ,self.ui.tableWOrder.item(item.row(),14).text(),self.ui.tableWOrder.item(item.row(),1).text()))
+                     ,self.ui.tableWOrder.item(item.row(),14).text(),self.ui.tableWOrder.item(item.row(),0).text()))
         except Exception as e:
             logger.error('error occur when get id at last coloum-{0}'.format(e))
         record_id=int(self.ui.tableWOrder.item(item.row(),14).text())
@@ -336,4 +338,34 @@ class TISMainWindow(QMainWindow):
             logger.debug(' start to edit order {0}'.format(order))
         else: # None for shipment line
             shipment=Shipment.objects.get(id=record_id)
+            shipment_dict={'id':record_id,'etd':shipment.etd,'eta':shipment.eta,'instore':shipment.instore,
+                           'instore_abm':shipment.instore_abm,'quantity':shipment.total_quantity,'volume':shipment.volume,
+                           'carton':shipment.cartons,'etd_port':shipment.etd_port,'eta_port':shipment.eta_port,
+                           'container':shipment.container,'mode':shipment.mode,'code':shipment.code,'weight':shipment.weight,
+                           'supplier':shipment.supplier}
             logger.debug(' start to edit shipment {0}'.format(shipment))
+            try:
+                dialog=Edit_dialog_shipment(**shipment_dict)
+                action=dialog.exec_()
+                if action:
+                    logger.debug('dialog exec_ : {0}'.format(action))
+                    logger.debug('shipment saving {0} -{1} -{2} -{3} -{4} -{5} -{6} -{7}'.format(shipment,dialog.ui.dateE_etd.date(),\
+                                dialog.ui.dateE_eta.date(),dialog.ui.dateE_instore.date(),dialog.ui.dateE_instore_abm.date, \
+                                dialog.ui.comb_etdport.currentText(),dialog.ui.comb_etaport.currentText(),dialog.ui.comb_mode.currentText()))
+                    shipment.etd=dialog.ui.dateE_etd.date().toPyDate()
+                    shipment.eta=dialog.ui.dateE_eta.date().toPyDate()
+                    shipment.instore=dialog.ui.dateE_instore.date().toPyDate()
+                    shipment.instore_abm=dialog.ui.dateE_instore_abm.date().toPyDate()
+                    shipment.etd_port=dialog.ui.comb_etdport.currentText()
+                    shipment.eta_port=dialog.ui.comb_etaport.currentText()
+                    shipment.mode=dialog.ui.comb_mode.currentText()
+                    shipment.save()
+                    logger.debug('shipment saved {0} -{1} -{2} -{3} -{4} -{5} -{6} -{7}'.format(shipment,shipment.etd,
+                                                                                                shipment.eta,shipment.instore,
+                                                                                                shipment.instore_abm,shipment.etd_port,
+                                                                                                shipment.eta_port,shipment.mode))
+                else:
+                    logger.debug('dialog not exec_')
+                dialog.destroy()
+            except Exception as e:
+                logger.error(' error dialog {0}'.format(e))
