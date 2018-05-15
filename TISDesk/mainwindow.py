@@ -13,7 +13,7 @@ from orders.models import Order
 from shipments import views as shipment_view
 from shipments.models import Shipment
 from PyQt5.QtSql import QSqlRelationalTableModel,QSqlRelation,QSqlRelationalDelegate
-from TISDesk.edit_dialog import Edit_dialog_shipment
+from TISDesk.edit_dialog import Edit_dialog_shipment,Edit_Dialog_Order
 
 
 logger=tis_log.get_tis_logger()
@@ -335,7 +335,32 @@ class TISMainWindow(QMainWindow):
         if self.ui.tableWOrder.item(item.row(),1): #in order line the col 1 is TIS no, not none
             #handle order form
             order=Order.objects.get(id=record_id)
+            shipments=Shipment.objects.filter(supplier__iexact=order.supplier,eta__gt=datetime.date.today())\
+                .exclude(order__id=order.id).order_by('-etd')
+            shipment_l=['{4} - {0} / ETD {1} / {2} / {3}'.format(order.shipment.code,order.shipment.etd.strftime('%d-%b'),\
+                                                    order.shipment.mode,order.shipment.container,order.shipment.id)]
+            #assemble shipment list
+            for shipment in shipments:
+                shipment_l.append('{4} - {0} / ETD {1} / {2} / {3}'.format(shipment.code,shipment.etd.strftime('%d-%b'),\
+                                                    shipment.mode,shipment.container,shipment.id))
+             #assemble size_breakup
+
+            #assemble **kwargs
+            order_dict={'id':order.id,'style':order.product.style_no,'shipments':shipment_l,'tis_no':order.tis_no,\
+                        'supplier':order.supplier,'client':order.client,'abm_no':order.internal_no,'quantity':order.quantity, \
+                        'colour':order.colour,'order_date':order.order_date}
             logger.debug(' start to edit order {0}'.format(order))
+            try:
+                dialog=Edit_Dialog_Order(**order_dict)
+                action=dialog.exec_()
+                if action:
+                    logger.debug('dialog order exec_:{0}'.format(action))
+                    logger.debug('order saving ')
+                else:
+                    logger.debug('dialog order not exec_')
+            except Exception as e:
+                logger.error('error saving order: {0}'.format(e))
+
         else: # None for shipment line
             shipment=Shipment.objects.get(id=record_id)
             shipment_dict={'id':record_id,'etd':shipment.etd,'eta':shipment.eta,'instore':shipment.instore,

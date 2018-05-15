@@ -1,0 +1,362 @@
+
+
+Shipment-1: 40HQ  Delivery:2018-05-03 with 1214 cartons 55.723 m3 by AUWIN ; ETD:2018-04-17 From Guangzhou 
+  TIS17-SO4174B - RMPC013 - PkWStr - 400 pcs - 25 cartons
+  TIS17-SO4256 - RM107V2R - Ora/Nav - 2600 pcs - 130 cartons
+  TIS17-SO4256 - RM107V2R - Yel/Nav - 600 pcs - 30 cartons
+  TIS17-SO4260 - RM4050R - Blu/Nav - 720 pcs - 18 cartons
+  TIS17-SO4260 - RM4050R - Ora/Nav - 960 pcs - 24 cartons
+  TIS17-SO4260 - RM4050R - Pink/Navy - 900 pcs - 23 cartons
+  TIS17-SO4260 - RM4050R - Yel/Nav - 440 pcs - 11 cartons
+  TIS17-SO4261 - RM200CF - CobaltBlue - 2250 pcs - 94 cartons
+  TIS17-SO4261 - RM200CF - Emerald - 820 pcs - 35 cartons
+  TIS17-SO4261 - RM200CF - Fren Navy - 660 pcs - 28 cartons
+  TIS17-SO4261 - RM200CF - LightBlue - 880 pcs - 37 cartons
+  TIS17-SO4261 - RM200CF - Ochre - 340 pcs - 15 cartons
+  TIS17-SO4261 - RM200CF - Red - 880 pcs - 37 cartons
+  TIS17-SO4261 - RM200CF - Stone - 1480 pcs - 62 cartons
+  TIS17-SO4261 - RM200CF - green - 820 pcs - 35 cartons
+  TIS17-SO4265 - RM300CF - Azure - 620 pcs - 24 cartons
+  TIS17-SO4265 - RM300CF - CobaltBlue - 680 pcs - 27 cartons
+  TIS17-SO4265 - RM300CF - Emerald - 340 pcs - 14 cartons
+  TIS17-SO4265 - RM300CF - Fren Navy - 240 pcs - 10 cartons
+  TIS17-SO4265 - RM300CF - HotPink - 720 pcs - 28 cartons
+  TIS17-SO4265 - RM300CF - Purple - 420 pcs - 17 cartons
+  TIS17-SO4265 - RM300CF - Stone - 1320 pcs - 51 cartons
+  TIS17-SO4266 - RM400CF - CobaltBlue - 720 pcs - 18 cartons
+  TIS17-SO4266 - RM400CF - Emerald - 260 pcs - 7 cartons
+  TIS17-SO4266 - RM400CF - Fren Navy - 200 pcs - 5 cartons
+  TIS17-SO4266 - RM400CF - HotPink - 360 pcs - 9 cartons
+  TIS17-SO4267 - RMPC008 - RNW - 400 pcs - 25 cartons
+  TIS17-SO4268 - RM1002 - Khaki - 420 pcs - 21 cartons
+  TIS17-SO4268 - RM1002 - Navy - 2040 pcs - 102 cartons
+  TIS17-SO4269 - RM1002R - Navy - 1020 pcs - 51 cartons
+  TIS17-SO4271 - RM8080 - Black - 140 pcs - 7 cartons
+  TIS17-SO4271 - RM8080 - Khaki - 100 pcs - 5 cartons
+  TIS17-SO4271 - RM8080 - Navy - 1880 pcs - 94 cartons
+  TIS17-SO4272 - RM4040 - Navy - 620 pcs - 25 cartons
+  TIS17-SO4277 - RMPC014 - Ink Navy - 480 pcs - 24 cartons
+  TIS17-SO4277 - RMPC014 - VintaGrey - 380 pcs - 19 cartons
+  TIS17-SO4277 - RMPC014 - Wheat - 440 pcs - 22 cartons
+  TIS18-SO4465B - RM200CF - Ochre - 100 pcs - 5 cartons
+
+Shipment-2: 40HQ  Delivery:2018-05-03 with 1138 cartons 56.778 m3 by AUWIN ; ETD:2018-04-17 From Guangzhou 
+  TIS17-SO4253 - RM1050R - Blu/Nav - 900 pcs - 45 cartons
+  TIS17-SO4253 - RM1050R - Eme/Nav - 760 pcs - 38 cartons
+  TIS17-SO4254 - RM73N1R - Ora/Nav - 420 pcs - 84 cartons
+  TIS17-SO4255 - RM107V2 - Ora/Nav - 440 pcs - 22 cartons
+  TIS17-SO4255 - RM107V2 - Yel/Nav - 1620 pcs - 81 cartons
+  TIS17-SO4257 - RM107V2S - Ora/Nav - 300 pcs - 15 cartons
+  TIS17-SO4257 - RM107V2S - Yel/Nav - 320 pcs - 16 cartons
+  TIS17-SO4259 - RM208V2R - Ora/Nav - 560 pcs - 28 cartons
+  TIS17-SO4259 - RM208V2R - Yel/Nav - 280 pcs - 14 cartons
+  TIS17-SO4261A - RM200CF - CobaltBlue - 1430 pcs - 60 cartons
+  TIS17-SO4262 - RM200CFS - CobaltBlue - 1080 pcs - 39 cartons
+  TIS17-SO4262 - RM200CFS - Red - 540 pcs - 20 cartons
+  TIS17-SO4262 - RM200CFS - Stone - 680 pcs - 25 cartons
+  TIS17-SO4263 - RM500BT - CobaltBlue - 480 pcs - 20 cartons
+  TIS17-SO4263 - RM500BT - Emerald - 340 pcs - 15 cartons
+  TIS17-SO4263 - RM500BT - LightBlue - 300 pcs - 13 cartons
+  TIS17-SO4264 - RM500BTS - CobaltBlue - 380 pcs - 14 cartons
+  TIS17-SO4264 - RM500BTS - Red - 340 pcs - 13 cartons
+  TIS17-SO4264 - RM500BTS - Stone - 220 pcs - 8 cartons
+  TIS17-SO4270 - RM1004 - Black - 380 pcs - 19 cartons
+  TIS17-SO4273 - RM33EWLS - Navy - 760 pcs - 31 cartons
+  TIS17-SO4274 - RM106DJ - Blue - 1540 pcs - 77 cartons
+  TIS17-SO4275 - RM106DJR - Blue - 780 pcs - 39 cartons
+  TIS17-SO4276 - RM110SD - Blue - 2540 pcs - 127 cartons
+  TIS17-SO4335 - 07399X - Orange-Navy - 1000 pcs - 50 cartons
+  TIS17-SO4335 - 07399 - Yellow-Navy - 1540 pcs - 77 cartons
+  TIS17-SO4343 - IGG001X - Orange/Navy - 605 pcs - 31 cartons
+  TIS17-SO4346 - IGG004XJ - Orange-Navy - 302 pcs - 38 cartons
+  TIS17-SO4367 - RMPC010 - RoyWhiStr - 500 pcs - 32 cartons
+  TIS17-SO4387 - RMPC013 - NWStr - 360 pcs - 23 cartons
+  TIS18-SO4464A - RM1004 - Black - 100 pcs - 5 cartons
+  TIS18-SO4464A - RM1004 - Bottle - 60 pcs - 3 cartons
+  TIS18-SO4464B - RM106DJ - Blue - 80 pcs - 4 cartons
+  TIS18-SO4465C - RM107V2S - Ora/Nav - 40 pcs - 2 cartons
+  TIS18-SO4643 - VP badge - Ink Navy - 10000 pcs - 10 cartons
+
+Shipment-3: Air  Delivery:2018-05-15 with 50 cartons 3.000 m3 by Tanhoo ; ETD:2018-05-07 From Beijing
+  TIS17-SO4400A - MU50 - Ink Navy - 288 pcs - 15 cartons
+  TIS17-SO4401A - MU52 - Ink Navy - 144 pcs - 8 cartons
+  TIS17-SO4402A - FU36 - Ink Navy - 378 pcs - 19 cartons
+  TIS17-SO4403A - FU38 - Ink Navy - 144 pcs - 8 cartons
+
+Shipment-4: Air  Delivery:2018-05-21 with 19 cartons 0.779 m3 by AUWIN ; ETD:2018-05-15 From Guangzhou 
+  TIS17-SO4315A - RM109VXR - Orange - 100 pcs - 5 cartons
+  TIS17-SO4316A - RM208V2R - Ora/Nav - 200 pcs - 10 cartons
+  TIS17-SO4316A - RM208V2R - Yel/Nav - 80 pcs - 4 cartons
+
+Shipment-5: LCL  Delivery:2018-05-27 with 97 cartons 4.853 m3 by Tanhoo ; ETD:2018-05-07 From Shanghai
+  TIS18-SO4406 - QPSTO - Ink Navy - 1000 pcs - 50 cartons
+  TIS18-SO4407 - QPSFO - Ink Navy - 240 pcs - 12 cartons
+  TIS18-SO4408 - QPSSO - Ink Navy - 700 pcs - 35 cartons
+
+Shipment-6: LCL  Delivery:2018-05-28 with 29 cartons 2.204 m3 by SHANGYU LIANYA ; ETD:2018-05-10 From Ningbo
+  TIS18-SO4478 - RFSDDJ - Ink Navy - 314 pcs - 29 cartons
+
+Shipment-7: LCL  Delivery:2018-05-28 with 8 cartons 0.384 m3 by SN LABEL ; ETD:2018-05-10 From Ningbo
+  TIS18-SO4623 - QPS-TIE-P-ML - Ink Navy - 100 pcs - 1 cartons
+  TIS18-SO4623 - QPS-TIE-P-MR - Ink Navy - 250 pcs - 3 cartons
+  TIS18-SO4623 - QPS-TIE-P-F - Ink Navy - 150 pcs - 2 cartons
+  TIS18-SO4623 - QPS-TIE-EXE-L - Ink Navy - 50 pcs - 1 cartons
+  TIS18-SO4623 - QPS-TIE-EXE-R - Ink Navy - 50 pcs - 1 cartons
+
+Shipment-8: LCL  Delivery:2018-05-28 with 111 cartons 4.830 m3 by Eliel ; ETD:2018-05-10 From NINGBO 
+  TIS17-SO4354 - RM4245T - Fluro Pink - 1020 pcs - 26 cartons
+  TIS17-SO4355 - RMPC019 - Fren Navy - 580 pcs - 29 cartons
+  TIS17-SO4355 - RMPC019 - Red - 580 pcs - 29 cartons
+  TIS18-SO4426 - RM2346S - Orange-Navy - 800 pcs - 27 cartons
+
+Shipment-9: 40HQ  Delivery:2018-05-30 with 1036 cartons 51.955 m3 by Tanhoo ; ETD:2018-04-14 From Shanghai
+  TIS17-SO4157 - RM1050 - Ora/Nav - 920 pcs - 46 cartons
+  TIS17-SO4157 - RM1050 - Yel/Nav - 700 pcs - 35 cartons
+  TIS17-SO4243 - RM100CFS - Navy - 300 pcs - 15 cartons
+  TIS17-SO4244 - RM1040R - Orange - 700 pcs - 35 cartons
+  TIS17-SO4245 - RM1050 - Yel/Nav - 740 pcs - 37 cartons
+  TIS17-SO4246 - RM1050R - Ora/Nav - 1640 pcs - 82 cartons
+  TIS17-SO4247 - RM1050S - Ora/Nav - 1000 pcs - 50 cartons
+  TIS17-SO4247 - RM1050S - Yel/Nav - 840 pcs - 42 cartons
+  TIS17-SO4248 - RM105CFR - Ora/Nav - 1620 pcs - 81 cartons
+  TIS17-SO4249 - RM105CFS - Yel/Nav - 320 pcs - 16 cartons
+  TIS17-SO4250 - RM1004 - Navy - 2700 pcs - 135 cartons
+  TIS17-SO4251 - RM1004R - Navy - 1760 pcs - 88 cartons
+  TIS17-SO4252 - RM1004S - Navy - 580 pcs - 24 cartons
+  TIS17-SO4302A - RM105CF - Ora/Nav - 300 pcs - 15 cartons
+  TIS17-SO4336 - SESSPM - Red Orange - 280 pcs - 10 cartons
+  TIS17-SO4337 - SESSPF - Red Orange - 250 pcs - 13 cartons
+  TIS17-SO4338 - SESTPF - Red Orange - 770 pcs - 65 cartons
+  TIS17-SO4339 - SESTPM - Red Orange - 320 pcs - 27 cartons
+  TIS17-SO4347 - AW1002 - Navy - 1140 pcs - 57 cartons
+  TIS17-SO4348 - AW1004 - Navy - 1080 pcs - 54 cartons
+  TIS17-SO4349 - AW1004R - Navy - 2060 pcs - 103 cartons
+  TIS18-SO4474 - SESOU - Red Orange - 45 pcs - 6 cartons
+
+Shipment-10: LCL  Delivery:2018-05-31 with 84 cartons 5.712 m3 by AUWIN ; ETD:2018-05-15 From Guangzhou 
+  TIS18-SO4466 - SOX-SAVERS-O - Green - 7000 pcs - 28 cartons
+  TIS18-SO4466 - SOX-SAVERS-O - Khaki - 7000 pcs - 28 cartons
+  TIS18-SO4466 - SOX-SAVERS-O - Navy - 7000 pcs - 28 cartons
+
+Shipment-11: Need Split  Delivery:2018-06-07 with 2918 cartons 137.321 m3 by AUWIN ; ETD:2018-05-22 From Guangzhou 
+  TIS17-SO4309 - RM1000S - Khaki - 320 pcs - 16 cartons
+  TIS17-SO4310 - RM107V2 - Ora/Nav - 580 pcs - 29 cartons
+  TIS17-SO4310 - RM107V2 - Yel/Nav - 1200 pcs - 60 cartons
+  TIS17-SO4311 - RM107V2R - Ora/Nav - 1940 pcs - 97 cartons
+  TIS17-SO4311 - RM107V2R - Yel/Nav - 800 pcs - 40 cartons
+  TIS17-SO4312 - RM107V2S - Ora/Nav - 300 pcs - 15 cartons
+  TIS17-SO4312 - RM107V2S - Yel/Nav - 300 pcs - 15 cartons
+  TIS17-SO4313 - RM108V3 - Navy - 1240 pcs - 62 cartons
+  TIS17-SO4313 - RM108V3 - Orange - 300 pcs - 15 cartons
+  TIS17-SO4314 - RM108V3R - Orange - 780 pcs - 39 cartons
+  TIS17-SO4315B - RM109VXR - Orange - 620 pcs - 31 cartons
+  TIS17-SO4316B - RM208V2R - Ora/Nav - 460 pcs - 23 cartons
+  TIS17-SO4316B - RM208V2R - Yel/Nav - 360 pcs - 18 cartons
+  TIS17-SO4317 - RM208V3R - Orange - 320 pcs - 16 cartons
+  TIS17-SO4318 - RM4050R - Blu/Nav - 420 pcs - 11 cartons
+  TIS17-SO4318 - RM4050R - Ora/Nav - 960 pcs - 24 cartons
+  TIS17-SO4318 - RM4050R - Pink/Navy - 1400 pcs - 35 cartons
+  TIS17-SO4318 - RM4050R - Yel/Nav - 600 pcs - 15 cartons
+  TIS17-SO4319 - RM200CF - CobaltBlue - 3780 pcs - 158 cartons
+  TIS17-SO4319 - RM200CF - Emerald - 1060 pcs - 45 cartons
+  TIS17-SO4319 - RM200CF - Fren Navy - 780 pcs - 33 cartons
+  TIS17-SO4319 - RM200CF - LightBlue - 1580 pcs - 66 cartons
+  TIS17-SO4319 - RM200CF - Red - 1260 pcs - 53 cartons
+  TIS17-SO4319 - RM200CF - green - 700 pcs - 30 cartons
+  TIS17-SO4319A - RM200CF - CobaltBlue - 200 pcs - 9 cartons
+  TIS17-SO4320 - RM200CFS - CobaltBlue - 500 pcs - 18 cartons
+  TIS17-SO4320 - RM200CFS - Red - 360 pcs - 13 cartons
+  TIS17-SO4321 - RM500BT - Black - 380 pcs - 16 cartons
+  TIS17-SO4321 - RM500BT - CobaltBlue - 580 pcs - 25 cartons
+  TIS17-SO4321 - RM500BT - Emerald - 360 pcs - 15 cartons
+  TIS17-SO4321 - RM500BT - LightBlue - 400 pcs - 17 cartons
+  TIS17-SO4321 - RM500BT - Stone - 640 pcs - 27 cartons
+  TIS17-SO4322 - RM300CF - Azure - 720 pcs - 28 cartons
+  TIS17-SO4322 - RM300CF - CobaltBlue - 460 pcs - 18 cartons
+  TIS17-SO4322 - RM300CF - Emerald - 760 pcs - 30 cartons
+  TIS17-SO4322 - RM300CF - Fren Navy - 380 pcs - 15 cartons
+  TIS17-SO4322 - RM300CF - HotPink - 920 pcs - 36 cartons
+  TIS17-SO4322 - RM300CF - Purple - 500 pcs - 20 cartons
+  TIS17-SO4322 - RM300CF - Stone - 640 pcs - 25 cartons
+  TIS17-SO4322 - RM300CF - Watermelon - 360 pcs - 14 cartons
+  TIS17-SO4322 - RM300CF - green - 280 pcs - 11 cartons
+  TIS17-SO4323 - RM400CF - CobaltBlue - 340 pcs - 9 cartons
+  TIS17-SO4323 - RM400CF - Emerald - 360 pcs - 9 cartons
+  TIS17-SO4323 - RM400CF - Fren Navy - 320 pcs - 8 cartons
+  TIS17-SO4323 - RM400CF - HotPink - 320 pcs - 8 cartons
+  TIS17-SO4323 - RM400CF - Purple - 220 pcs - 6 cartons
+  TIS17-SO4323 - RM400CF - Red - 320 pcs - 8 cartons
+  TIS17-SO4323 - RM400CF - Stone - 300 pcs - 8 cartons
+  TIS17-SO4324 - RM1002 - Navy - 2240 pcs - 112 cartons
+  TIS17-SO4325 - RM1002R - Navy - 1220 pcs - 61 cartons
+  TIS17-SO4326 - RM1002S - Bottle - 450 pcs - 18 cartons
+  TIS17-SO4327 - RM1004 - Khaki - 460 pcs - 23 cartons
+  TIS17-SO4328 - RM1004S - Black - 400 pcs - 16 cartons
+  TIS17-SO4328 - RM1004S - Bottle - 160 pcs - 7 cartons
+  TIS17-SO4329 - RM112TSD - Blue - 600 pcs - 30 cartons
+  TIS17-SO4330 - RM2020 - Black - 300 pcs - 12 cartons
+  TIS17-SO4330 - RM2020 - Khaki - 340 pcs - 14 cartons
+  TIS17-SO4330 - RM2020 - Navy - 460 pcs - 19 cartons
+  TIS17-SO4331 - RM106DJ - Blue - 720 pcs - 36 cartons
+  TIS17-SO4332 - RM106DJR - Blue - 480 pcs - 24 cartons
+  TIS17-SO4333 - RM220LSD - Blue - 960 pcs - 48 cartons
+  TIS17-SO4334 - RMPC014 - Black - 380 pcs - 19 cartons
+  TIS17-SO4334 - RMPC014 - Bone - 920 pcs - 46 cartons
+  TIS17-SO4334 - RMPC014 - Moss - 300 pcs - 15 cartons
+  TIS17-SO4334 - RMPC014 - VintaGrey - 720 pcs - 36 cartons
+  TIS17-SO4334 - RMPC014 - Wheat - 540 pcs - 27 cartons
+  TIS17-SO4384 - RMPC007 - Cham/Blue - 420 pcs - 27 cartons
+  TIS18-SO4404 - GS301M - ALL Black - 400 pcs - 16 cartons
+  TIS18-SO4404 - GS301M - ALL Navy - 370 pcs - 15 cartons
+  TIS18-SO4404 - GS301M - Navy - 370 pcs - 15 cartons
+  TIS18-SO4404 - GS301M - Navy-Blue - 370 pcs - 15 cartons
+  TIS18-SO4405 - GS301W - All Black - 350 pcs - 14 cartons
+  TIS18-SO4405 - GS301W - Black - 390 pcs - 16 cartons
+  TIS18-SO4405 - GS301W - Fren Navy - 390 pcs - 16 cartons
+  TIS18-SO4405 - GS301W - Fren Navy-Emerald - 390 pcs - 16 cartons
+  TIS18-SO4405 - GS301W - Fren Navy-Fuschia - 390 pcs - 16 cartons
+  TIS18-SO4405 - GS301W - Fuschia - 390 pcs - 16 cartons
+  TIS18-SO4405 - GS301W - HotPink-ColbaltBlue - 390 pcs - 16 cartons
+  TIS18-SO4405 - GS301W - Purple - 390 pcs - 16 cartons
+  TIS18-SO4445A - RM200CF - Stone - 980 pcs - 41 cartons
+  TIS18-SO4477 - 07288 - Orange-Navy - 1000 pcs - 50 cartons
+  TIS18-SO4477 - 07388X - Orange-Navy - 1000 pcs - 50 cartons
+  TIS18-SO4477 - 07299 - Yellow-Navy - 1000 pcs - 50 cartons
+  TIS18-SO4523 - RM107V2 - Ora/Nav - 1040 pcs - 52 cartons
+  TIS18-SO4523 - RM107V2 - Yel/Nav - 1000 pcs - 50 cartons
+  TIS18-SO4524 - RM107V2R - Ora/Nav - 1000 pcs - 50 cartons
+  TIS18-SO4524 - RM107V2R - Yel/Nav - 1000 pcs - 50 cartons
+  TIS18-SO4525 - RM108V3R - Orange - 1000 pcs - 50 cartons
+  TIS18-SO4526 - RM109VXR - Orange - 1000 pcs - 50 cartons
+  TIS18-SO4527 - RM200CF - CobaltBlue - 1000 pcs - 42 cartons
+  TIS18-SO4528 - RM1002 - Navy - 1000 pcs - 50 cartons
+  TIS18-SO4529 - RM1002R - Navy - 1000 pcs - 50 cartons
+  TIS18-SO4530 - RM106DJ - Blue - 980 pcs - 49 cartons
+  TIS18-SO4531 - RM110SD - Blue - 1000 pcs - 50 cartons
+  TIS18-SO4532 - RM8080 - Navy - 1000 pcs - 50 cartons
+  TIS18-SO4570B - RM908CR - Ora/Nav - 180 pcs - 18 cartons
+
+Shipment-12: 20GP  Delivery:2018-06-12 with 217 cartons 12.794 m3 by Smartex ; ETD:2018-05-05 From Xingang
+  TIS18-SO4571A - JEASH-01 - Grey - 1680 pcs - 42 cartons
+  TIS18-SO4571B - JEPINE-02 - Grey - 208 pcs - 6 cartons
+  TIS18-SO4571C - JEATOOW-01 - Navy - 980 pcs - 25 cartons
+  TIS18-SO4571D - JEATOOW-ART - Navy - 105 pcs - 3 cartons
+  TIS18-SO4571E - JESLC-01 - Saxe Blue - 2125 pcs - 71 cartons
+  TIS18-SO4571F - JEGAP-03 - White - 805 pcs - 21 cartons
+  TIS18-SO4571G - JEGAP-04 - White - 360 pcs - 12 cartons
+  TIS18-SO4571H - JEGAP-05 - White - 253 pcs - 9 cartons
+  TIS18-SO4571I - JEASH-01 - Grey - 1105 pcs - 28 cartons
+
+Shipment-13: LCL  Delivery:2018-06-14 with 120 cartons 4.920 m3 by AUWIN ; ETD:2018-05-29 From Guangzhou 
+  TIS17-SO4309 - RM1000S - Bottle - 420 pcs - 21 cartons
+  TIS17-SO4385 - RMPC009 - RoyWhiChk - 440 pcs - 28 cartons
+  TIS17-SO4386 - RMPC012 - EmeWStr - 360 pcs - 23 cartons
+  TIS17-SO4386 - RMPC012 - NWStr - 420 pcs - 27 cartons
+  TIS18-SO4575 - RMPC009S - RoyWhiChk - 260 pcs - 17 cartons
+  TIS18-SO4576 - RMPC010S - RoyWhiStr - 60 pcs - 4 cartons
+
+Shipment-14: 40HQ  Delivery:2018-06-19 with 1003 cartons 55.996 m3 by Tanhoo ; ETD:2018-05-12 From Xingang
+  TIS17-SO4296 - RM1000S - Navy - 480 pcs - 24 cartons
+  TIS17-SO4297 - RM100CF - Navy - 380 pcs - 19 cartons
+  TIS17-SO4299A - RM1050 - Ora/Nav - 420 pcs - 21 cartons
+  TIS17-SO4300A - RM1050R - Ora/Nav - 1860 pcs - 93 cartons
+  TIS17-SO4301A - RM1050S - Yel/Nav - 680 pcs - 34 cartons
+  TIS17-SO4302B - RM105CF - Ora/Nav - 660 pcs - 33 cartons
+  TIS17-SO4302B - RM105CF - Yel/Nav - 540 pcs - 27 cartons
+  TIS17-SO4305 - RM1004 - Navy - 1560 pcs - 78 cartons
+  TIS17-SO4306 - RM1004R - Navy - 1440 pcs - 72 cartons
+  TIS17-SO4308 - RM1004RLW - Navy - 900 pcs - 45 cartons
+  TIS17-SO4400B - MU50 - Ink Navy - 5292 pcs - 265 cartons
+  TIS17-SO4401B - MU52 - Ink Navy - 1326 pcs - 67 cartons
+  TIS17-SO4402B - FU36 - Ink Navy - 3647 pcs - 183 cartons
+  TIS17-SO4403B - FU38 - Ink Navy - 826 pcs - 42 cartons
+
+Shipment-15: LCL  Delivery:2018-06-28 with 87 cartons 4.698 m3 by JIN FENG ; ETD:2018-06-09 From NINGBO 
+  TIS18-SO4704 - SESPL-SS - Ink Navy - 2595 pcs - 87 cartons
+
+Shipment-16: Need Split  Delivery:2018-06-28 with 2599 cartons 122.826 m3 by AUWIN ; ETD:2018-06-12 From Guangzhou 
+  TIS17-SO4368 - RM1000S - Bottle - 80 pcs - 4 cartons
+  TIS17-SO4368 - RM1000S - Khaki - 320 pcs - 16 cartons
+  TIS17-SO4369 - RM1050R - Blu/Nav - 840 pcs - 42 cartons
+  TIS17-SO4370 - RM107V2 - Ora/Nav - 900 pcs - 45 cartons
+  TIS17-SO4370 - RM107V2 - Yel/Nav - 2020 pcs - 101 cartons
+  TIS17-SO4371 - RM107V2R - Ora/Nav - 2320 pcs - 116 cartons
+  TIS17-SO4371 - RM107V2R - Yel/Nav - 1380 pcs - 69 cartons
+  TIS17-SO4372 - RM107V2RS - Ora/Nav - 300 pcs - 15 cartons
+  TIS17-SO4373 - RM107V2S - Yel/Nav - 400 pcs - 20 cartons
+  TIS17-SO4374 - RM108V3R - Orange - 920 pcs - 46 cartons
+  TIS17-SO4375 - RM109VXR - Orange - 1000 pcs - 50 cartons
+  TIS17-SO4376 - RM4050R - Blu/Nav - 440 pcs - 11 cartons
+  TIS17-SO4376 - RM4050R - Ora/Nav - 720 pcs - 18 cartons
+  TIS17-SO4376 - RM4050R - Pink/Navy - 920 pcs - 23 cartons
+  TIS17-SO4376 - RM4050R - Yel/Nav - 640 pcs - 16 cartons
+  TIS17-SO4377 - RM200CF - CobaltBlue - 2240 pcs - 94 cartons
+  TIS17-SO4377 - RM200CF - Emerald - 1140 pcs - 48 cartons
+  TIS17-SO4377 - RM200CF - Fren Navy - 1080 pcs - 45 cartons
+  TIS17-SO4377 - RM200CF - LightBlue - 1440 pcs - 60 cartons
+  TIS17-SO4377 - RM200CF - Olive - 460 pcs - 20 cartons
+  TIS17-SO4377 - RM200CF - Red - 820 pcs - 35 cartons
+  TIS17-SO4377A - RM200CF - CobaltBlue - 1300 pcs - 55 cartons
+  TIS17-SO4378 - RM200CFS - CobaltBlue - 460 pcs - 17 cartons
+  TIS17-SO4378 - RM200CFS - Red - 300 pcs - 11 cartons
+  TIS17-SO4379 - RM500BT - CobaltBlue - 840 pcs - 35 cartons
+  TIS17-SO4379 - RM500BT - Emerald - 320 pcs - 14 cartons
+  TIS17-SO4379 - RM500BT - LightBlue - 360 pcs - 15 cartons
+  TIS17-SO4379 - RM500BT - Stone - 340 pcs - 15 cartons
+  TIS17-SO4380 - RM500BTS - CobaltBlue - 300 pcs - 11 cartons
+  TIS17-SO4380 - RM500BTS - Red - 100 pcs - 4 cartons
+  TIS17-SO4380 - RM500BTS - Stone - 160 pcs - 6 cartons
+  TIS17-SO4381 - RM300CF - Azure - 360 pcs - 14 cartons
+  TIS17-SO4381 - RM300CF - CobaltBlue - 360 pcs - 14 cartons
+  TIS17-SO4381 - RM300CF - Emerald - 360 pcs - 14 cartons
+  TIS17-SO4381 - RM300CF - Fren Navy - 300 pcs - 12 cartons
+  TIS17-SO4381 - RM300CF - HotPink - 1040 pcs - 40 cartons
+  TIS17-SO4381 - RM300CF - Purple - 420 pcs - 17 cartons
+  TIS17-SO4381 - RM300CF - Red - 340 pcs - 14 cartons
+  TIS17-SO4381 - RM300CF - Watermelon - 520 pcs - 20 cartons
+  TIS17-SO4382 - RM400CF - CobaltBlue - 460 pcs - 12 cartons
+  TIS17-SO4382 - RM400CF - Emerald - 340 pcs - 9 cartons
+  TIS17-SO4382 - RM400CF - Fren Navy - 340 pcs - 9 cartons
+  TIS17-SO4382 - RM400CF - HotPink - 380 pcs - 10 cartons
+  TIS17-SO4382 - RM400CF - Purple - 300 pcs - 8 cartons
+  TIS17-SO4382 - RM400CF - Red - 360 pcs - 9 cartons
+  TIS17-SO4383 - RMPC006 - Cham/Blue - 360 pcs - 23 cartons
+  TIS17-SO4388 - RM1002 - Navy - 1220 pcs - 61 cartons
+  TIS17-SO4389 - RM1002R - Navy - 820 pcs - 41 cartons
+  TIS17-SO4390 - RM1002S - Bottle - 110 pcs - 5 cartons
+  TIS17-SO4390 - RM1002S - Navy - 380 pcs - 16 cartons
+  TIS17-SO4391 - RM1004S - Khaki - 360 pcs - 15 cartons
+  TIS17-SO4392 - RM301EWS - Bottle - 20 pcs - 1 cartons
+  TIS17-SO4392 - RM301EWS - Navy - 1520 pcs - 61 cartons
+  TIS17-SO4393 - RM33EWLS - Navy - 680 pcs - 28 cartons
+  TIS17-SO4394 - RM8080 - Black - 840 pcs - 42 cartons
+  TIS17-SO4394 - RM8080 - Khaki - 380 pcs - 19 cartons
+  TIS17-SO4394 - RM8080 - Navy - 1080 pcs - 54 cartons
+  TIS17-SO4395 - RM4040 - Black - 780 pcs - 32 cartons
+  TIS17-SO4395 - RM4040 - Khaki - 300 pcs - 12 cartons
+  TIS17-SO4395 - RM4040 - Navy - 680 pcs - 28 cartons
+  TIS17-SO4396 - RM2020 - Khaki - 300 pcs - 12 cartons
+  TIS17-SO4396 - RM2020 - Navy - 380 pcs - 16 cartons
+  TIS17-SO4397 - RM106DJ - Blue - 680 pcs - 34 cartons
+  TIS17-SO4398 - RM106DJR - Blue - 580 pcs - 29 cartons
+  TIS17-SO4399 - RMPC014 - Ink Navy - 460 pcs - 23 cartons
+  TIS17-SO4399 - RMPC014 - Moss - 440 pcs - 22 cartons
+  TIS18-SO4506 - RMPC007 - ChamBlu - 520 pcs - 33 cartons
+  TIS18-SO4553 - RM107V2 - Yel/Nav - 1000 pcs - 50 cartons
+  TIS18-SO4554 - RM107V2R - Ora/Nav - 1000 pcs - 50 cartons
+  TIS18-SO4554 - RM107V2R - Yel/Nav - 1000 pcs - 50 cartons
+  TIS18-SO4555 - RM108V3R - Orange - 1000 pcs - 50 cartons
+  TIS18-SO4556 - RM109VXR - Orange - 1000 pcs - 50 cartons
+  TIS18-SO4557 - RM200CF - CobaltBlue - 1000 pcs - 42 cartons
+  TIS18-SO4558 - RM1002 - Navy - 1000 pcs - 50 cartons
+  TIS18-SO4559 - RM1002R - Navy - 960 pcs - 48 cartons
+  TIS18-SO4560 - RM106DJ - Blue - 1010 pcs - 51 cartons
+  TIS18-SO4561 - RM110SD - Blue - 1000 pcs - 50 cartons
+  TIS18-SO4562 - RM8080 - Navy - 1000 pcs - 50 cartons
+  TIS18-SO4577 - RMPC012 - BWStr - 465 pcs - 30 cartons
+  TIS18-SO4577 - RMPC012 - RWStr - 0 pcs - 0 cartons
+  TIS18-SO4578 - RMPC013 - NWStr - 320 pcs - 20 cartons
+  TIS18-SO4630 - RM200CF - Stone - 1020 pcs - 43 cartons
+  TIS18-SO4644 - GS301M - ALL Maroon - 400 pcs - 16 cartons
+  TIS18-SO4644 - GS301W - ALL Maroon - 310 pcs - 13 cartons
+  TIS18-SO4657 - RM909AR - Ora/Nav - 500 pcs - 50 cartons

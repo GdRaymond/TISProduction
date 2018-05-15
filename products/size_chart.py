@@ -1,3 +1,4 @@
+import re
 style_type={'RM1000':'male_shirt','RM1000S':'male_shirt','RM100CF':'male_shirt','RM100CFS':'male_shirt',
             'RM1050':'male_shirt','RM1050S':'male_shirt','RM1050R':'male_shirt','RM1050RS':'male_shirt',
             'RM105CF':'male_shirt','RM105CFS':'male_shirt','RM105CFR':'male_shirt',
@@ -92,6 +93,43 @@ type_size={
 
         }
 
+type_size_for_show = {
+    'male_shirt': [['2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', '6XL', '7XL', '8XL', '9XL', '10XL']],
+
+    'female_shirt': [['6', '8', '10', '12', '14', '16', '18', '20', '22', '24', '26', '28', '30', '-', '-']],
+
+    'kids_shirt': [['Y0', 'Y1-2', 'Y3-4', 'Y5-6', 'Y7-8', 'Y9-10', 'Y11-12', 'Y13-14', '-', '-', '-', '-', '-', '-',
+                   '-']],
+
+    'male_trousers': [['67R', '72R', '77R', '82R', '87R', '92R', '97R', '102R', '107R', '112R', '117R', '122R', '127R',
+                      '132R'],
+                      ['87S', '92S', '97S', '102S', '107S', '112S', '117S', '122S', '127S', '132S'], ['74L', '79L', '84L',
+                      '89L', '94L']],
+
+    'female_slacks': [['6', '8', '10', '12', '14', '16', '18', '20', '22', '24', '-', '-', '-', '-',
+                      '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']],
+
+    'shorts': [['67', '72', '77', '82', '87', '92', '97', '102', '107', '112', '117', '122', '127', '132',
+               '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']],
+    'QPS_operation_trousers': [['2', '3', '4', '5', '6', '7', '8', '9', '10', '-'], ['3.25', '4.25', '5.25', '6.25',
+                               '7.25', '8.25', '9.25', '10.25', '-', '-'], ['4.5', '5.5', '6.5', '7.5', '8.5', '9.5',
+                               '10.5', '-', '-']],
+    'QPS_field': [['70R', '75R', '80R', '85R', '90R', '95R', '100R', '105R', '110R', '115R', '120R', '125R', '130R'],
+                  ['70S', '75S', '80S',
+                  '85S', '90S', '95S', '100S', '105S'], ['70L', '75L', '80L', '85L', '90L', '95L', '100L', '105L', '110L',
+                  '115L', '120L']],
+    'ABF_trousers': [['67R', '72R', '77R', '82R', '87R', '92R', '97R', '102R', '107R', '112R', '117R', '122R', '127R'],
+                     ['82S', '87S',
+                     '92S', '97S', '102S', '107S', '112S', '117S', '122S', '127S', '132S'], ['74L', '79L', '84L', '89L',
+                     '94L', '99L', '104L']],
+    'ABF_unisex_shirt': [['4XS', '3XS', '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', '6XL', '7XL']],
+    'VP_male_shirt': [['36', '37', '38', '39', '40', '41', '42', '44', '46', '48', '50', '51', '52']],
+
+    'CYDC_trousers': [['72R', '77R', '82R', '87R', '92R', '97R', '102R', '107R', '112R'],
+                      ['117S', '122S', '127S', '132S', '137S']]
+
+}
+
 size_code={
     '00B':'Blank','a-4XS':'4XS','b-3XS':'3XS','c-2XS':'2XS','d--XS':'XS','e---S':'S','f---M':'M','g---L':'L','h--XL':'XL','i-2XL':'2XL',
     'j-3XL':'3XL','k-4XL':'4XL','l-5XL':'5XL','m-6XL':'6XL','n-7XL':'7XL','o-8XL':'8XL','p-9XL':'9XL','q10XL':'10XL','0325':'3.25',
@@ -130,15 +168,6 @@ def get_size_list(style_no=''):
     size_list=type_size.get(garment_type)
     return size_list
 
-def get_size_list_for_show(style_no='')
-    garment_type=get_garment_type(style_no)
-    if not garment_type:
-        return None
-    size_list=get_size_list(style_no)
-    result_list=[]
-    if size_list:
-        for size in size_list:
-            if garment_type in ['']
 
 def get_garment_type(style_no=''):
     garment_type=style_type.get(style_no)

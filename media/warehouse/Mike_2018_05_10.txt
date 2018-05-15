@@ -1,0 +1,38 @@
+
+
+Shipment-1: JIN FENG ETD 2018-06-09 EX NINGBO  in LCL
+  TIS18-SO4704  - SESPL-SS        - Ink Navy      -  2595 pcs -  87 cartons
+ Total Quantity: 2,595 pcs
+
+Shipment-2: JIN FENG ETD 2018-06-14 EX NINGBO  in LCL
+  TIS18-SO4624  - QPSPL-FUL-SS    - Ink Navy      -  1290 pcs -  43 cartons
+  TIS18-SO4624  - QPSPL-FUL-LS    - Ink Navy      -  1425 pcs -  57 cartons
+  TIS18-SO4624  - QPSPL-WHO-SS    - Ink Navy      -    46 pcs -   2 cartons
+  TIS18-SO4624  - QPSPL-WHO-LS    - Ink Navy      -    27 pcs -   2 cartons
+  TIS18-SO4624  - QPSPL-PLO-SS    - Ink Navy      -    70 pcs -   3 cartons
+  TIS18-SO4624  - QPSPL-PS-SS     - Ink Navy      -    60 pcs -   2 cartons
+  TIS18-SO4624  - QPSPL-PS-LS     - Ink Navy      -    65 pcs -   3 cartons
+  TIS18-SO4653  - CRPL-SS         - Ink Navy      -   650 pcs -  22 cartons
+  TIS18-SO4706  - QPSPL-NDW-SS    - Ink Navy      -  1000 pcs -  40 cartons
+ Total Quantity: 4,633 pcs
+
+Shipment-3: Eliel ETD 2018-06-14 EX NINGBO  in LCL
+  TIS18-SO4661  - RM3122          - Navy/White/Orange -   500 pcs -  17 cartons
+ Total Quantity: 500 pcs
+
+Shipment-4: Tanhoo ETD 2018-06-16 EX Xingang in 40GP
+  TIS18-SO4625  - QPSFT           - Ink Navy      -   670 pcs -  34 cartons
+  TIS18-SO4626  - QPSFO           - Ink Navy      -   700 pcs -  35 cartons
+ Total Quantity: 1,370 pcs
+
+Shipment-5: Smartex ETD 2018-06-23 EX Xingang in LCL
+  TIS18-SO4632  - QPSDTM          - Ink Navy      -   320 pcs -  16 cartons
+  TIS18-SO4633  - QPSDSF          - Ink Navy      -   320 pcs -  16 cartons
+  TIS18-SO4634  - QPSTM           - Ink Navy      -     8 pcs -   1 cartons
+  TIS18-SO4645  - QFESDTM         - Ink Navy      -   330 pcs -  17 cartons
+  TIS18-SO4646  - QFESDSF         - Ink Navy      -   280 pcs -  14 cartons
+ Total Quantity: 1,258 pcs
+
+Shipment-6: Tanhoo ETD 2018-06-25 EX Shanghai in LCL
+  TIS18-SO4582  - SESOU           - Red Orange    -   150 pcs -  19 cartons
+ Total Quantity: 150 pcs
