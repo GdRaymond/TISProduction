@@ -252,7 +252,7 @@ class TISMainWindow(QMainWindow):
                 orders=shipment_view.get_orders_inspection_from_shipment(shipment)
                 if not orders or len(orders)==0:
                     newItem = QTableWidgetItem(shipment_info)
-                    newItem.setBackground(QColor(131, 149, 147))  # blue  grey:131,149,147 green:129,215,65
+                    newItem.setBackground(QColor(131, 149, 147))  # blue  grey:131,149,147 green:129,215,65 red:255,19,1
                     newItem.setFont(QFont('SimHei', 11, QFont.Bold))
                     # newItem.setTextColor(QColor(200, 111, 100))
                     self.ui.tableWOrder.setItem(row_pos, 0, newItem)
@@ -344,11 +344,17 @@ class TISMainWindow(QMainWindow):
                 shipment_l.append('{4} - {0} / ETD {1} / {2} / {3}'.format(shipment.code,shipment.etd.strftime('%d-%b'),\
                                                     shipment.mode,shipment.container,shipment.id))
              #assemble size_breakup
+            size_breakup=[0] #there are 31 items, item 0 is total quantity, item 1 is size 1 quantity...
+            for index in range(1,30):
+                quantity=getattr(order,'size{0}'.format(index),0)
+                size_breakup[0]+=quantity
+                size_breakup.append(quantity)
+            logger.debug('got size breakup {0}'.format(size_breakup))
 
             #assemble **kwargs
             order_dict={'id':order.id,'style':order.product.style_no,'shipments':shipment_l,'tis_no':order.tis_no,\
                         'supplier':order.supplier,'client':order.client,'abm_no':order.internal_no,'quantity':order.quantity, \
-                        'colour':order.colour,'order_date':order.order_date}
+                        'colour':order.colour,'order_date':order.order_date,'size_breakup':size_breakup}
             logger.debug(' start to edit order {0}'.format(order))
             try:
                 dialog=Edit_Dialog_Order(**order_dict)

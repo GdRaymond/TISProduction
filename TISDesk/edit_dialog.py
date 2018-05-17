@@ -1,7 +1,12 @@
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QDialog,QTableWidgetItem,QTableWidget,QMessageBox
+from PyQt5.QtGui import QFont,QColor
 from TISDesk.TIS_edit_dialog import Ui_editDialogShipment
 from TISDesk.TIS_edit_order_dialog import Ui_editDialog_Order
 from shipments.models import Shipment
+from products import size_chart
+from TISProduction import tis_log
+
+logger=tis_log.get_tis_logger()
 
 class Edit_Dialog_Order(QDialog):
     def __init__(self,parent=None,**kwargs):
@@ -17,6 +22,105 @@ class Edit_Dialog_Order(QDialog):
         self.ui.comb_shipment.addItems(kwargs.get('shipments'))
         if kwargs.get('order_date'):
             self.ui.dateE_orderdate.setDate(kwargs.get('order_date'))
+
+        size_show_l=size_chart.get_size_show(kwargs.get('style')) #get the size show list according to style, it is 2-d list
+        logger.debug(' get size_show_l for {0}: {1}'.format(kwargs.get('style'),size_show_l))
+        size_index_whole=0 #to increase to indicate the size index in all size chart from 1-30, index 0 is total quantity
+        for group_no in range(len(size_show_l)): #iterate every group , for shirt only one, for trousers, 2 or 3
+            group_box=getattr(self.ui,'groupB_size_{0}'.format(group_no+1))
+            group_box.setEnabled(True) #by default the group box size No.2 ,3 are disable, need enable when size group exist
+            size_group=size_show_l[group_no]
+            logger.debug(' start showing size grou {0}'.format(size_group))
+            len_group=len(size_group)
+            tableW_group=getattr(self.ui,'tableW_size_{0}'.format(group_no+1)) #dynamicly get the tableWidget to show the group, 1-Regular 2-Stout 3-Long fit
+            tableW_group.setColumnCount(len_group)
+            tableW_group.setRowCount(2)
+            tableW_group.verticalHeader().setVisible(False)
+            tableW_group.horizontalHeader().setDefaultSectionSize(49)
+            tableW_group.verticalHeader().setDefaultSectionSize(17)
+            tableW_group.setRowHeight(0,34)
+            tableW_group.setEditTriggers(QTableWidget.CurrentChanged)
+            size_title=[]
+            for size_no in range(len_group):  #size_no - the index of size in this group
+                size_index_whole+=1
+                size_title.append(size_group[size_no])
+                if size_group[size_no]=='-':
+                    tableW_group.setColumnWidth(size_no,1)
+                tableW_group.setItem(0,size_no,QTableWidgetItem(str(kwargs.get('size_breakup')[size_index_whole])))
+                tableW_group.setItem(1,size_no,QTableWidgetItem('0'))
+            tableW_group.setHorizontalHeaderLabels(size_title)
+        self.ui.toolBtn_plus_1.clicked.connect(self.add_quantity_group)
+        self.ui.toolBtn_plus_2.clicked.connect(self.add_quantity_group)
+        self.ui.toolBtn_plus_3.clicked.connect(self.add_quantity_group)
+
+        '''
+        self.ui.gridL_size_R.addWidget(self.ui.tableW_size_R)
+        for index in range(1,6):
+            lb_size=getattr(self.ui,'lb_size_{0}'.format(index))
+            lin_size=getattr(self.ui,'lin_size_{0}'.format(index))
+            lin_size.setText(str(kwargs.get('size_breakup')[index]))
+            self.ui.gridL_size_R.addWidget(lb_size,0,index)
+            self.ui.gridL_size_R.addWidget(lin_size, 1, index)
+        '''
+    def add_quantity_group_1(self):
+        columns=self.ui.tableW_size_1.columnCount()
+        #self.ui.tableW_size_1.setFont(QFont('SimHei',11,QFont.Bold))
+        for index in range(columns):
+            logger.debug(' check group1 change item{0} :{1}'.format(index,self.ui.tableW_size_1.item(1,index).text()))
+            try:
+                change = int(self.ui.tableW_size_1.item(1,index).text())
+            except Exception as e:
+                logger.error(' not int ')
+                continue
+            if change!=0:
+                try:
+                    origin=int(self.ui.tableW_size_1.item(0,index).text())
+                    result=origin+change
+                    if result<0:
+                        self.ui.tableW_size_1.item(1,index).setBackground(QColor(202,223,79)) #yellow 255,255,79
+                        reply=QMessageBox.information(self,'Warning','Final quantity must not be less than 0',QMessageBox.Ok)
+                        continue
+                    item=QTableWidgetItem(str(origin+change))
+                    item.setForeground(QColor(255, 19, 1))
+                    self.ui.tableW_size_1.setItem(0,index,item)
+                    self.ui.tableW_size_1.setItem(1,index,QTableWidgetItem('0'))
+                except Exception as e:
+                    logger.error(' error calculating quantity :{0}'.format(e))
+
+    def add_quantity_group(self):
+        if self.sender() == self.ui.toolBtn_plus_1:
+            tableW_size=self.ui.tableW_size_1
+            group_no=1
+        elif self.sender()==self.ui.toolBtn_plus_2:
+            tableW_size = self.ui.tableW_size_2
+            group_no = 2
+        else:
+            tableW_size = self.ui.tableW_size_3
+            group_no = 3
+        columns=tableW_size.columnCount()
+        #self.ui.tableW_size_1.setFont(QFont('SimHei',11,QFont.Bold))
+        for index in range(columns):
+            try:
+                change = int(tableW_size.item(1,index).text())
+            except Exception as e:
+                logger.error(' not int ')
+                continue
+            if change!=0:
+                logger.debug(
+                    ' check group {2} change item{0} :{1}'.format(index, tableW_size.item(1, index).text(), group_no))
+                try:
+                    origin=int(tableW_size.item(0,index).text())
+                    result=origin+change
+                    if result<0:
+                        tableW_size.item(1,index).setBackground(QColor(202,223,79)) #yellow 255,255,79
+                        reply=QMessageBox.information(self,'Warning','Final quantity must not be less than 0',QMessageBox.Ok)
+                        continue
+                    item=QTableWidgetItem(str(origin+change))
+                    item.setForeground(QColor(255, 19, 1))
+                    tableW_size.setItem(0,index,item)
+                    tableW_size.setItem(1,index,QTableWidgetItem('0'))
+                except Exception as e:
+                    logger.error(' error calculating quantity :{0}'.format(e))
 
 
 class Edit_dialog_shipment(QDialog):

@@ -150,7 +150,7 @@ size_code={
     'E082R':'82R','085R':'85R','G087R':'87R','090R':'90R','J092R':'92R','095R':'95R','M097R':'97R','100R':'100R','O102R':'102R','105R':'105R',
     'Q107R':'107R','110R':'110R','T112R':'112R','115R':'115R','V117R':'117R','120R':'120R','122R':'122R','125R':'125R','127R':'127R','130R':'130R',
     '132R':'132R','070S':'70S','075S':'75S','080S':'80S','085S':'85S','H087S':'87S','090S':'90S','K092S':'92S','095S':'95S','N097S':'97S','100S':'100S',
-    'P102S':'102S','105S':'105S','S107S':'107S','110S':'110S','U112S':'112S','W117S':'117S','X122S':'122S','Y127S':'127S','132S':'132S','070L':'70L',
+    'P102S':'102S','105S':'105S','S107S':'107S','110S':'110S','U112S':'112S','W117S':'117S','X122S':'122S','Y127S':'127S','Z132S':'132S','132S':'132S','070L':'70L',
     '074L':'74L','075L':'75L','D079L':'79L','080L':'80L','F084L':'84L','085L':'85L','I089L':'89L','090L':'90L','L094L':'94L','095L':'95L','099L':'99L',
     '100L':'100L','104L':'104L','105L':'105L','110L':'110L','115L':'115L','120L':'120L','082S':'82S','109L':'109L','MReg':'REGULAR','MLong':'LONG',
     'FReg':'SHORT','MNorm':'Normal - 150cm','Mtr':'Metres','0137':'137','0350':'3.5','1050':'10.5','3-7':'3-7','7-10':'7-10','9-12':'9-12','11-14':'11-14',
@@ -168,6 +168,12 @@ def get_size_list(style_no=''):
     size_list=type_size.get(garment_type)
     return size_list
 
+def get_size_show(style_no):
+    garment_type=get_garment_type(style_no)
+    if garment_type:
+        return type_size_for_show.get(garment_type)
+    else:
+        return None
 
 def get_garment_type(style_no=''):
     garment_type=style_type.get(style_no)
