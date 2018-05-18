@@ -19,6 +19,7 @@ class Edit_Dialog_Order(QDialog):
         order_recap2='Made by {0} for client {1}'.format(kwargs.get('supplier'),kwargs.get('client'))
         self.ui.lb_recap_2.setText(order_recap2)
         self.ui.lin_abmno.setText(kwargs.get('abm_no'))
+        self.ui.lin_ctm_no.setText(kwargs.get('ctm_no'))
         self.ui.comb_shipment.addItems(kwargs.get('shipments'))
         if kwargs.get('order_date'):
             self.ui.dateE_orderdate.setDate(kwargs.get('order_date'))

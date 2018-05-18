@@ -354,7 +354,7 @@ class TISMainWindow(QMainWindow):
             #assemble **kwargs
             order_dict={'id':order.id,'style':order.product.style_no,'shipments':shipment_l,'tis_no':order.tis_no,\
                         'supplier':order.supplier,'client':order.client,'abm_no':order.internal_no,'quantity':order.quantity, \
-                        'colour':order.colour,'order_date':order.order_date,'size_breakup':size_breakup}
+                        'colour':order.colour,'order_date':order.order_date,'size_breakup':size_breakup,'ctm_no':order.ctm_no}
             logger.debug(' start to edit order {0}'.format(order))
             try:
                 dialog=Edit_Dialog_Order(**order_dict)
@@ -362,6 +362,14 @@ class TISMainWindow(QMainWindow):
                 if action:
                     logger.debug('dialog order exec_:{0}'.format(action))
                     logger.debug('order saving ')
+                    order.internal_no=dialog.ui.lin_abmno.text()
+                    order.ctm_no=dialog.ui.lin_ctm_no.text()
+                    order.order_date=dialog.ui.dateE_orderdate.date().toPyDate()
+                    shipment_id=int(dialog.ui.comb_shipment.currentText().strip().split('-')[0])
+                    shipment=Shipment.objects.get(id=shipment_id)
+                    order.shipment=shipment
+                    order.save()
+                    logger.debug('order saved {0}-{1}-{2}-{3}'.format(order,order.shipment,order.internal_no,order.ctm_no))
                 else:
                     logger.debug('dialog order not exec_')
             except Exception as e:
