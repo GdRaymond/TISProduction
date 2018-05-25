@@ -1,9 +1,9 @@
 
-from PyQt5.QtWidgets import QMainWindow,QFileDialog,QTableWidgetItem,QAbstractItemView,QDialog
+from PyQt5.QtWidgets import QMainWindow,QFileDialog,QTableWidgetItem,QAbstractItemView,QDialog,QApplication
 from PyQt5.QtGui import QColor,QIcon,QFont
 from TISDesk.TIS_mainwindow import Ui_MainWindow
 from excelway.tis_excel import TIS_Excel
-from products import product_price
+from products import product_price,size_chart
 import os,datetime,time
 from PyQt5.QtCore import QThread,pyqtSignal,QDate
 from TISProduction import tis_log
@@ -200,7 +200,7 @@ class TISMainWindow(QMainWindow):
 
     def append_one_order(self,order):
         row_pos=self.ui.tableWOrder.rowCount()
-        logger.debug('Row Position is {0}'.format(row_pos))
+        #logger.debug('Row Position is {0}'.format(row_pos))
         self.ui.tableWOrder.insertRow(row_pos)
         self.ui.tableWOrder.setRowHeight(row_pos, 30)
         self.ui.tableWOrder.setFont(QFont('Segoe UI', 9))
@@ -368,6 +368,18 @@ class TISMainWindow(QMainWindow):
                     shipment_id=int(dialog.ui.comb_shipment.currentText().strip().split('-')[0])
                     shipment=Shipment.objects.get(id=shipment_id)
                     order.shipment=shipment
+                    #below saving the size break up
+                    size_show_l=size_chart.get_size_show(order.product.style_no)
+                    size_no_whole=0
+                    for group_no in range(len(size_show_l)):
+                        size_group=size_show_l[group_no]
+                        table_w=getattr(dialog.ui,'tableW_size_{0}'.format(group_no+1))
+                        logger.debug('start to save data {0} to size {1} '.format(table_w,size_group))
+                        for size_no in range(len(size_group)):
+                            size_no_whole+=1
+                            quantity=int(table_w.item(0,size_no).text())
+                            setattr(order,'size{0}'.format(size_no_whole),quantity)
+
                     order.save()
                     logger.debug('order saved {0}-{1}-{2}-{3}'.format(order,order.shipment,order.internal_no,order.ctm_no))
                 else:
@@ -408,3 +420,4 @@ class TISMainWindow(QMainWindow):
                 dialog.destroy()
             except Exception as e:
                 logger.error(' error dialog {0}'.format(e))
+        QApplication.processEvents()

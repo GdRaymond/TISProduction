@@ -31,7 +31,7 @@ class Product(models.Model):
         ordering=('style_no',)
 
     def __str__(self):
-        return self.style_no
+        return '{0} {1} for {2}'.format(self.style_no,self.commodity,self.client)
 
     @staticmethod
     def get_default_fabric():

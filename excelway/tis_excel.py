@@ -12,6 +12,7 @@ from shipments.models import Shipment
 from products.models import Product
 from products.product_price import seek_colour
 import datetime,re,string
+from core import fts_search
 
 
 
@@ -691,6 +692,38 @@ class TIS_Excel():
         logger.info('Finish all orders {0}'.format(result))
         if signal_display:
             signal_display.emit({'msg':'Finish all orders {0}'.format(result), 'level': 'INFO'})
+
+        logger.info('Start to create virtual table my_search')
+        if signal_display:
+            signal_display.emit({'msg':'Start to create virtual table my_search','level':'INFO'})
+        fts_search.create_my_search()
+        logger.info('Finish to create virtual table my_search')
+        if signal_display:
+            signal_display.emit({'msg':'Finish to create virtual table my_search','level':'INFO'})
+
+
+        logger.info('Start to write the index')
+        if signal_display:
+            signal_display.emit({'msg':'Start to write index','level':'INFO'})
+        shipments=Shipment.objects.all()
+        content = []
+        for shipment in shipments:
+            info={'table_name':'shipments_shipment','obj_id':str(shipment.id),'text':shipment}
+            content.append(info)
+        fts_search.add_index(content)
+        logger.debug(' added {0} records for shipment to my_search'.format(len(content)))
+        if signal_display:
+            signal_display.emit({'msg':' added {} records for shipment to my_search'.format(len(content)),'level':'INFO'})
+
+        orders=Order.objects.all()
+        content=[]
+        for order in orders:
+            info={'table_nam':'orders_order','obj_id':str(order.id),'text':order}
+            content.append(info)
+        fts_search.add_index(content)
+        logger.debug(' added {0} records for order to my_search'.format(len(content)))
+        if signal_display:
+            signal_display.emit({'msg':'added {0} records for order to my_search'.format(len(content)),'level':'INFO'})
 
         try:
             self.close_wb()

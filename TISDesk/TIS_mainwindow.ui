@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -193,7 +193,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>ShowOrder</string>
+       <string>ShowAllOrder</string>
       </property>
      </widget>
      <widget class="QPushButton" name="btnShowShipment">
@@ -206,7 +206,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>ShowShipment</string>
+       <string>ShowAllShipment</string>
       </property>
      </widget>
      <widget class="QPushButton" name="btnWarehouse">

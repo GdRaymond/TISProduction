@@ -75,7 +75,7 @@ class Order(models.Model):
         ordering=('tis_no','colour')
 
     def __str__(self):
-        return '{0}-{1}-{2}-{3}'.format(self.id,self.tis_no,self.product.__str__(),self.quantity)
+        return '{0} - {1} - {2} - {3} - {4}'.format(self.id,self.tis_no,self.product.__str__(),self.colour,self.quantity)
 
     def get_tisno_style(self):
         return '{0}-{1}'.format(self.tis_no,self.product.__str__())
