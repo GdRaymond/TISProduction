@@ -1,5 +1,5 @@
 
-from PyQt5.QtWidgets import QMainWindow,QFileDialog,QTableWidgetItem,QAbstractItemView,QDialog,QApplication
+from PyQt5.QtWidgets import QMainWindow,QFileDialog,QTableWidgetItem,QAbstractItemView,QDialog,QApplication,QMessageBox
 from PyQt5.QtGui import QColor,QIcon,QFont
 from TISDesk.TIS_mainwindow import Ui_MainWindow
 from excelway.tis_excel import TIS_Excel
@@ -14,6 +14,7 @@ from shipments import views as shipment_view
 from shipments.models import Shipment
 from PyQt5.QtSql import QSqlRelationalTableModel,QSqlRelation,QSqlRelationalDelegate
 from TISDesk.edit_dialog import Edit_dialog_shipment,Edit_Dialog_Order
+from core import fts_search
 
 
 logger=tis_log.get_tis_logger()
@@ -67,8 +68,8 @@ class TISMainWindow(QMainWindow):
         self.ui.btnRequisition.clicked.connect(self.generate_order_from_requisition)
         self.ui.btnGenerateOrderTrace.clicked.connect(self.create_order_trace)
         self.ui.btnInitProducts.clicked.connect(self.init_products)
-        self.ui.btnShowOrder.clicked.connect(self.show_orders)
-        self.ui.btnShowShipment.clicked.connect(self.show_shipments)
+        self.ui.btnShowOrder.clicked.connect(self.show_all_orders)
+        self.ui.btnShowShipment.clicked.connect(self.show_all_shipments)
         self.ui.btnWarehouse.clicked.connect(self.show_shipments_warehouse)
         self.ui.btnInspecSchedule.clicked.connect(self.show_shipments_inspection)
         self.ui.btnCalVol.clicked.connect(self.cal_allshipment_volumes)
@@ -79,6 +80,7 @@ class TISMainWindow(QMainWindow):
         self.ui.tableWOrder.setHorizontalHeaderLabels(order_title)
         self.ui.tableWOrder.itemDoubleClicked.connect(self.edit_shipment)
         self.ui.btnShipView.clicked.connect(self.show_shipment_view)
+        self.ui.btnSearch.clicked.connect(self.full_text_search)
 
     def openfile(self):
         files=QFileDialog.getOpenFileName(self,'Open file','C:\\Users\\rhe\\PyCharm\\TISOrder\\media')
@@ -162,7 +164,8 @@ class TISMainWindow(QMainWindow):
     def create_order_trace(self):
         order_file=QFileDialog.getOpenFileName(self,'Open file',os.path.join(os.path.abspath('..'),'media'))[0]
         excel=TIS_Excel()
-        order_list=excel.read_order(order_file)
+        #order_list=excel.read_order(order_file)
+        order_list=[]
 
         #result=excel.create_from_trace(order_file)
         #self.ui.textBrowser.append('finish creating '+str(result))
@@ -264,11 +267,7 @@ class TISMainWindow(QMainWindow):
             logger.error('  error when get orders from shipment {0}'.format(e))
 
 
-    def show_orders(self):
-        self.ui.tableWOrder.setRowCount(0)
-        orders=order_view.get_orders()
-        logger.debug(' Get orders {0}'.format(len(orders)))
-        #self.ui.tableWOrder.setRowCount(len(orders))
+    def show_orders(self,orders):
         for index in range(len(orders)):
             order=orders[index]
             logger.debug('  start to show order {0}/{1}/{2}'.format(order.tis_no,order.product.style_no,order.quantity))
@@ -277,13 +276,24 @@ class TISMainWindow(QMainWindow):
             except Exception as e:
                 logger.error(' error occurs when show order in Table widget {0}'.format(e))
 
-    def show_shipments(self):
+    def show_all_orders(self):
         self.ui.tableWOrder.setRowCount(0)
-        shipments=shipment_view.get_all_shipment()
-        logger.debug(' Get shipments {0}'.format(len(shipments)))
+        orders=order_view.get_orders()
+        logger.debug(' Get orders {0}'.format(len(orders)))
+        #self.ui.tableWOrder.setRowCount(len(orders))
+        self.show_orders(orders)
+
+
+    def show_shipments(self,shipments):
         for shipment in shipments:
             logger.debug('  start to show shipment {0}'.format(shipment))
             self.append_one_shipment(shipment)
+
+    def show_all_shipments(self,shipments):
+        self.ui.tableWOrder.setRowCount(0)
+        shipments=shipment_view.get_all_shipment()
+        logger.debug(' Get shipments {0}'.format(len(shipments)))
+        self.show_shipments(shipments)
 
     def show_shipments_warehouse(self):
         self.ui.tableWOrder.setRowCount(0)
@@ -421,3 +431,27 @@ class TISMainWindow(QMainWindow):
             except Exception as e:
                 logger.error(' error dialog {0}'.format(e))
         QApplication.processEvents()
+
+    def full_text_search(self):
+        self.ui.tableWOrder.setRowCount(0)
+        key_text=self.ui.lin_search.text()
+        if not key_text:
+            qm=QMessageBox()
+            ret=qm.question(self,'search box','Please fill in the search text',qm.Ok)
+            return
+        table_l=fts_search.search_index(key_text)
+        logger.debug(' Searching {0}, get {1}'.format(key_text,table_l))
+        orders=[]
+        shipments=[]
+        for line in table_l:
+            if line.get('table_name')=='orders_order':
+                order=Order.objects.get(id=line.get('obj_id'))
+                orders.append(order)
+            elif line.get('table_name')=='shipments_shipment':
+                shipment=Shipment.objects.get(id=line.get('obj_id'))
+                shipments.append(shipment)
+            else:
+                logger.warn(' Not found this table index: {0}'.format(line.get('table_name')))
+        self.show_orders(orders)
+        self.show_shipments(shipments)
+

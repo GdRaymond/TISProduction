@@ -18,7 +18,7 @@
     <normaloff>TIS.PNG</normaloff>TIS.PNG</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTabWidget" name="tapWidget">
+   <widget class="QTabWidget" name="tabSampleCheck">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -235,10 +235,49 @@
        <string>InspectionSchedule</string>
       </property>
      </widget>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="geometry">
+       <rect>
+        <x>670</x>
+        <y>0</y>
+        <width>361</width>
+        <height>48</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Search</string>
+      </property>
+      <widget class="QLineEdit" name="lin_search">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>231</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="statusTip">
+        <string>i.e. RM1050 Yel/Nav</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnSearch">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>20</y>
+         <width>75</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Search</string>
+       </property>
+      </widget>
+     </widget>
     </widget>
     <widget class="QWidget" name="editShipment">
      <attribute name="title">
-      <string>EditShipment</string>
+      <string>SampleCheck</string>
      </attribute>
      <widget class="QTableView" name="tableVshipment">
       <property name="geometry">

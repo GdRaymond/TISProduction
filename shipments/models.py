@@ -52,7 +52,7 @@ class Shipment(models.Model):
         ordering=('etd_port','etd',)
 
     def __str__(self):
-        return '{0}-{1}-{2}-{3}-{4}'.format(self.code,self.etd_port,self.eta_port,self.etd,self.container)
+        return '{5}-{0}-{1}-{2}-{3}-{4}'.format(self.code,self.etd_port,self.eta_port,self.etd,self.container,self.supplier)
 
     def get_absolute_url(self):
         return reverse('shipment_detail',kwargs={'pk':self.pk})

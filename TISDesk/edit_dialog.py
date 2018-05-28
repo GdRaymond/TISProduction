@@ -148,9 +148,9 @@ class Edit_dialog_shipment(QDialog):
         self.ui.comb_mode.setCurrentText(str(kwargs.get('mode')))
         etd_port_list=[a[0] for a in list(Shipment.ETD_PORT)]
         self.ui.comb_etdport.addItems(etd_port_list)
-        self.ui.comb_etdport.setCurrentText(str(kwargs.get('etd_port')))
+        self.ui.comb_etdport.setCurrentText(str(kwargs.get('etd_port')).upper())
         eta_port_list=[a[0] for a in list(Shipment.ETA_PORT)]
         self.ui.comb_etaport.addItems(eta_port_list)
-        self.ui.comb_etaport.setCurrentText(str(kwargs.get('eta_port')))
+        self.ui.comb_etaport.setCurrentText(str(kwargs.get('eta_port')).upper())
 
 

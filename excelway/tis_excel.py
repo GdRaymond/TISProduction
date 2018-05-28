@@ -543,6 +543,7 @@ class TIS_Excel():
 
 
     def create_from_trace(self, order_file,order_list,signal_display=None):
+        """
         if  not order_file or order_file=="":
             order_file=os.path.join(os.path.abspath('..'),'media/order.xls')
         logger.info('\nstart create order form trace excel')
@@ -655,6 +656,7 @@ class TIS_Excel():
             for the fabric. If there is already test report in the excel, it means we can create a check of approve and 
             put the test report No. to reference field.
             '''
+
             if order_line.get('TestReport'):
                 current_test_reports=TIS_Excel.parse_testreport(order_line.get('TestReport'))
                 if current_test_reports:
@@ -692,7 +694,7 @@ class TIS_Excel():
         logger.info('Finish all orders {0}'.format(result))
         if signal_display:
             signal_display.emit({'msg':'Finish all orders {0}'.format(result), 'level': 'INFO'})
-
+        """
         logger.info('Start to create virtual table my_search')
         if signal_display:
             signal_display.emit({'msg':'Start to create virtual table my_search','level':'INFO'})
@@ -706,9 +708,11 @@ class TIS_Excel():
         if signal_display:
             signal_display.emit({'msg':'Start to write index','level':'INFO'})
         shipments=Shipment.objects.all()
+        logger.debug(' get {0} shipments'.format(len(shipments)))
         content = []
         for shipment in shipments:
             info={'table_name':'shipments_shipment','obj_id':str(shipment.id),'text':shipment}
+            logger.debug(' get shipment info:{0}'.format(info))
             content.append(info)
         fts_search.add_index(content)
         logger.debug(' added {0} records for shipment to my_search'.format(len(content)))
@@ -718,7 +722,7 @@ class TIS_Excel():
         orders=Order.objects.all()
         content=[]
         for order in orders:
-            info={'table_nam':'orders_order','obj_id':str(order.id),'text':order}
+            info={'table_name':'orders_order','obj_id':str(order.id),'text':order}
             content.append(info)
         fts_search.add_index(content)
         logger.debug(' added {0} records for order to my_search'.format(len(content)))
