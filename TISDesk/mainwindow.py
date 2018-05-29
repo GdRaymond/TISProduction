@@ -1,5 +1,5 @@
 
-from PyQt5.QtWidgets import QMainWindow,QFileDialog,QTableWidgetItem,QAbstractItemView,QDialog,QApplication,QMessageBox
+from PyQt5.QtWidgets import QMainWindow,QFileDialog,QTableWidgetItem,QAbstractItemView,QDialog,QApplication,QMessageBox,QButtonGroup
 from PyQt5.QtGui import QColor,QIcon,QFont
 from TISDesk.TIS_mainwindow import Ui_MainWindow
 from excelway.tis_excel import TIS_Excel
@@ -79,8 +79,8 @@ class TISMainWindow(QMainWindow):
         self.ui.tableWOrder.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.tableWOrder.setHorizontalHeaderLabels(order_title)
         self.ui.tableWOrder.itemDoubleClicked.connect(self.edit_shipment)
-        self.ui.btnShipView.clicked.connect(self.show_shipment_view)
         self.ui.btnSearch.clicked.connect(self.full_text_search)
+        self.ui.btn_checkorder.clicked.connect(self.check_orders)
 
     def openfile(self):
         files=QFileDialog.getOpenFileName(self,'Open file','C:\\Users\\rhe\\PyCharm\\TISOrder\\media')
@@ -214,9 +214,30 @@ class TISMainWindow(QMainWindow):
         self.ui.tableWOrder.setItem(row_pos,4,QTableWidgetItem(order.internal_no))
         self.ui.tableWOrder.setItem(row_pos,5,QTableWidgetItem(order.ctm_no))
         self.ui.tableWOrder.setItem(row_pos,6,QTableWidgetItem(order.order_date.strftime('%d %b %y')) )
-        self.ui.tableWOrder.setItem(row_pos,7,QTableWidgetItem('-'))
-        self.ui.tableWOrder.setItem(row_pos,8,QTableWidgetItem('-') )
-        self.ui.tableWOrder.setItem(row_pos,9,QTableWidgetItem('-') )
+        pp_comments = ''
+        pp_checks=order.samplecheck_set.filter(type__iexact='p')
+        if pp_checks:
+            logger.debug('get pp_checks quantity {0}'.format(len(pp_checks)))
+            pp_comments=pp_checks[0].comment
+            for pp_check in range(1,len(pp_checks)):
+                pp_comments='{0}\n{1}'.format(pp_comments,pp_check.comment)
+        self.ui.tableWOrder.setItem(row_pos,7,QTableWidgetItem(pp_comments))
+        ss_comments = ''
+        ss_checks=order.samplecheck_set.filter(type__iexact='s')
+        if ss_checks:
+            logger.debug('get ss_checks quantity {0}'.format(len(ss_checks)))
+            ss_comments=ss_checks[0].comment
+            for ss_check in range(1,len(ss_checks)):
+                ss_comments='{0}\n{1}'.format(ss_comments,ss_check.comment)
+        self.ui.tableWOrder.setItem(row_pos,8,QTableWidgetItem(ss_comments) )
+        test_comments = ''
+        test_checks=order.samplecheck_set.filter(type__iexact='t')
+        if test_checks:
+            logger.debug('get test_checks quantity {0}'.format(len(test_checks)))
+            test_comments='{0}-{1}-{2}'.format(test_checks[0].check_date,test_checks[0].ref,test_checks[0].comment)
+            for test_check in range(1,len(test_checks)):
+                test_comments='{0}\n{1}-{2}-{3}'.format(test_comments,test_check.check_date,test_check.ref,test_check.comment)
+        self.ui.tableWOrder.setItem(row_pos,9,QTableWidgetItem(test_comments) )
         self.ui.tableWOrder.setItem(row_pos,10,QTableWidgetItem(str(order.cartons)) )
         self.ui.tableWOrder.setItem(row_pos,11,QTableWidgetItem(str(order.volumes)) )
         self.ui.tableWOrder.setItem(row_pos,12,QTableWidgetItem(str(order.weights)) )
@@ -455,3 +476,10 @@ class TISMainWindow(QMainWindow):
         self.show_orders(orders)
         self.show_shipments(shipments)
 
+    def check_orders(self):
+        self.ui.button_group1=QButtonGroup()
+        self.ui.button_group1.addButton(self.ui.radioB_a_1)
+        self.ui.button_group1.addButton(self.ui.radioB_r_1)
+        self.ui.button_group2=QButtonGroup()
+        self.ui.button_group2.addButton(self.ui.radioB_a_2)
+        self.ui.button_group2.addButton(self.ui.radioB_r_2)
