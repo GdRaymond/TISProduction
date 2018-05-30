@@ -1,9 +1,11 @@
 
-from PyQt5.QtWidgets import QMainWindow,QFileDialog,QTableWidgetItem,QAbstractItemView,QDialog,QApplication,QMessageBox,QButtonGroup
+from PyQt5.QtWidgets import QMainWindow,QFileDialog,QTableWidgetItem,QAbstractItemView,QDialog,QApplication,\
+    QMessageBox,QButtonGroup,QCheckBox,QRadioButton
 from PyQt5.QtGui import QColor,QIcon,QFont
 from TISDesk.TIS_mainwindow import Ui_MainWindow
 from excelway.tis_excel import TIS_Excel
 from products import product_price,size_chart
+from products.models import Product
 import os,datetime,time
 from PyQt5.QtCore import QThread,pyqtSignal,QDate
 from TISProduction import tis_log
@@ -81,6 +83,67 @@ class TISMainWindow(QMainWindow):
         self.ui.tableWOrder.itemDoubleClicked.connect(self.edit_shipment)
         self.ui.btnSearch.clicked.connect(self.full_text_search)
         self.ui.btn_checkorder.clicked.connect(self.check_orders)
+        self.load_initial_data()
+        self.ui.comb_supplier.currentTextChanged.connect(self.load_comb_fabric)
+        self.ui.comb_fabric.currentTextChanged.connect(self.load_fabric_colour)
+
+    def load_initial_data(self):
+        suppliers=[supplier.get('supplier') for supplier in Order.objects.order_by().values('supplier').distinct()]
+        logger.debug( 'get suppliers list {0}'.format(suppliers))
+        self.ui.comb_supplier.addItems(suppliers)
+
+    def load_comb_fabric(self):
+        self.ui.comb_fabric.clear()
+        supplier=self.ui.comb_supplier.currentText()
+        #products=Order.objects.filter(supplier__iexact=supplier).order_by().values('product').distinct()
+        try:
+            fabrics_dict=Product.objects.filter(order__supplier=supplier).values('fabric__fabric').order_by().distinct()
+            logger.debug(' get products list {0}'.format(fabrics_dict))
+            fabrics=[fabric.get('fabric__fabric') for fabric in fabrics_dict]
+        except Exception as e:
+            logger.error(' error when get fabric: {0}'.format(e))
+        self.ui.comb_fabric.addItems(fabrics)
+
+    def load_fabric_colour(self):
+        supplier = self.ui.comb_supplier.currentText()
+        fabric=self.ui.comb_fabric.currentText()
+        try:
+            order_id_dict=Product.objects.filter(fabric__fabric=fabric).values('order__supplier','order__id').filter(order__supplier=supplier).order_by().distinct()
+            order_id_list=[order_id.get('order__id') for order_id in order_id_dict]
+            logger.debug(' get order id list {0}'.format(order_id_list))
+            colour_dict=Order.objects.filter(id__in=order_id_list).values('fabrictrim__colour_solid').order_by().distinct()
+            colours=[colour.get('fabrictrim__colour_solid') for colour in colour_dict]
+            #logger.debug(' get colour list {0}'.format(colours))
+            for i in range(len(colours)):
+                colour=colours[i]
+                item=QTableWidgetItem(colour)
+                item.setToolTip(colour)
+                self.ui.tableW_colour.setHorizontalHeaderItem(i,item)
+                #below add the check box and radio box to widget
+                qcheck=QCheckBox()
+                setattr(self.ui,'checkB_{0}'.format(colour),qcheck)
+                qradio_app=QRadioButton()
+                setattr(self.ui,'radioB_a_{0}'.format(colour),qradio_app)
+                qradio_rej=QRadioButton()
+                setattr(self.ui,'radioB_a_{0}'.format(colour),qradio_rej)
+                qbutton_group=QButtonGroup()
+                setattr(self.ui,'buttonG_{0}'.format(colour),qbutton_group)
+                qbutton_group.addButton(qradio_app)
+                qbutton_group.addButton(qradio_rej)
+
+                self.ui.tableW_colour.setCellWidget(0,i,qcheck)
+                self.ui.tableW_colour.setCellWidget(1,i,qradio_app)
+                self.ui.tableW_colour.setCellWidget(2,i,qradio_rej)
+
+
+        except Exception as e:
+            logger.error(' error when get colour :{0}'.format(e))
+        if len(colours)<20:
+            for i in range(len(colours),20):
+                #colours.append('-')
+                self.ui.tableW_colour.setHorizontalHeaderItem(i, QTableWidgetItem('-'))
+        #self.ui.tableW_colour.setHorizontalHeaderLabels(colours)
+
 
     def openfile(self):
         files=QFileDialog.getOpenFileName(self,'Open file','C:\\Users\\rhe\\PyCharm\\TISOrder\\media')
@@ -235,8 +298,8 @@ class TISMainWindow(QMainWindow):
         if test_checks:
             logger.debug('get test_checks quantity {0}'.format(len(test_checks)))
             test_comments='{0}-{1}-{2}'.format(test_checks[0].check_date,test_checks[0].ref,test_checks[0].comment)
-            for test_check in range(1,len(test_checks)):
-                test_comments='{0}\n{1}-{2}-{3}'.format(test_comments,test_check.check_date,test_check.ref,test_check.comment)
+            for i in range(1,len(test_checks)):
+                test_comments='{0}\n{1}-{2}-{3}'.format(test_comments,test_checks[i].check_date,test_checks[i].ref,test_checks[i].comment)
         self.ui.tableWOrder.setItem(row_pos,9,QTableWidgetItem(test_comments) )
         self.ui.tableWOrder.setItem(row_pos,10,QTableWidgetItem(str(order.cartons)) )
         self.ui.tableWOrder.setItem(row_pos,11,QTableWidgetItem(str(order.volumes)) )
@@ -283,6 +346,8 @@ class TISMainWindow(QMainWindow):
 
             logger.debug(' get orders from shipment {0}'.format(len(orders)))
             for order in orders:
+                if order.tis_no=='TIS18-SO4548':
+                    logger.debug('  check this point')
                 self.append_one_order(order)
         except Exception as e:
             logger.error('  error when get orders from shipment {0}'.format(e))
@@ -327,7 +392,7 @@ class TISMainWindow(QMainWindow):
 
     def show_shipments_inspection(self):
         self.ui.tableWOrder.setRowCount(0)
-        shipments=shipment_view.get_next_month_inspection()
+        shipments=shipment_view.get_next_2month_inspection()
         logger.debug('  get inspection shipments {0}'.format(len(shipments)))
         for shipment in shipments:
             logger.debug('  start to show shipment {0}'.format(shipment))

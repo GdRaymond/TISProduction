@@ -47,10 +47,10 @@ def get_next_month_warehouse():
         logger.error(' error occur when get shipment for warehouse {0}'.format(e))
     return shipments
 
-def get_next_month_inspection():
+def get_next_2month_inspection():
     today=datetime.date.today()
     start_date=today+dateutil.relativedelta.relativedelta(days=+6)
-    next_month_date=today+dateutil.relativedelta.relativedelta(months=+1)
+    next_month_date=today+dateutil.relativedelta.relativedelta(months=+2)
     firtday,days=calendar.monthrange(next_month_date.year,next_month_date.month)
     last_day_next_month=datetime.date(year=next_month_date.year,month=next_month_date.month,day=days)
     logger.debug(' get the last day of next month is {0}'.format(last_day_next_month))

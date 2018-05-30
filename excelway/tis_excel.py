@@ -543,7 +543,7 @@ class TIS_Excel():
 
 
     def create_from_trace(self, order_file,order_list,signal_display=None):
-        """
+
         if  not order_file or order_file=="":
             order_file=os.path.join(os.path.abspath('..'),'media/order.xls')
         logger.info('\nstart create order form trace excel')
@@ -632,7 +632,7 @@ class TIS_Excel():
 
             order.internal_no=order_line.get('InternalNo')
             order.client=order_line.get('Customer')
-            order.supplier=order_line.get('Supplier')
+            order.supplier=order_line.get('Supplier').upper()
             order.quantity = order_line.get('Quantity')
             #order.volume = order_line.get('Volume')
             #order.cartons = order_line.get('Cartons')
@@ -694,7 +694,7 @@ class TIS_Excel():
         logger.info('Finish all orders {0}'.format(result))
         if signal_display:
             signal_display.emit({'msg':'Finish all orders {0}'.format(result), 'level': 'INFO'})
-        """
+
         logger.info('Start to create virtual table my_search')
         if signal_display:
             signal_display.emit({'msg':'Start to create virtual table my_search','level':'INFO'})
