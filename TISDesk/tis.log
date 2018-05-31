@@ -5081,3 +5081,267 @@
 2018-05-31 16:31:21,500 - DEBUG - save_test_report -  finish save test report chech for 2 orders
 2018-05-31 16:31:36,222 - DEBUG - load_fabric_colour -  get order id list []
 2018-05-31 16:32:28,215 - DEBUG - load_initial_data - get suppliers list ['JIN FENG', 'ELIEL', 'J-LONG', 'SHANGYU LIANYA', 'SN LABEL', 'TANHOO', 'SMARTEX', 'AUWIN']
+2018-06-01 08:48:46,406 - DEBUG - load_initial_data - get suppliers list ['JIN FENG', 'ELIEL', 'J-LONG', 'SHANGYU LIANYA', 'SN LABEL', 'TANHOO', 'SMARTEX', 'AUWIN']
+2018-06-01 08:48:50,522 - DEBUG - load_comb_fabric -  get products list <QuerySet [{'fabric__fabric': '100% Cotton Twill 20X20 108X56 190gsm'}, {'fabric__fabric': '100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm'}, {'fabric__fabric': '100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash'}, {'fabric__fabric': '100% Cotton Drill 90x46 / 14sx7s in 310gsm'}, {'fabric__fabric': '98% Cotton / 2% Spandex 450gsm after washing, 78x50/7X10+70D'}, {'fabric__fabric': '100% Cotton Twill 7sx6s 72x46 14.50zs (490gsm)'}, {'fabric__fabric': '100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm'}, {'fabric__fabric': 'other'}, {'fabric__fabric': '201D Nylon Oxford with PU coating, 300g/M2*24HRS'}, {'fabric__fabric': '98% Cotton, 2% elastane twill, 12X16+70D 75X56'}, {'fabric__fabric': '100% Cotton Twill 20X20 108X56 190gsm, soft treatment, garment wash'}, {'fabric__fabric': '100% Fine Cotton, Y/D CHECKS, 80/2X50 / 160X82, 130gsm'}, {'fabric__fabric': 'Cotton chambray, 21x61, 62x48, 135gsm'}, {'fabric__fabric': '99% Cotton, 1% Elastane, about 11.3OZ before wash'}, {'fabric__fabric': '3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")'}, {'fabric__fabric': '100% Cotton Drill 150gsm'}, {'fabric__fabric': '100% Cotton Poplin, 50x050 / 144x80, 105gsm'}]>
+2018-06-01 08:48:50,538 - DEBUG - load_fabric_colour -  get order id list [647, 648, 649, 77, 78, 96, 200, 293, 294, 311, 312, 329, 1039, 112, 186, 222, 267, 295, 313, 679, 680, 753, 754, 79, 113, 187, 268, 314, 968, 969, 80, 160, 201, 223, 248, 269, 840, 842, 103, 104, 118, 157, 191, 192, 231, 232, 241, 276, 302, 303, 320, 321, 337, 338, 479, 910, 81, 82, 99, 100, 109, 116, 117, 152, 153, 163, 189, 203, 211, 212, 227, 228, 239, 240, 251, 252, 257, 258, 272, 273, 282, 298, 299, 318, 319, 333, 334, 405, 477, 478, 607, 608, 755, 841, 909, 970, 971, 972, 1040, 1041, 1091, 97, 98, 114, 115, 158, 159, 162, 188, 202, 210, 225, 226, 237, 238, 249, 250, 270, 271, 297, 316, 317, 331, 332, 404, 908, 714, 715]
+2018-06-01 08:48:50,553 - DEBUG - load_fabric_colour -  get order id list []
+2018-06-01 08:49:16,541 - DEBUG - load_fabric_colour -  get order id list [495, 560, 600, 601, 602, 723, 809, 810, 811, 831, 887, 958, 1036, 1084, 469, 470, 471, 603, 812, 813, 814, 886, 956, 957, 724, 725, 726, 815, 816, 883, 884, 885, 955, 1033, 1034, 1035]
+2018-06-01 08:49:19,754 - DEBUG - get_colour_checkbox_status -  head colour name: BLACK
+2018-06-01 08:49:19,755 - DEBUG - get_colour_checkbox_status -  colour:checkB_BLACK Selected=False
+2018-06-01 08:49:19,755 - DEBUG - get_colour_checkbox_status -  head colour name: KHAKI
+2018-06-01 08:49:19,756 - DEBUG - get_colour_checkbox_status -  colour:checkB_KHAKI Selected=True
+2018-06-01 08:49:19,756 - DEBUG - get_colour_checkbox_status -  radioB_a_KHAKI selected=True
+2018-06-01 08:49:19,756 - DEBUG - get_colour_checkbox_status -  head colour name: NAVY
+2018-06-01 08:49:19,757 - DEBUG - get_colour_checkbox_status -  colour:checkB_NAVY Selected=False
+2018-06-01 08:49:19,757 - DEBUG - check_orders -  colours seleted is {'KHAKI': 'A'}
+2018-06-01 08:49:19,772 - DEBUG - check_orders -  get check sample orders number: 7
+2018-06-01 08:49:19,822 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:49:19,828 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:49:24,867 - DEBUG - get_colour_checkbox_status -  head colour name: BLACK
+2018-06-01 08:49:24,868 - DEBUG - get_colour_checkbox_status -  colour:checkB_BLACK Selected=False
+2018-06-01 08:49:24,868 - DEBUG - get_colour_checkbox_status -  head colour name: KHAKI
+2018-06-01 08:49:24,869 - DEBUG - get_colour_checkbox_status -  colour:checkB_KHAKI Selected=True
+2018-06-01 08:49:24,869 - DEBUG - get_colour_checkbox_status -  radioB_a_KHAKI selected=True
+2018-06-01 08:49:24,869 - DEBUG - get_colour_checkbox_status -  head colour name: NAVY
+2018-06-01 08:49:24,870 - DEBUG - get_colour_checkbox_status -  colour:checkB_NAVY Selected=True
+2018-06-01 08:49:24,870 - DEBUG - get_colour_checkbox_status -  radioB_a_NAVY selected=True
+2018-06-01 08:49:24,870 - DEBUG - check_orders -  colours seleted is {'NAVY': 'A', 'KHAKI': 'A'}
+2018-06-01 08:49:24,884 - DEBUG - check_orders -  get check sample orders number: 22
+2018-06-01 08:49:24,903 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:49:24,946 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:49:24,952 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:49:24,958 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:49:24,964 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:49:24,970 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:49:24,976 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:49:24,983 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:49:24,989 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:49:24,996 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:49:25,002 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:50:13,145 - DEBUG - get_colour_checkbox_status -  head colour name: BLACK
+2018-06-01 08:50:13,146 - DEBUG - get_colour_checkbox_status -  colour:checkB_BLACK Selected=False
+2018-06-01 08:50:13,147 - DEBUG - get_colour_checkbox_status -  head colour name: KHAKI
+2018-06-01 08:50:13,147 - DEBUG - get_colour_checkbox_status -  colour:checkB_KHAKI Selected=True
+2018-06-01 08:50:13,147 - DEBUG - get_colour_checkbox_status -  radioB_a_KHAKI selected=True
+2018-06-01 08:50:13,148 - DEBUG - get_colour_checkbox_status -  head colour name: NAVY
+2018-06-01 08:50:13,149 - DEBUG - get_colour_checkbox_status -  colour:checkB_NAVY Selected=True
+2018-06-01 08:50:13,149 - DEBUG - get_colour_checkbox_status -  radioB_a_NAVY selected=True
+2018-06-01 08:50:13,150 - DEBUG - save_test_report -  start to search fabri trim for order_id 725 and colours dict_keys(['NAVY', 'KHAKI'])
+2018-06-01 08:50:13,154 - DEBUG - save_test_report -  get fabric trims number : 1
+2018-06-01 08:50:13,296 - DEBUG - save_test_report -  finish save 1 test report check for order 725
+2018-06-01 08:50:13,297 - DEBUG - save_test_report -  start to search fabri trim for order_id 811 and colours dict_keys(['NAVY', 'KHAKI'])
+2018-06-01 08:50:13,301 - DEBUG - save_test_report -  get fabric trims number : 1
+2018-06-01 08:50:13,470 - DEBUG - save_test_report -  finish save 1 test report check for order 811
+2018-06-01 08:50:13,470 - DEBUG - save_test_report -  start to search fabri trim for order_id 815 and colours dict_keys(['NAVY', 'KHAKI'])
+2018-06-01 08:50:13,474 - DEBUG - save_test_report -  get fabric trims number : 1
+2018-06-01 08:50:13,636 - DEBUG - save_test_report -  finish save 1 test report check for order 815
+2018-06-01 08:50:13,636 - DEBUG - save_test_report -  finish save test report chech for 3 orders
+2018-06-01 08:50:22,220 - DEBUG - load_fabric_colour -  get order id list []
+2018-06-01 08:56:17,199 - DEBUG - load_initial_data - get suppliers list ['JIN FENG', 'ELIEL', 'J-LONG', 'SHANGYU LIANYA', 'SN LABEL', 'TANHOO', 'SMARTEX', 'AUWIN']
+2018-06-01 08:56:19,788 - DEBUG - load_comb_fabric -  get products list <QuerySet [{'fabric__fabric': '100% Cotton Twill 20X20 108X56 190gsm'}, {'fabric__fabric': '100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm'}, {'fabric__fabric': '100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash'}, {'fabric__fabric': '100% Cotton Drill 90x46 / 14sx7s in 310gsm'}, {'fabric__fabric': '98% Cotton / 2% Spandex 450gsm after washing, 78x50/7X10+70D'}, {'fabric__fabric': '100% Cotton Twill 7sx6s 72x46 14.50zs (490gsm)'}, {'fabric__fabric': '100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm'}, {'fabric__fabric': 'other'}, {'fabric__fabric': '201D Nylon Oxford with PU coating, 300g/M2*24HRS'}, {'fabric__fabric': '98% Cotton, 2% elastane twill, 12X16+70D 75X56'}, {'fabric__fabric': '100% Cotton Twill 20X20 108X56 190gsm, soft treatment, garment wash'}, {'fabric__fabric': '100% Fine Cotton, Y/D CHECKS, 80/2X50 / 160X82, 130gsm'}, {'fabric__fabric': 'Cotton chambray, 21x61, 62x48, 135gsm'}, {'fabric__fabric': '99% Cotton, 1% Elastane, about 11.3OZ before wash'}, {'fabric__fabric': '3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")'}, {'fabric__fabric': '100% Cotton Drill 150gsm'}, {'fabric__fabric': '100% Cotton Poplin, 50x050 / 144x80, 105gsm'}]>
+2018-06-01 08:56:19,804 - DEBUG - load_fabric_colour -  get order id list [647, 648, 649, 77, 78, 96, 200, 293, 294, 311, 312, 329, 1039, 112, 186, 222, 267, 295, 313, 679, 680, 753, 754, 79, 113, 187, 268, 314, 968, 969, 80, 160, 201, 223, 248, 269, 840, 842, 103, 104, 118, 157, 191, 192, 231, 232, 241, 276, 302, 303, 320, 321, 337, 338, 479, 910, 81, 82, 99, 100, 109, 116, 117, 152, 153, 163, 189, 203, 211, 212, 227, 228, 239, 240, 251, 252, 257, 258, 272, 273, 282, 298, 299, 318, 319, 333, 334, 405, 477, 478, 607, 608, 755, 841, 909, 970, 971, 972, 1040, 1041, 1091, 97, 98, 114, 115, 158, 159, 162, 188, 202, 210, 225, 226, 237, 238, 249, 250, 270, 271, 297, 316, 317, 331, 332, 404, 908, 714, 715]
+2018-06-01 08:56:19,819 - DEBUG - load_fabric_colour -  get order id list []
+2018-06-01 08:56:31,499 - DEBUG - load_fabric_colour -  get order id list [495, 560, 600, 601, 602, 723, 809, 810, 811, 831, 887, 958, 1036, 1084, 469, 470, 471, 603, 812, 813, 814, 886, 956, 957, 724, 725, 726, 815, 816, 883, 884, 885, 955, 1033, 1034, 1035]
+2018-06-01 08:56:34,959 - DEBUG - get_colour_checkbox_status -  head colour name: BLACK
+2018-06-01 08:56:34,960 - DEBUG - get_colour_checkbox_status -  colour:checkB_BLACK Selected=False
+2018-06-01 08:56:34,961 - DEBUG - get_colour_checkbox_status -  head colour name: KHAKI
+2018-06-01 08:56:34,961 - DEBUG - get_colour_checkbox_status -  colour:checkB_KHAKI Selected=True
+2018-06-01 08:56:34,962 - DEBUG - get_colour_checkbox_status -  radioB_a_KHAKI selected=True
+2018-06-01 08:56:34,962 - DEBUG - get_colour_checkbox_status -  head colour name: NAVY
+2018-06-01 08:56:34,962 - DEBUG - get_colour_checkbox_status -  colour:checkB_NAVY Selected=True
+2018-06-01 08:56:34,963 - DEBUG - get_colour_checkbox_status -  radioB_a_NAVY selected=True
+2018-06-01 08:56:34,963 - DEBUG - check_orders -  colours seleted is {'NAVY': 'A', 'KHAKI': 'A'}
+2018-06-01 08:56:34,982 - DEBUG - check_orders -  get check sample orders number: 22
+2018-06-01 08:56:34,998 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:56:35,009 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:56:35,026 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:56:35,044 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:56:35,055 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:56:35,062 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:56:35,068 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:56:35,074 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:56:35,080 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:56:35,086 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:56:35,092 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:56:35,099 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:56:35,104 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:56:35,110 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 08:57:14,796 - DEBUG - get_colour_checkbox_status -  head colour name: BLACK
+2018-06-01 08:57:14,797 - DEBUG - get_colour_checkbox_status -  colour:checkB_BLACK Selected=False
+2018-06-01 08:57:14,797 - DEBUG - get_colour_checkbox_status -  head colour name: KHAKI
+2018-06-01 08:57:14,798 - DEBUG - get_colour_checkbox_status -  colour:checkB_KHAKI Selected=True
+2018-06-01 08:57:14,798 - DEBUG - get_colour_checkbox_status -  radioB_a_KHAKI selected=True
+2018-06-01 08:57:14,798 - DEBUG - get_colour_checkbox_status -  head colour name: NAVY
+2018-06-01 08:57:14,799 - DEBUG - get_colour_checkbox_status -  colour:checkB_NAVY Selected=True
+2018-06-01 08:57:14,799 - DEBUG - get_colour_checkbox_status -  radioB_a_NAVY selected=True
+2018-06-01 08:57:14,799 - DEBUG - save_test_report -  start to search fabri trim for order_id 725 and colours dict_keys(['NAVY', 'KHAKI'])
+2018-06-01 08:57:14,804 - DEBUG - save_test_report -  get fabric trims number : 1
+2018-06-01 08:57:14,956 - DEBUG - save_test_report -  finish save 1 test report check for order 725
+2018-06-01 08:57:14,957 - DEBUG - save_test_report -  start to search fabri trim for order_id 813 and colours dict_keys(['NAVY', 'KHAKI'])
+2018-06-01 08:57:14,960 - DEBUG - save_test_report -  get fabric trims number : 1
+2018-06-01 08:57:15,106 - DEBUG - save_test_report -  finish save 1 test report check for order 813
+2018-06-01 08:57:15,106 - DEBUG - save_test_report -  start to search fabri trim for order_id 814 and colours dict_keys(['NAVY', 'KHAKI'])
+2018-06-01 08:57:15,109 - DEBUG - save_test_report -  get fabric trims number : 1
+2018-06-01 08:57:15,350 - DEBUG - save_test_report -  finish save 1 test report check for order 814
+2018-06-01 08:57:15,352 - DEBUG - save_test_report -  finish save test report chech for 3 orders
+2018-06-01 08:57:17,905 - DEBUG - load_fabric_colour -  get order id list []
+2018-06-01 08:57:17,908 - DEBUG - save_test_report -  get email_msg is:Regarding test report NQA123 - 100% Cotton Twill 20X20 108X56 190gsm, soft treatment, garment wash NAVY KHAKI-TIS18-SO 4330 4395 4395- RM2020 RM4040 RM4040-NAVY approvedKHAKI approvedRETEST IS IMPROVED.
+2018-06-01 09:32:18,131 - DEBUG - load_initial_data - get suppliers list ['JIN FENG', 'ELIEL', 'J-LONG', 'SHANGYU LIANYA', 'SN LABEL', 'TANHOO', 'SMARTEX', 'AUWIN']
+2018-06-01 09:32:23,560 - DEBUG - load_comb_fabric -  get products list <QuerySet [{'fabric__fabric': '100% Cotton Twill 20X20 108X56 190gsm'}, {'fabric__fabric': '100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm'}, {'fabric__fabric': '100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash'}, {'fabric__fabric': '100% Cotton Drill 90x46 / 14sx7s in 310gsm'}, {'fabric__fabric': '98% Cotton / 2% Spandex 450gsm after washing, 78x50/7X10+70D'}, {'fabric__fabric': '100% Cotton Twill 7sx6s 72x46 14.50zs (490gsm)'}, {'fabric__fabric': '100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm'}, {'fabric__fabric': 'other'}, {'fabric__fabric': '201D Nylon Oxford with PU coating, 300g/M2*24HRS'}, {'fabric__fabric': '98% Cotton, 2% elastane twill, 12X16+70D 75X56'}, {'fabric__fabric': '100% Cotton Twill 20X20 108X56 190gsm, soft treatment, garment wash'}, {'fabric__fabric': '100% Fine Cotton, Y/D CHECKS, 80/2X50 / 160X82, 130gsm'}, {'fabric__fabric': 'Cotton chambray, 21x61, 62x48, 135gsm'}, {'fabric__fabric': '99% Cotton, 1% Elastane, about 11.3OZ before wash'}, {'fabric__fabric': '3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")'}, {'fabric__fabric': '100% Cotton Drill 150gsm'}, {'fabric__fabric': '100% Cotton Poplin, 50x050 / 144x80, 105gsm'}]>
+2018-06-01 09:32:23,591 - DEBUG - load_fabric_colour -  get order id list [647, 648, 649, 77, 78, 96, 200, 293, 294, 311, 312, 329, 1039, 112, 186, 222, 267, 295, 313, 679, 680, 753, 754, 79, 113, 187, 268, 314, 968, 969, 80, 160, 201, 223, 248, 269, 840, 842, 103, 104, 118, 157, 191, 192, 231, 232, 241, 276, 302, 303, 320, 321, 337, 338, 479, 910, 81, 82, 99, 100, 109, 116, 117, 152, 153, 163, 189, 203, 211, 212, 227, 228, 239, 240, 251, 252, 257, 258, 272, 273, 282, 298, 299, 318, 319, 333, 334, 405, 477, 478, 607, 608, 755, 841, 909, 970, 971, 972, 1040, 1041, 1091, 97, 98, 114, 115, 158, 159, 162, 188, 202, 210, 225, 226, 237, 238, 249, 250, 270, 271, 297, 316, 317, 331, 332, 404, 908, 714, 715]
+2018-06-01 09:32:23,591 - DEBUG - load_fabric_colour -  get order id list []
+2018-06-01 09:33:06,130 - DEBUG - load_fabric_colour -  get order id list [609, 541, 542, 431, 466, 467, 556, 597, 598, 712, 718, 801, 827, 880, 895, 947, 965, 1081, 1130, 443, 444, 558, 727, 803, 804, 882, 1031, 1083, 432, 468, 557, 599, 713, 719, 802, 828, 881, 948, 1082, 1131, 75, 90, 106, 121, 155, 168, 193, 215, 221, 243, 255, 260, 277, 278, 283, 325, 326, 341, 342, 449, 450, 451, 491, 492, 638, 640, 641, 728, 108, 170, 208, 217, 220, 245, 256, 280, 310, 328, 452, 453, 559, 729, 730, 805, 493, 494, 639, 808, 952, 953, 1134, 434, 806, 807, 949, 950, 951, 1132, 1133, 433, 1032, 643, 661, 839, 734, 735, 736, 737, 837, 631]
+2018-06-01 09:33:12,820 - DEBUG - get_colour_checkbox_status -  head colour name: NAVY
+2018-06-01 09:33:12,821 - DEBUG - get_colour_checkbox_status -  colour:checkB_NAVY Selected=True
+2018-06-01 09:33:12,821 - DEBUG - get_colour_checkbox_status -  radioB_a_NAVY selected=True
+2018-06-01 09:33:12,822 - DEBUG - get_colour_checkbox_status -  head colour name: BOTTLE
+2018-06-01 09:33:12,822 - DEBUG - get_colour_checkbox_status -  colour:checkB_BOTTLE Selected=False
+2018-06-01 09:33:12,822 - DEBUG - get_colour_checkbox_status -  head colour name: BLACK
+2018-06-01 09:33:12,823 - DEBUG - get_colour_checkbox_status -  colour:checkB_BLACK Selected=False
+2018-06-01 09:33:12,823 - DEBUG - get_colour_checkbox_status -  head colour name: KHAKI
+2018-06-01 09:33:12,824 - DEBUG - get_colour_checkbox_status -  colour:checkB_KHAKI Selected=True
+2018-06-01 09:33:12,824 - DEBUG - get_colour_checkbox_status -  radioB_a_KHAKI selected=True
+2018-06-01 09:33:12,825 - DEBUG - get_colour_checkbox_status -  head colour name: ORANGE
+2018-06-01 09:33:12,825 - DEBUG - get_colour_checkbox_status -  colour:checkB_ORANGE Selected=False
+2018-06-01 09:33:12,826 - DEBUG - get_colour_checkbox_status -  head colour name: YELLOW
+2018-06-01 09:33:12,826 - DEBUG - get_colour_checkbox_status -  colour:checkB_YELLOW Selected=False
+2018-06-01 09:33:12,826 - DEBUG - get_colour_checkbox_status -  head colour name: ORANGE-NAVY
+2018-06-01 09:33:12,827 - DEBUG - get_colour_checkbox_status -  colour:checkB_ORANGE-NAVY Selected=False
+2018-06-01 09:33:12,827 - DEBUG - get_colour_checkbox_status -  head colour name: NAVY-BLUE
+2018-06-01 09:33:12,827 - DEBUG - get_colour_checkbox_status -  colour:checkB_NAVY-BLUE Selected=False
+2018-06-01 09:33:12,828 - DEBUG - get_colour_checkbox_status -  head colour name: ALL NAVY
+2018-06-01 09:33:12,828 - DEBUG - get_colour_checkbox_status -  colour:checkB_ALL NAVY Selected=False
+2018-06-01 09:33:12,828 - DEBUG - get_colour_checkbox_status -  head colour name: ALL BLACK
+2018-06-01 09:33:12,829 - DEBUG - get_colour_checkbox_status -  colour:checkB_ALL BLACK Selected=False
+2018-06-01 09:33:12,829 - DEBUG - get_colour_checkbox_status -  head colour name: ALL MAROON
+2018-06-01 09:33:12,829 - DEBUG - get_colour_checkbox_status -  colour:checkB_ALL MAROON Selected=False
+2018-06-01 09:33:12,830 - DEBUG - check_orders -  colours seleted is {'KHAKI': 'A', 'NAVY': 'A'}
+2018-06-01 09:33:12,849 - DEBUG - check_orders -  get check sample orders number: 32
+2018-06-01 09:33:12,859 - DEBUG - append_samplecheck_one_order - get ss_checks quantity 1
+2018-06-01 09:33:12,862 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:33:12,872 - DEBUG - append_samplecheck_one_order - get ss_checks quantity 1
+2018-06-01 09:33:12,875 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:33:12,879 - DEBUG - append_samplecheck_one_order - get pp_checks quantity 1
+2018-06-01 09:33:12,881 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:33:12,887 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:33:12,893 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:33:12,899 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:33:12,904 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:33:12,910 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:33:12,916 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:33:49,665 - DEBUG - get_colour_checkbox_status -  head colour name: NAVY
+2018-06-01 09:33:49,666 - DEBUG - get_colour_checkbox_status -  colour:checkB_NAVY Selected=True
+2018-06-01 09:33:49,666 - DEBUG - get_colour_checkbox_status -  radioB_a_NAVY selected=True
+2018-06-01 09:33:49,667 - DEBUG - get_colour_checkbox_status -  head colour name: BOTTLE
+2018-06-01 09:33:49,667 - DEBUG - get_colour_checkbox_status -  colour:checkB_BOTTLE Selected=False
+2018-06-01 09:33:49,667 - DEBUG - get_colour_checkbox_status -  head colour name: BLACK
+2018-06-01 09:33:49,668 - DEBUG - get_colour_checkbox_status -  colour:checkB_BLACK Selected=False
+2018-06-01 09:33:49,668 - DEBUG - get_colour_checkbox_status -  head colour name: KHAKI
+2018-06-01 09:33:49,669 - DEBUG - get_colour_checkbox_status -  colour:checkB_KHAKI Selected=True
+2018-06-01 09:33:49,669 - DEBUG - get_colour_checkbox_status -  radioB_a_KHAKI selected=True
+2018-06-01 09:33:49,669 - DEBUG - get_colour_checkbox_status -  head colour name: ORANGE
+2018-06-01 09:33:49,670 - DEBUG - get_colour_checkbox_status -  colour:checkB_ORANGE Selected=False
+2018-06-01 09:33:49,670 - DEBUG - get_colour_checkbox_status -  head colour name: YELLOW
+2018-06-01 09:33:49,671 - DEBUG - get_colour_checkbox_status -  colour:checkB_YELLOW Selected=False
+2018-06-01 09:33:49,672 - DEBUG - get_colour_checkbox_status -  head colour name: ORANGE-NAVY
+2018-06-01 09:33:49,672 - DEBUG - get_colour_checkbox_status -  colour:checkB_ORANGE-NAVY Selected=False
+2018-06-01 09:33:49,672 - DEBUG - get_colour_checkbox_status -  head colour name: NAVY-BLUE
+2018-06-01 09:33:49,673 - DEBUG - get_colour_checkbox_status -  colour:checkB_NAVY-BLUE Selected=False
+2018-06-01 09:33:49,673 - DEBUG - get_colour_checkbox_status -  head colour name: ALL NAVY
+2018-06-01 09:33:49,673 - DEBUG - get_colour_checkbox_status -  colour:checkB_ALL NAVY Selected=False
+2018-06-01 09:33:49,674 - DEBUG - get_colour_checkbox_status -  head colour name: ALL BLACK
+2018-06-01 09:33:49,674 - DEBUG - get_colour_checkbox_status -  colour:checkB_ALL BLACK Selected=False
+2018-06-01 09:33:49,674 - DEBUG - get_colour_checkbox_status -  head colour name: ALL MAROON
+2018-06-01 09:33:49,675 - DEBUG - get_colour_checkbox_status -  colour:checkB_ALL MAROON Selected=False
+2018-06-01 09:33:49,675 - DEBUG - save_test_report -  start to search fabri trim for order_id 734 and colours dict_keys(['KHAKI', 'NAVY'])
+2018-06-01 09:33:49,679 - DEBUG - save_test_report -  get fabric trims number : 1
+2018-06-01 09:33:49,817 - DEBUG - save_test_report -  finish save 1 test report check for order 734
+2018-06-01 09:33:49,818 - DEBUG - save_test_report -  start to search fabri trim for order_id 880 and colours dict_keys(['KHAKI', 'NAVY'])
+2018-06-01 09:33:49,823 - DEBUG - save_test_report -  get fabric trims number : 1
+2018-06-01 09:33:49,966 - DEBUG - save_test_report -  finish save 1 test report check for order 880
+2018-06-01 09:33:49,967 - DEBUG - save_test_report -  start to search fabri trim for order_id 882 and colours dict_keys(['KHAKI', 'NAVY'])
+2018-06-01 09:33:49,968 - DEBUG - save_test_report -  get fabric trims number : 1
+2018-06-01 09:33:50,123 - DEBUG - save_test_report -  finish save 1 test report check for order 882
+2018-06-01 09:33:50,124 - DEBUG - save_test_report -  finish save test report chech for 3 orders
+2018-06-01 09:33:50,124 - DEBUG - save_test_report -  get email_msg is:Regarding test report NQA234 - 100% Cotton Drill 90x46 / 14sx7s in 310gsm KHAKI NAVY - TIS18-SO4404 4450 4452  -  GS301M RM1002 RM1002S
+KHAKI approved; NAVY approved; Navy shrinkage need improved.
+2018-06-01 09:34:17,556 - DEBUG - load_fabric_colour -  get order id list []
+2018-06-01 09:37:46,022 - DEBUG - load_initial_data - get suppliers list ['JIN FENG', 'ELIEL', 'J-LONG', 'SHANGYU LIANYA', 'SN LABEL', 'TANHOO', 'SMARTEX', 'AUWIN']
+2018-06-01 09:37:49,342 - DEBUG - load_comb_fabric -  get products list <QuerySet [{'fabric__fabric': '100% Cotton Twill 20X20 108X56 190gsm'}, {'fabric__fabric': '100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm'}, {'fabric__fabric': '100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash'}, {'fabric__fabric': '100% Cotton Drill 90x46 / 14sx7s in 310gsm'}, {'fabric__fabric': '98% Cotton / 2% Spandex 450gsm after washing, 78x50/7X10+70D'}, {'fabric__fabric': '100% Cotton Twill 7sx6s 72x46 14.50zs (490gsm)'}, {'fabric__fabric': '100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm'}, {'fabric__fabric': 'other'}, {'fabric__fabric': '201D Nylon Oxford with PU coating, 300g/M2*24HRS'}, {'fabric__fabric': '98% Cotton, 2% elastane twill, 12X16+70D 75X56'}, {'fabric__fabric': '100% Cotton Twill 20X20 108X56 190gsm, soft treatment, garment wash'}, {'fabric__fabric': '100% Fine Cotton, Y/D CHECKS, 80/2X50 / 160X82, 130gsm'}, {'fabric__fabric': 'Cotton chambray, 21x61, 62x48, 135gsm'}, {'fabric__fabric': '99% Cotton, 1% Elastane, about 11.3OZ before wash'}, {'fabric__fabric': '3XDRY 60.5% Cotton / 37% Polyester / 2.5% Lycra Dyed Twill, 116x69 21TCX16+70D, 260gsm, useable width 144cm (60/61")'}, {'fabric__fabric': '100% Cotton Drill 150gsm'}, {'fabric__fabric': '100% Cotton Poplin, 50x050 / 144x80, 105gsm'}]>
+2018-06-01 09:37:49,358 - DEBUG - load_fabric_colour -  get order id list [647, 648, 649, 77, 78, 96, 200, 293, 294, 311, 312, 329, 1039, 112, 186, 222, 267, 295, 313, 679, 680, 753, 754, 79, 113, 187, 268, 314, 968, 969, 80, 160, 201, 223, 248, 269, 840, 842, 103, 104, 118, 157, 191, 192, 231, 232, 241, 276, 302, 303, 320, 321, 337, 338, 479, 910, 81, 82, 99, 100, 109, 116, 117, 152, 153, 163, 189, 203, 211, 212, 227, 228, 239, 240, 251, 252, 257, 258, 272, 273, 282, 298, 299, 318, 319, 333, 334, 405, 477, 478, 607, 608, 755, 841, 909, 970, 971, 972, 1040, 1041, 1091, 97, 98, 114, 115, 158, 159, 162, 188, 202, 210, 225, 226, 237, 238, 249, 250, 270, 271, 297, 316, 317, 331, 332, 404, 908, 714, 715]
+2018-06-01 09:37:49,373 - DEBUG - load_fabric_colour -  get order id list []
+2018-06-01 09:37:56,251 - DEBUG - load_fabric_colour -  get order id list [609, 541, 542, 431, 466, 467, 556, 597, 598, 712, 718, 801, 827, 880, 895, 947, 965, 1081, 1130, 443, 444, 558, 727, 803, 804, 882, 1031, 1083, 432, 468, 557, 599, 713, 719, 802, 828, 881, 948, 1082, 1131, 75, 90, 106, 121, 155, 168, 193, 215, 221, 243, 255, 260, 277, 278, 283, 325, 326, 341, 342, 449, 450, 451, 491, 492, 638, 640, 641, 728, 108, 170, 208, 217, 220, 245, 256, 280, 310, 328, 452, 453, 559, 729, 730, 805, 493, 494, 639, 808, 952, 953, 1134, 434, 806, 807, 949, 950, 951, 1132, 1133, 433, 1032, 643, 661, 839, 734, 735, 736, 737, 837, 631]
+2018-06-01 09:37:59,789 - DEBUG - get_colour_checkbox_status -  head colour name: NAVY
+2018-06-01 09:37:59,789 - DEBUG - get_colour_checkbox_status -  colour:checkB_NAVY Selected=True
+2018-06-01 09:37:59,790 - DEBUG - get_colour_checkbox_status -  radioB_a_NAVY selected=True
+2018-06-01 09:37:59,790 - DEBUG - get_colour_checkbox_status -  head colour name: BOTTLE
+2018-06-01 09:37:59,791 - DEBUG - get_colour_checkbox_status -  colour:checkB_BOTTLE Selected=False
+2018-06-01 09:37:59,791 - DEBUG - get_colour_checkbox_status -  head colour name: BLACK
+2018-06-01 09:37:59,791 - DEBUG - get_colour_checkbox_status -  colour:checkB_BLACK Selected=True
+2018-06-01 09:37:59,792 - DEBUG - get_colour_checkbox_status -  radioB_a_BLACK selected=True
+2018-06-01 09:37:59,792 - DEBUG - get_colour_checkbox_status -  head colour name: KHAKI
+2018-06-01 09:37:59,792 - DEBUG - get_colour_checkbox_status -  colour:checkB_KHAKI Selected=False
+2018-06-01 09:37:59,793 - DEBUG - get_colour_checkbox_status -  head colour name: ORANGE
+2018-06-01 09:37:59,793 - DEBUG - get_colour_checkbox_status -  colour:checkB_ORANGE Selected=False
+2018-06-01 09:37:59,793 - DEBUG - get_colour_checkbox_status -  head colour name: YELLOW
+2018-06-01 09:37:59,794 - DEBUG - get_colour_checkbox_status -  colour:checkB_YELLOW Selected=False
+2018-06-01 09:37:59,794 - DEBUG - get_colour_checkbox_status -  head colour name: ORANGE-NAVY
+2018-06-01 09:37:59,794 - DEBUG - get_colour_checkbox_status -  colour:checkB_ORANGE-NAVY Selected=False
+2018-06-01 09:37:59,795 - DEBUG - get_colour_checkbox_status -  head colour name: NAVY-BLUE
+2018-06-01 09:37:59,795 - DEBUG - get_colour_checkbox_status -  colour:checkB_NAVY-BLUE Selected=False
+2018-06-01 09:37:59,795 - DEBUG - get_colour_checkbox_status -  head colour name: ALL NAVY
+2018-06-01 09:37:59,796 - DEBUG - get_colour_checkbox_status -  colour:checkB_ALL NAVY Selected=False
+2018-06-01 09:37:59,796 - DEBUG - get_colour_checkbox_status -  head colour name: ALL BLACK
+2018-06-01 09:37:59,796 - DEBUG - get_colour_checkbox_status -  colour:checkB_ALL BLACK Selected=False
+2018-06-01 09:37:59,797 - DEBUG - get_colour_checkbox_status -  head colour name: ALL MAROON
+2018-06-01 09:37:59,797 - DEBUG - get_colour_checkbox_status -  colour:checkB_ALL MAROON Selected=False
+2018-06-01 09:37:59,797 - DEBUG - check_orders -  colours seleted is {'NAVY': 'A', 'BLACK': 'A'}
+2018-06-01 09:37:59,819 - DEBUG - check_orders -  get check sample orders number: 32
+2018-06-01 09:37:59,826 - DEBUG - append_samplecheck_one_order - get ss_checks quantity 1
+2018-06-01 09:37:59,827 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:37:59,832 - DEBUG - append_samplecheck_one_order - get ss_checks quantity 1
+2018-06-01 09:37:59,833 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:37:59,837 - DEBUG - append_samplecheck_one_order - get pp_checks quantity 1
+2018-06-01 09:37:59,838 - DEBUG - append_samplecheck_one_order - get ss_checks quantity 1
+2018-06-01 09:37:59,840 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:37:59,845 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:37:59,851 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:37:59,858 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:37:59,863 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:37:59,869 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:37:59,875 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:37:59,881 - DEBUG - append_samplecheck_one_order - get test_checks quantity 1
+2018-06-01 09:38:42,160 - DEBUG - get_colour_checkbox_status -  head colour name: NAVY
+2018-06-01 09:38:42,161 - DEBUG - get_colour_checkbox_status -  colour:checkB_NAVY Selected=True
+2018-06-01 09:38:42,161 - DEBUG - get_colour_checkbox_status -  radioB_a_NAVY selected=True
+2018-06-01 09:38:42,162 - DEBUG - get_colour_checkbox_status -  head colour name: BOTTLE
+2018-06-01 09:38:42,162 - DEBUG - get_colour_checkbox_status -  colour:checkB_BOTTLE Selected=False
+2018-06-01 09:38:42,163 - DEBUG - get_colour_checkbox_status -  head colour name: BLACK
+2018-06-01 09:38:42,163 - DEBUG - get_colour_checkbox_status -  colour:checkB_BLACK Selected=True
+2018-06-01 09:38:42,163 - DEBUG - get_colour_checkbox_status -  radioB_a_BLACK selected=False
+2018-06-01 09:38:42,164 - DEBUG - get_colour_checkbox_status -  head colour name: KHAKI
+2018-06-01 09:38:42,164 - DEBUG - get_colour_checkbox_status -  colour:checkB_KHAKI Selected=False
+2018-06-01 09:38:42,165 - DEBUG - get_colour_checkbox_status -  head colour name: ORANGE
+2018-06-01 09:38:42,165 - DEBUG - get_colour_checkbox_status -  colour:checkB_ORANGE Selected=False
+2018-06-01 09:38:42,165 - DEBUG - get_colour_checkbox_status -  head colour name: YELLOW
+2018-06-01 09:38:42,166 - DEBUG - get_colour_checkbox_status -  colour:checkB_YELLOW Selected=False
+2018-06-01 09:38:42,166 - DEBUG - get_colour_checkbox_status -  head colour name: ORANGE-NAVY
+2018-06-01 09:38:42,167 - DEBUG - get_colour_checkbox_status -  colour:checkB_ORANGE-NAVY Selected=False
+2018-06-01 09:38:42,167 - DEBUG - get_colour_checkbox_status -  head colour name: NAVY-BLUE
+2018-06-01 09:38:42,167 - DEBUG - get_colour_checkbox_status -  colour:checkB_NAVY-BLUE Selected=False
+2018-06-01 09:38:42,168 - DEBUG - get_colour_checkbox_status -  head colour name: ALL NAVY
+2018-06-01 09:38:42,168 - DEBUG - get_colour_checkbox_status -  colour:checkB_ALL NAVY Selected=False
+2018-06-01 09:38:42,169 - DEBUG - get_colour_checkbox_status -  head colour name: ALL BLACK
+2018-06-01 09:38:42,169 - DEBUG - get_colour_checkbox_status -  colour:checkB_ALL BLACK Selected=False
+2018-06-01 09:38:42,170 - DEBUG - get_colour_checkbox_status -  head colour name: ALL MAROON
+2018-06-01 09:38:42,170 - DEBUG - get_colour_checkbox_status -  colour:checkB_ALL MAROON Selected=False
+2018-06-01 09:38:42,170 - DEBUG - save_test_report -  start to search fabri trim for order_id 881 and colours dict_keys(['NAVY', 'BLACK'])
+2018-06-01 09:38:42,175 - DEBUG - save_test_report -  get fabric trims number : 1
+2018-06-01 09:38:42,404 - DEBUG - save_test_report -  finish save 1 test report check for order 881
+2018-06-01 09:38:42,405 - DEBUG - save_test_report -  start to search fabri trim for order_id 949 and colours dict_keys(['NAVY', 'BLACK'])
+2018-06-01 09:38:42,408 - DEBUG - save_test_report -  get fabric trims number : 1
+2018-06-01 09:38:42,619 - DEBUG - save_test_report -  finish save 1 test report check for order 949
+2018-06-01 09:38:42,620 - DEBUG - save_test_report -  finish save test report chech for 2 orders
+2018-06-01 09:38:42,620 - DEBUG - save_test_report -  get email_msg is:Regarding test report NQA23456 - 100% Cotton Drill 90x46 / 14sx7s in 310gsm NAVY BLACK - TIS18-SO4451 4509  -  RM1002R RM301EWS
+NAVY approved; BLACK rejected; Black failed at shringkage need refinished
+2018-06-01 09:38:44,813 - DEBUG - load_fabric_colour -  get order id list []

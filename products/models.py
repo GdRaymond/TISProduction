@@ -5,6 +5,7 @@ from django.conf import settings
 
 class Fabric(models.Model):
     fabric=models.TextField(max_length=200)
+    nickname=models.TextField(max_length=50)
 
     class Meta:
         verbose_name='Fabric'

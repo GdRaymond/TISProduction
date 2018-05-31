@@ -17,6 +17,7 @@ from shipments.models import Shipment
 from PyQt5.QtSql import QSqlRelationalTableModel,QSqlRelation,QSqlRelationalDelegate
 from TISDesk.edit_dialog import Edit_dialog_shipment,Edit_Dialog_Order
 from core import fts_search
+from TISDesk import clipboard
 
 
 logger=tis_log.get_tis_logger()
@@ -662,9 +663,9 @@ class TISMainWindow(QMainWindow):
                 continue
             try:
                 order_id=int(self.ui.tableW_samplecheck_order.item(i,14).text())
-                tis_no=self.ui.tableW_samplecheck_order.item(i,1).text()[]
+                tis_no=self.ui.tableW_samplecheck_order.item(i,1).text()[-4:] #get last 4 digits after SO,
                 style=self.ui.tableW_samplecheck_order.item(i,2).text()
-                order_str='{0} {1}'.format(order_str,tis_no)
+                order_str='{0}{1} '.format(order_str,tis_no)
                 style_str='{0} {1}'.format(style_str,style)
             except Exception as e:
                 logger.error(' error get order_id from tableW : {0}'.format(e))
@@ -682,10 +683,24 @@ class TISMainWindow(QMainWindow):
             logger.debug(' finish save {0} test report check for order {1}'.format(len(fabrictrims),order_id))
             orders_checked+=1
         logger.debug(' finish save test report chech for {0} orders'.format(orders_checked))
+        #below assemble the msg for email
+        for k,v in colours_selected.items():
+            comment_str += k
+            if v=='A':
+                comment_str += ' approved; '
+            else:
+                comment_str+=' rejected; '
+        comment_str+=comment
+        email_msg=email_msg+' - '+order_str+' - '+style_str+'\n'+comment_str
+        logger.debug(' get email_msg is:{0}'.format(email_msg))
+        clipboard.write(email_msg)
+        #below reset the window
         qm=QMessageBox()
-        qm.question(self,'save test report','Successfully saved test report {0} for {1} orders'.format(test_report,orders_checked))
+        qm.question(self,'Save test report','Successfully saved test report {0} for {1} orders. Below message has been written to clipboard, you can press CTR+V to paste to your email \n {2}'.format(test_report,orders_checked,email_msg))
         self.ui.tableW_samplecheck_order.setRowCount(0)
         self.ui.lin_testreport_ref.setText('')
         self.ui.lin_testreport_comment.setText('')
         self.ui.comb_fabric.setCurrentText('--')
+
+
 
