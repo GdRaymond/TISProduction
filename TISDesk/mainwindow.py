@@ -1,6 +1,6 @@
 
 from PyQt5.QtWidgets import QMainWindow,QFileDialog,QTableWidgetItem,QAbstractItemView,QDialog,QApplication,\
-    QMessageBox,QButtonGroup,QCheckBox,QRadioButton
+    QMessageBox,QButtonGroup,QCheckBox,QRadioButton,QAbstractScrollArea
 from PyQt5.QtGui import QColor,QIcon,QFont
 from TISDesk.TIS_mainwindow import Ui_MainWindow
 from excelway.tis_excel import TIS_Excel
@@ -11,7 +11,7 @@ from PyQt5.QtCore import QThread,pyqtSignal,QDate
 from TISProduction import tis_log
 from products import views as product_view
 from orders import views as order_view
-from orders.models import Order
+from orders.models import Order,FabricTrim,SampleCheck
 from shipments import views as shipment_view
 from shipments.models import Shipment
 from PyQt5.QtSql import QSqlRelationalTableModel,QSqlRelation,QSqlRelationalDelegate
@@ -86,11 +86,19 @@ class TISMainWindow(QMainWindow):
         self.load_initial_data()
         self.ui.comb_supplier.currentTextChanged.connect(self.load_comb_fabric)
         self.ui.comb_fabric.currentTextChanged.connect(self.load_fabric_colour)
+        self.ui.tableW_colour.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        sample_check_order_title=['Select','TIS','Style','Colour','Quantity','CTM','OrderDate','Report','PPS','SSS','Cartons','Volume','Weight','3M','id']
+        self.ui.tableW_samplecheck_order.setHorizontalHeaderLabels(sample_check_order_title)
+        self.ui.tableW_samplecheck_order.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents) #in PyQt5 allow to adjust to cotent
+        self.ui.btn_save_testreport.clicked.connect(self.save_test_report)
+
 
     def load_initial_data(self):
         suppliers=[supplier.get('supplier') for supplier in Order.objects.order_by().values('supplier').distinct()]
         logger.debug( 'get suppliers list {0}'.format(suppliers))
         self.ui.comb_supplier.addItems(suppliers)
+        self.ui.comb_supplier.addItem('--')
+        self.ui.comb_supplier.setCurrentText('--')
 
     def load_comb_fabric(self):
         self.ui.comb_fabric.clear()
@@ -103,6 +111,8 @@ class TISMainWindow(QMainWindow):
         except Exception as e:
             logger.error(' error when get fabric: {0}'.format(e))
         self.ui.comb_fabric.addItems(fabrics)
+        self.ui.comb_fabric.addItem('--')
+        self.ui.comb_fabric.setCurrentText('--')
 
     def load_fabric_colour(self):
         supplier = self.ui.comb_supplier.currentText()
@@ -114,7 +124,9 @@ class TISMainWindow(QMainWindow):
             colour_dict=Order.objects.filter(id__in=order_id_list).values('fabrictrim__colour_solid').order_by().distinct()
             colours=[colour.get('fabrictrim__colour_solid') for colour in colour_dict]
             #logger.debug(' get colour list {0}'.format(colours))
-            for i in range(len(colours)):
+            colours_len=len(colours)
+            self.ui.tableW_colour.setColumnCount(colours_len)
+            for i in range(colours_len):
                 colour=colours[i]
                 item=QTableWidgetItem(colour)
                 item.setToolTip(colour)
@@ -123,9 +135,10 @@ class TISMainWindow(QMainWindow):
                 qcheck=QCheckBox()
                 setattr(self.ui,'checkB_{0}'.format(colour),qcheck)
                 qradio_app=QRadioButton()
+                qradio_app.setChecked(True)
                 setattr(self.ui,'radioB_a_{0}'.format(colour),qradio_app)
                 qradio_rej=QRadioButton()
-                setattr(self.ui,'radioB_a_{0}'.format(colour),qradio_rej)
+                setattr(self.ui,'radioB_r_{0}'.format(colour),qradio_rej)
                 qbutton_group=QButtonGroup()
                 setattr(self.ui,'buttonG_{0}'.format(colour),qbutton_group)
                 qbutton_group.addButton(qradio_app)
@@ -138,11 +151,7 @@ class TISMainWindow(QMainWindow):
 
         except Exception as e:
             logger.error(' error when get colour :{0}'.format(e))
-        if len(colours)<20:
-            for i in range(len(colours),20):
-                #colours.append('-')
-                self.ui.tableW_colour.setHorizontalHeaderItem(i, QTableWidgetItem('-'))
-        #self.ui.tableW_colour.setHorizontalHeaderLabels(colours)
+        self.ui.tableW_colour.resizeColumnsToContents()
 
 
     def openfile(self):
@@ -306,6 +315,52 @@ class TISMainWindow(QMainWindow):
         self.ui.tableWOrder.setItem(row_pos,12,QTableWidgetItem(str(order.weights)) )
         self.ui.tableWOrder.setItem(row_pos,13,QTableWidgetItem(str(order.tape_no)) )
         self.ui.tableWOrder.setItem(row_pos,14,QTableWidgetItem(str(order.id)) )
+
+    def append_samplecheck_one_order(self,order):
+        row_pos=self.ui.tableW_samplecheck_order.rowCount()
+        #logger.debug('Row Position is {0}'.format(row_pos))
+        self.ui.tableW_samplecheck_order.insertRow(row_pos)
+        self.ui.tableW_samplecheck_order.setRowHeight(row_pos, 30)
+        self.ui.tableW_samplecheck_order.setFont(QFont('Segoe UI', 9))
+        check_box=QCheckBox()
+        setattr(self.ui,'checkB_samplecheck_order_{0}'.format(row_pos),check_box)
+        self.ui.tableW_samplecheck_order.setCellWidget(row_pos,0,check_box)
+        self.ui.tableW_samplecheck_order.setItem(row_pos,1,QTableWidgetItem(order.tis_no))
+        self.ui.tableW_samplecheck_order.setItem(row_pos,2, QTableWidgetItem(order.product.style_no))
+        self.ui.tableW_samplecheck_order.setItem(row_pos,3,QTableWidgetItem(order.colour) )
+        self.ui.tableW_samplecheck_order.setItem(row_pos,4,QTableWidgetItem(str(order.quantity)))
+        self.ui.tableW_samplecheck_order.setItem(row_pos,5,QTableWidgetItem(order.ctm_no))
+        self.ui.tableW_samplecheck_order.setItem(row_pos,6,QTableWidgetItem(order.order_date.strftime('%d %b %y')) )
+        pp_comments = ''
+        pp_checks=order.samplecheck_set.filter(type__iexact='p')
+        if pp_checks:
+            logger.debug('get pp_checks quantity {0}'.format(len(pp_checks)))
+            pp_comments=pp_checks[0].comment
+            for pp_check in range(1,len(pp_checks)):
+                pp_comments='{0}\n{1}'.format(pp_comments,pp_check.comment)
+        self.ui.tableW_samplecheck_order.setItem(row_pos,8,QTableWidgetItem(pp_comments))
+        ss_comments = ''
+        ss_checks=order.samplecheck_set.filter(type__iexact='s')
+        if ss_checks:
+            logger.debug('get ss_checks quantity {0}'.format(len(ss_checks)))
+            ss_comments=ss_checks[0].comment
+            for ss_check in range(1,len(ss_checks)):
+                ss_comments='{0}\n{1}'.format(ss_comments,ss_check.comment)
+        self.ui.tableW_samplecheck_order.setItem(row_pos,9,QTableWidgetItem(ss_comments) )
+        test_comments = ''
+        test_checks=order.samplecheck_set.filter(type__iexact='t')
+        if test_checks:
+            logger.debug('get test_checks quantity {0}'.format(len(test_checks)))
+            test_comments='{0}-{1}-{2}'.format(test_checks[0].check_date,test_checks[0].ref,test_checks[0].comment)
+            for i in range(1,len(test_checks)):
+                test_comments='{0}\n{1}-{2}-{3}'.format(test_comments,test_checks[i].check_date,test_checks[i].ref,test_checks[i].comment)
+        self.ui.tableW_samplecheck_order.setItem(row_pos,7,QTableWidgetItem(test_comments) )
+        self.ui.tableW_samplecheck_order.setItem(row_pos,10,QTableWidgetItem(str(order.cartons)) )
+        self.ui.tableW_samplecheck_order.setItem(row_pos,11,QTableWidgetItem(str(order.volumes)) )
+        self.ui.tableW_samplecheck_order.setItem(row_pos,12,QTableWidgetItem(str(order.weights)) )
+        self.ui.tableW_samplecheck_order.setItem(row_pos,13,QTableWidgetItem(str(order.tape_no)) )
+        self.ui.tableW_samplecheck_order.setItem(row_pos,14,QTableWidgetItem(str(order.id)) )
+
 
     def append_one_shipment(self,shipment,flag_all_order='F'):
         row_pos=self.ui.tableWOrder.rowCount()
@@ -541,10 +596,96 @@ class TISMainWindow(QMainWindow):
         self.show_orders(orders)
         self.show_shipments(shipments)
 
+    def get_colour_checkbox_status(self):
+        colour_checkbox_status={} #store only selected colour {'Navy':'A','Yellow':'R'}  A-Approve R-Reject
+        for i in range(self.ui.tableW_colour.columnCount()): #check each check_box to get colours_selected
+            try:
+                colour_name = self.ui.tableW_colour.horizontalHeaderItem(i).text()
+                logger.debug(' head colour name: {0}'.format(colour_name))
+                colour_check_box_name='checkB_{0}'.format(colour_name)
+                colour_check_box=getattr(self.ui,colour_check_box_name,False)
+                logger.debug(' colour:{0} Selected={1}'.format(colour_check_box_name,colour_check_box.isChecked()))
+                if colour_check_box.isChecked():
+                    radioB_app=getattr(self.ui,'radioB_a_{0}'.format(colour_name))
+                    logger.debug(' radioB_a_{0} selected={1}'.format(colour_name,radioB_app.isChecked()))
+                    if radioB_app.isChecked():  #as 2 radio button are mutually excluded, so only need to check 1 button
+                        colour_checkbox_status[colour_name]='A'
+                    else:
+                        colour_checkbox_status[colour_name]='R'
+            except Exception as e:
+                logger.error(' error {0}'.format(e))
+        return colour_checkbox_status
+
+
     def check_orders(self):
-        self.ui.button_group1=QButtonGroup()
-        self.ui.button_group1.addButton(self.ui.radioB_a_1)
-        self.ui.button_group1.addButton(self.ui.radioB_r_1)
-        self.ui.button_group2=QButtonGroup()
-        self.ui.button_group2.addButton(self.ui.radioB_a_2)
-        self.ui.button_group2.addButton(self.ui.radioB_r_2)
+        #orders=Order.objects.filter(tis_no__contains='TIS18-SO47')
+        self.ui.tableW_samplecheck_order.setRowCount(0)
+        supplier=self.ui.comb_supplier.currentText()
+        fabric=self.ui.comb_fabric.currentText()
+        colours_selected=self.get_colour_checkbox_status()
+        logger.debug(' colours seleted is {0}'.format(colours_selected))
+        orders=Order.objects.filter(supplier=supplier,product__fabric__fabric=fabric,\
+                                    fabrictrim__colour_solid__in=colours_selected.keys(),shipment__eta__gt=datetime.date.today())
+        logger.debug(' get check sample orders number: {0}'.format(len(orders)))
+        for order in orders:
+            self.append_samplecheck_one_order(order)
+        for i in range(15): # adjust all coloum width to content
+            if i in [8,9]:
+                continue
+            self.ui.tableW_samplecheck_order.resizeColumnToContents(i)
+
+    def save_test_report(self):
+        supplier=self.ui.comb_supplier.currentText()
+        fabric=self.ui.comb_fabric.currentText()
+        if not fabric:
+            qm=QMessageBox()
+            ret=qm.question(self,'Fabric','Please select Fabric',qm.Ok)
+            return
+        test_report=self.ui.lin_testreport_ref.text()
+        if not test_report:
+            qm=QMessageBox()
+            ret=qm.question(self,'TestReport','Please fill in test report No.',qm.Ok)
+            return
+        comment=self.ui.lin_testreport_comment.text()
+        if not comment:
+            qm=QMessageBox()
+            ret=qm.question(self,'TestReport','Please fill in comment',qm.Ok)
+        colours_selected=self.get_colour_checkbox_status()
+        orders_checked=0
+        email_msg='Regarding test report {0} - {1} {2}'.format(test_report,fabric,' '.join(colours_selected.keys()))
+        order_str='TIS18-SO'
+        style_str=''
+        comment_str=''
+        for i in range(self.ui.tableW_samplecheck_order.rowCount()):
+            check_box=getattr(self.ui,'checkB_samplecheck_order_{0}'.format(i))
+            if not check_box.isChecked():
+                continue
+            try:
+                order_id=int(self.ui.tableW_samplecheck_order.item(i,14).text())
+                tis_no=self.ui.tableW_samplecheck_order.item(i,1).text()[]
+                style=self.ui.tableW_samplecheck_order.item(i,2).text()
+                order_str='{0} {1}'.format(order_str,tis_no)
+                style_str='{0} {1}'.format(style_str,style)
+            except Exception as e:
+                logger.error(' error get order_id from tableW : {0}'.format(e))
+            #colour=self.ui.tableW_samplecheck_order.item(i,3).text()
+            logger.debug(' start to search fabri trim for order_id {0} and colours {1}'.format(order_id,colours_selected.keys()))
+            fabrictrims=FabricTrim.objects.filter(order_id=order_id,colour_solid__in=colours_selected.keys())
+            logger.debug(' get fabric trims number : {0}'.format(len(fabrictrims)))
+            for fabrictrim in fabrictrims:
+                try:
+                    testreport_check=SampleCheck(type='T',status=colours_selected.get(fabrictrim.colour_solid),comment=comment,\
+                                             ref=test_report,fabric=fabrictrim,order_id=order_id,check_date=datetime.date.today())
+                    testreport_check.save()
+                except Exception as e:
+                    logger.error(' error when saving test report: {0}'.format(e))
+            logger.debug(' finish save {0} test report check for order {1}'.format(len(fabrictrims),order_id))
+            orders_checked+=1
+        logger.debug(' finish save test report chech for {0} orders'.format(orders_checked))
+        qm=QMessageBox()
+        qm.question(self,'save test report','Successfully saved test report {0} for {1} orders'.format(test_report,orders_checked))
+        self.ui.tableW_samplecheck_order.setRowCount(0)
+        self.ui.lin_testreport_ref.setText('')
+        self.ui.lin_testreport_comment.setText('')
+        self.ui.comb_fabric.setCurrentText('--')
+

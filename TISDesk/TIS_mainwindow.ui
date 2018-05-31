@@ -166,8 +166,9 @@
        <number>0</number>
       </property>
       <property name="columnCount">
-       <number>14</number>
+       <number>15</number>
       </property>
+      <column/>
       <column/>
       <column/>
       <column/>
@@ -282,16 +283,6 @@
      <attribute name="title">
       <string>SampleCheck</string>
      </attribute>
-     <widget class="QTableView" name="tableVshipment">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>270</y>
-        <width>1321</width>
-        <height>341</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QGroupBox" name="groupBox_2">
       <property name="geometry">
        <rect>
@@ -437,7 +428,7 @@
         <rect>
          <x>40</x>
          <y>220</y>
-         <width>75</width>
+         <width>121</width>
          <height>23</height>
         </rect>
        </property>
@@ -445,7 +436,7 @@
         <string>CheckOrder</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="lin_ref">
+      <widget class="QLineEdit" name="lin_testreport_ref">
        <property name="geometry">
         <rect>
          <x>60</x>
@@ -481,7 +472,7 @@
         <string>Comment</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="lin_ref_2">
+      <widget class="QLineEdit" name="lin_testreport_comment">
        <property name="geometry">
         <rect>
          <x>240</x>
@@ -504,71 +495,6 @@
         <string>Rejected</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="checkB_1">
-       <property name="geometry">
-        <rect>
-         <x>640</x>
-         <y>30</y>
-         <width>70</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="radioB_a_1">
-       <property name="geometry">
-        <rect>
-         <x>660</x>
-         <y>20</y>
-         <width>82</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="radioB_r_1">
-       <property name="geometry">
-        <rect>
-         <x>660</x>
-         <y>40</y>
-         <width>82</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="checkB_2">
-       <property name="geometry">
-        <rect>
-         <x>640</x>
-         <y>50</y>
-         <width>70</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="radioB_r_2">
-       <property name="geometry">
-        <rect>
-         <x>660</x>
-         <y>0</y>
-         <width>82</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_8">
        <property name="geometry">
         <rect>
@@ -582,19 +508,70 @@
         <string>Select</string>
        </property>
       </widget>
+      <widget class="QPushButton" name="btn_save_testreport">
+       <property name="geometry">
+        <rect>
+         <x>180</x>
+         <y>220</y>
+         <width>121</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Save Test Report</string>
+       </property>
+      </widget>
      </widget>
-     <widget class="QRadioButton" name="radioB_a_2">
+     <widget class="QTableWidget" name="tableW_samplecheck_order">
       <property name="geometry">
        <rect>
-        <x>640</x>
-        <y>0</y>
-        <width>81</width>
-        <height>20</height>
+        <x>10</x>
+        <y>270</y>
+        <width>1291</width>
+        <height>361</height>
        </rect>
       </property>
-      <property name="text">
-       <string/>
+      <property name="baseSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>7</pointsize>
+       </font>
+      </property>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
+      <property name="columnCount">
+       <number>15</number>
+      </property>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>100</number>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderHighlightSections">
+       <bool>true</bool>
+      </attribute>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
+      <column/>
      </widget>
     </widget>
    </widget>
