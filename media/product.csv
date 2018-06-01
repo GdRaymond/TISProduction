@@ -100,6 +100,7 @@ QFES,QFESPF,,10,0.06,13,"100% Polyester 395gsm polar fleece laminated with water
 QFES,QFESTM,2.5,10,0.189,13,"54.1% Polyester / 44% Wool / 1.4% Lycra / 5% Antistatic Fibre Plain Weave Weft Stretch Anti Static 30s/2x30s/2, 43x40, 240gsm, 150cm"
 QFES,QFES badge,,1000,0.03328,6.8,other
 QFES,RFS badge,,1000,0.03328,6.8,other
+QFES,SES Badge,,1000,0.03328,6.8,other
 QFES,RFS-Vinyl-Badge,,1000,0.03328,6.8,other
 ComRec,CRPL-SS,,30,0.05415,13,"52% Cotton Back / 48% Polyester Face, 170/180 gsm, Mesh Polyester Face in Cool Dry Yarn / Cotton Back with Hydrophilic finish."
 VC,VC MALE SS,,20,0.05712,10,65% Polyester / 35% Cotton 78x65 / 45/2x32/1 135gsm 
@@ -114,21 +115,21 @@ VP,PSO badge,,1000,0.03328,6.8,other
 OVERBOOTS,SOX-SAVERS-O,,250,0.06804,13,100% COTTON TWILL 20X20 108X56 190gsm
 RITEMATE,RMPC006,,16,0.041125,6,"Cotton chambray, 21x61, 62x48, 135gsm"
 RITEMATE,RMPC007,,16,0.041125,6,"Cotton chambray, 21x61, 62x48, 135gsm"
-RITEMATE,RMPC008,,16,0.041125,6,"100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm"
-RITEMATE,RMPC008S,,16,0.041125,6,"100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm"
-RITEMATE,RMPC009,,16,0.041125,6,"100% Fine Cotton, Y/D CHECKS, 80/2X50 / 160X82, 130gsm"
-RITEMATE,RMPC009S,,16,0.041125,6,"100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm"
-RITEMATE,RMPC010,,16,0.041125,6,"100% Fine Cotton, Y/D CHECKS, 80/2X50 / 160X82, 130gsm"
-RITEMATE,RMPC010S,,16,0.041125,6,"100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm"
-RITEMATE,RMPC011,,16,0.041125,6,"100% Fine Cotton, Y/D CHECKS, 80/2X50 / 160X82, 130gsm"
-RITEMATE,RMPC011S,,16,0.041125,6,"100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm"
-RITEMATE,RMPC012,,16,0.041125,6,"100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm"
-RITEMATE,RMPC013,,16,0.041125,6,"100% Fine Cotton, Y/D Striped, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC008,,16,0.041125,6,"100% Fine Cotton, Y/D, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC008S,,16,0.041125,6,"100% Fine Cotton, Y/D, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC009,,16,0.041125,6,"100% Fine Cotton, Y/D, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC009S,,16,0.041125,6,"100% Fine Cotton, Y/D, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC010,,16,0.041125,6,"100% Fine Cotton, Y/D, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC010S,,16,0.041125,6,"100% Fine Cotton, Y/D, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC011,,16,0.041125,6,"100% Fine Cotton, Y/D, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC011S,,16,0.041125,6,"100% Fine Cotton, Y/D, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC012,,16,0.041125,6,"100% Fine Cotton, Y/D, 80/2X50 / 160X82, 130gsm"
+RITEMATE,RMPC013,,16,0.041125,6,"100% Fine Cotton, Y/D, 80/2X50 / 160X82, 130gsm"
 RITEMATE,RMPC014,,20,0.0624,13,"98% Cotton, 2% elastane twill, 12X16+70D 75X56"
 RITEMATE,RMPC015,,20,0.0624,13,"98% Cotton, 2% elastane twill, 12X16+70D 75X56"
 RITEMATE,RMPC017,,16,0.041125,,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
 RITEMATE,RMPC018,,16,0.04277,,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
-RITEMATE,RMPC017S,,16,0.041125,,"100% Cotton Poplin, 50x050 / 144x80, 105gsm"
+RITEMATE,RMPC017S,,16,0.041125,,"100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm"
 RITEMATE,RMPC019,,20,0.041125,,100% cotton Pique combed 220gsm Enzyme wash + tender hand feel
 RITEMATE,RMPC020,,20,0.041125,,100% cotton Pique combed 220gsm Enzyme wash + tender hand feel
 RITEMATE,RMPC021,,20,0.041125,,100% cotton Pique combed 220gsm Enzyme wash + tender hand feel
@@ -171,13 +172,14 @@ RITEMATE,RM208V3R,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gs
 RITEMATE,RM73N1R,,5,0.06,11,100% Cotton Drill 90x46 / 14sx7s in 310gsm
 RITEMATE,RM7654R,,12,0.0945,11,100% Cotton Drill 90x46 / 14sx7s in 310gsm
 RITEMATE,RM5071R,,8,0.06,13,100% Cotton Drill 90x46 / 14sx7s in 310gsm
-RITEMATE,RM123FOF,,21,0.06048,10,100% Cotton 20x10 40x42 155gsm brushed printing check
+RITEMATE,RM123FOF,,21,0.06048,10,"100% Cotton 20xw0 40x42 155gsm brushed printing check, 150gsm"
 RITEMATE,3M-8910-50mm,,1000,0.03328,6.8,other
-Hutchinson,HUT123FOF,,21,0.06048,10,100% Cotton 20x10 40x42 155gsm brushed printing check
-Hutchinson,HUT123FOF-F,,21,0.06048,10,100% Cotton 20x10 40x42 155gsm brushed printing check
-RITEMATE,RM123FCF,,21,0.06048,10,100% Cotton 20x10 40x42 155gsm brushed printing check
-RITEMATE,RM123QS,,14,0.1575,11,"100% Cotton 20x10 40x42 155gsm brushed printing check, 150gsm Polyfill"
-RITEMATE,RM123V,,14,0.0784,11,"100% Cotton 20x10 40x42 155gsm brushed printing check, 150gsm Polyfill"
+RITEMATE,RM-HANGER,,100,0.03328,6.8,other
+Hutchinson,HUT123FOF,,21,0.06048,10,"100% Cotton 20xw0 40x42 155gsm brushed printing check, 150gsm"
+Hutchinson,HUT123FOF-F,,21,0.06048,10,"100% Cotton 20xw0 40x42 155gsm brushed printing check, 150gsm"
+RITEMATE,RM123FCF,,21,0.06048,10,"100% Cotton 20xw0 40x42 155gsm brushed printing check, 150gsm"
+RITEMATE,RM123QS,,14,0.1575,11,"100% Cotton 20xw0 40x42 155gsm brushed printing check, 150gsm"
+RITEMATE,RM123V,,14,0.0784,11,"100% Cotton 20xw0 40x42 155gsm brushed printing check, 150gsm"
 RITEMATE,RM106DJ,,20,0.06912,20,100% Cotton Twill 7sx6s 72x46 14.50zs (490gsm)
 RITEMATE,RM106DJR,,20,0.06912,20,100% Cotton Twill 7sx6s 72x46 14.50zs (490gsm)
 RITEMATE,RM112TSD,,20,0.066,17,"98% Cotton / 2% Spandex 450gsm after washing, 78x50/7X10+70D"
@@ -205,20 +207,20 @@ GOLDERS,GB402EWS,,40,0.0528,7,100% Cotton Drill 90x46 / 14sx7s in 310gsm
 GOLDERS,GB403EWS,,40,0.0528,7,100% Cotton Drill 90x46 / 14sx7s in 310gsm
 GOLDERS,GB302EWS,,30,0.0528,8.5,100% Cotton Drill 90x46 / 14sx7s in 310gsm
 GOLDERS,GB303EWS,,30,0.0528,8.5,100% Cotton Drill 90x46 / 14sx7s in 310gsm
-GOLDERS,GS301M,,25,0.0528,10,100% Cotton Drill 90x46 / 14sx7s in 310gsm
-GOLDERS,GS301W,,25,0.0528,10,100% Cotton Drill 150gsm
+GOLDERS,GS301M,,25,0.0528,10,"100% Cotton Twill 20X20 108X56 190gsm, soft treatment, garment wash"
+GOLDERS,GS301W,,25,0.0528,10,"100% Cotton Twill 20X20 108X56 190gsm, soft treatment, garment wash"
 GOLDERS,GB601S,,40,0.041125,12,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
 GOLDERS,GB602S,,40,0.041125,12,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
 McAullif,MCAB01,,40,0.051408,8.5,"50% Cotton Back, 50% Cool Dry Polyester Face, 180 gsm, Hydrophilic finish"
 McAullif,MCAM01,,30,0.051408,8.5,"50% Cotton Back, 50% Cool Dry Polyester Face, 180 gsm, Hydrophilic finish"
 McAullif,MCAB03,,50,0.06,13,"100% polyester Warp Knit, 145gsm Hydrophilic finish "
 McAullif,MCAM03,,40,0.06,13,"100% polyester Warp Knit, 145gsm Hydrophilic finish "
-RITEMATE,RM200CF,,24,0.041125,,"100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash"
-RITEMATE,RM200CFS,,28,0.041125,,"100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash"
-RITEMATE,RM300CF,,26,0.041125,,"100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash"
-RITEMATE,RM400CF,,40,0.041125,,"100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash"
-RITEMATE,RM500BT,,24,0.041125,,"100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash"
-RITEMATE,RM500BTS,,28,0.041125,,"100% Cotton Twill 130x70 / 30sx30s 150 - 155gsm, Silicon Wash"
+RITEMATE,RM200CF,,24,0.041125,,"100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm, Silicon Wash"
+RITEMATE,RM200CFS,,28,0.041125,,"100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm, Silicon Wash"
+RITEMATE,RM300CF,,26,0.041125,,"100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm, Silicon Wash"
+RITEMATE,RM400CF,,40,0.041125,,"100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm, Silicon Wash"
+RITEMATE,RM500BT,,24,0.041125,,"100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm, Silicon Wash"
+RITEMATE,RM500BTS,,28,0.041125,,"100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm, Silicon Wash"
 Allens,ALL-157V2,,20,0.042,11,100% COTTON TWILL 20X20 108X56 190gsm
 Allens,ALL-157V2R,,20,0.042,11,100% COTTON TWILL 20X20 108X56 190gsm
 Allens,ALL-258V2R,,20,0.042,11,100% COTTON TWILL 20X20 108X56 190gsm
@@ -242,6 +244,7 @@ John Ellignsen,JEA-BSW,,30,0.08208,10,"65% Polyester 35% Cotton Pipolin 135x80x4
 John Ellignsen,JEA-MSW,,30,0.08208,10,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
 John Ellignsen,JESLC-01,,30,0.08208,10,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
 John Ellignsen,JEPWB-02,,40,0.042,12,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
+John Ellignsen,JE-EMB,,1000,0.042,12,"65% Polyester 35% Cotton Pipolin 135x80x45x45, 125gsm"
 Atlas,07288,,20,0.041125,10,100% COTTON TWILL 20X20 108X56 190gsm
 Atlas,07299,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm
 Atlas,07399,,20,0.041125,10,100% Cotton Twill 130x70 / 32sx32s 150 - 155gsm

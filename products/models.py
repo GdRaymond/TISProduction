@@ -11,7 +11,7 @@ class Fabric(models.Model):
         verbose_name='Fabric'
         verbose_name_plural='Fabrics'
 
-DEFAULT_FABRIC_ID=44
+DEFAULT_FABRIC_ID=40
 class Product(models.Model):
 
     style_no=models.TextField(max_length=50)

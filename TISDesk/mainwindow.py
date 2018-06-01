@@ -67,7 +67,7 @@ class TISMainWindow(QMainWindow):
         self.ui.btn_open.clicked.connect(self.openfile)
         self.ui.btnTest.clicked.connect(self.test_Excelfuntion)
         self.ui.btnCopy.clicked.connect(self.copy_finance)
-        self.ui.btnGeneratePrice.clicked.connect(self.generate_price)
+        #self.ui.btnGeneratePrice.clicked.connect(self.generate_price)
         self.ui.btnRequisition.clicked.connect(self.generate_order_from_requisition)
         self.ui.btnGenerateOrderTrace.clicked.connect(self.create_order_trace)
         self.ui.btnInitProducts.clicked.connect(self.init_products)
@@ -106,9 +106,10 @@ class TISMainWindow(QMainWindow):
         supplier=self.ui.comb_supplier.currentText()
         #products=Order.objects.filter(supplier__iexact=supplier).order_by().values('product').distinct()
         try:
-            fabrics_dict=Product.objects.filter(order__supplier=supplier).values('fabric__fabric').order_by().distinct()
+            fabrics_dict=Product.objects.filter(order__supplier=supplier).values('fabric__nickname').order_by().distinct()
             logger.debug(' get products list {0}'.format(fabrics_dict))
-            fabrics=[fabric.get('fabric__fabric') for fabric in fabrics_dict]
+            fabrics=[fabric.get('fabric__nickname') for fabric in fabrics_dict]
+            fabrics.sort()
         except Exception as e:
             logger.error(' error when get fabric: {0}'.format(e))
         self.ui.comb_fabric.addItems(fabrics)
@@ -119,7 +120,7 @@ class TISMainWindow(QMainWindow):
         supplier = self.ui.comb_supplier.currentText()
         fabric=self.ui.comb_fabric.currentText()
         try:
-            order_id_dict=Product.objects.filter(fabric__fabric=fabric).values('order__supplier','order__id').filter(order__supplier=supplier).order_by().distinct()
+            order_id_dict=Product.objects.filter(fabric__nickname=fabric).values('order__supplier','order__id').filter(order__supplier=supplier).order_by().distinct()
             order_id_list=[order_id.get('order__id') for order_id in order_id_dict]
             logger.debug(' get order id list {0}'.format(order_id_list))
             colour_dict=Order.objects.filter(id__in=order_id_list).values('fabrictrim__colour_solid').order_by().distinct()
@@ -237,9 +238,7 @@ class TISMainWindow(QMainWindow):
     def create_order_trace(self):
         order_file=QFileDialog.getOpenFileName(self,'Open file',os.path.join(os.path.abspath('..'),'media'))[0]
         excel=TIS_Excel()
-        #order_list=excel.read_order(order_file)
-        order_list=[]
-
+        order_list=excel.read_order(order_file)
         #result=excel.create_from_trace(order_file)
         #self.ui.textBrowser.append('finish creating '+str(result))
         try:
@@ -625,7 +624,7 @@ class TISMainWindow(QMainWindow):
         fabric=self.ui.comb_fabric.currentText()
         colours_selected=self.get_colour_checkbox_status()
         logger.debug(' colours seleted is {0}'.format(colours_selected))
-        orders=Order.objects.filter(supplier=supplier,product__fabric__fabric=fabric,\
+        orders=Order.objects.filter(supplier=supplier,product__fabric__nickname=fabric,\
                                     fabrictrim__colour_solid__in=colours_selected.keys(),shipment__eta__gt=datetime.date.today())
         logger.debug(' get check sample orders number: {0}'.format(len(orders)))
         for order in orders:

@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -75,25 +75,12 @@
        <rect>
         <x>460</x>
         <y>10</y>
-        <width>75</width>
+        <width>91</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
-       <string>CopyFinance</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="btnGeneratePrice">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>81</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>GeneratePrice</string>
+       <string>CopyToFinance</string>
       </property>
      </widget>
      <widget class="QPushButton" name="btnRequisition">
@@ -112,40 +99,40 @@
      <widget class="QPushButton" name="btnGenerateOrderTrace">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>90</x>
         <y>10</y>
-        <width>91</width>
+        <width>101</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
-       <string>GenOrderTrace</string>
+       <string>2-GenOrderTrace</string>
       </property>
      </widget>
      <widget class="QPushButton" name="btnInitProducts">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>10</x>
         <y>10</y>
         <width>75</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
-       <string>InitProduct</string>
+       <string>1-InitProduct</string>
       </property>
      </widget>
      <widget class="QPushButton" name="btnCalVol">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>190</x>
         <y>10</y>
-        <width>75</width>
+        <width>81</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
-       <string>CalAllVolum</string>
+       <string>3-CalAllVolum</string>
       </property>
      </widget>
     </widget>
