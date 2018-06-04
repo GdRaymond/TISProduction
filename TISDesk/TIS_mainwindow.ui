@@ -18,7 +18,7 @@
     <normaloff>TIS.PNG</normaloff>TIS.PNG</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTabWidget" name="tabSampleCheck">
+   <widget class="QTabWidget" name="tabShipment">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -559,6 +559,24 @@
       <column/>
       <column/>
       <column/>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_7">
+     <attribute name="title">
+      <string>Shipment</string>
+     </attribute>
+     <widget class="QPushButton" name="btnAuwinSplit">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>30</y>
+        <width>121</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>SplitAuwinShipment</string>
+      </property>
      </widget>
     </widget>
    </widget>

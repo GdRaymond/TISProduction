@@ -6,7 +6,7 @@ from TISDesk.TIS_mainwindow import Ui_MainWindow
 from excelway.tis_excel import TIS_Excel
 from products import product_price,size_chart
 from products.models import Product
-import os,datetime,time
+import os,datetime,time,re
 from PyQt5.QtCore import QThread,pyqtSignal,QDate
 from TISProduction import tis_log
 from products import views as product_view
@@ -92,6 +92,7 @@ class TISMainWindow(QMainWindow):
         self.ui.tableW_samplecheck_order.setHorizontalHeaderLabels(sample_check_order_title)
         self.ui.tableW_samplecheck_order.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents) #in PyQt5 allow to adjust to cotent
         self.ui.btn_save_testreport.clicked.connect(self.save_test_report)
+        self.ui.btnAuwinSplit.clicked.connect(self.split_shipment_aw)
 
 
     def load_initial_data(self):
@@ -701,5 +702,52 @@ class TISMainWindow(QMainWindow):
         self.ui.lin_testreport_comment.setText('')
         self.ui.comb_fabric.setCurrentText('--')
 
+    def split_shipment_aw(self):
+        file_name=QFileDialog.getOpenFileName(self,'Open file',os.path.join(os.path.abspath('..'),'media'))[0]
+        logger.debug('start to read file {0}'.format(file_name))
+        shipment_no=0
+        target_l=[]
+        pre_tis_no=''
+        pre_style=''
+        with open(file_name) as f:
+            for line in f:
+                if line.startswith('Container'):
+                    con_no=line.split(' ')[1][0] #from Container 1: ETD: June 12th   1 X 40'HQ , get '1:' , get '1'
+                    continue
+                target_items=line.strip().split('\t')
+                if len(target_items)<=1:
+                    continue #skip blank line
+                target_items.append(con_no)
+                if target_items[0].startswith('SO') or target_items[0].startswith('so'):
+                    pre_tis_no=target_items[0]
+                    pre_style=target_items[1]
+                else:
+                    target_items[0]=pre_tis_no
+                    target_items[1]=pre_style
+                '''
+                if line.startswith('SO'):
+                    match=re.search('(\w+)\s+(\w+)\s+(\w+)\s+(\d+)\s+(\d+)\s+([\w\.]+)',line)
+                    if match:
+                        target_items=[match.group(1),match.group(2),match.group(3),match.group(4),match.group(5),match.group(6)]
+                        pre_tis_no=match.group(1)
+                        pre_style=match.group(2)
+                else:
+                '''
 
+
+                logger.debug('get line:{0}'.format(target_items))
+                target_l.append(target_items)
+        import numpy as np
+        try:
+            target_np=np.array(target_l)
+            logger.debug(' numpy array is {0}'.format(target_np))
+            target_np_sliced=np.array(target_np[:,3:7],dtype=np.float)
+            logger.debug(' numpy array slicing is {0}'.format(target_np_sliced))
+        except Exception as e:
+            logger.error(' error when conver numpy array {0}'.format(e))
+        from collections import defaultdict
+        volumes=defaultdict(float)
+        for i in range(len(target_l)):
+            volumes[target_l[i][6]]+=float(target_l[i][5])
+        logger.debug(' volumes is :{0}'.format(volumes))
 
