@@ -1,13 +1,13 @@
 
 from PyQt5.QtWidgets import QMainWindow,QFileDialog,QTableWidgetItem,QAbstractItemView,QDialog,QApplication,\
-    QMessageBox,QButtonGroup,QCheckBox,QRadioButton,QAbstractScrollArea
+    QMessageBox,QButtonGroup,QCheckBox,QRadioButton,QAbstractScrollArea,QListWidgetItem
 from PyQt5.QtGui import QColor,QIcon,QFont
 from TISDesk.TIS_mainwindow import Ui_MainWindow
 from excelway.tis_excel import TIS_Excel
 from products import product_price,size_chart
 from products.models import Product
 import os,datetime,time,re
-from PyQt5.QtCore import QThread,pyqtSignal,QDate
+from PyQt5.QtCore import QThread,pyqtSignal,QDate,Qt
 from TISProduction import tis_log
 from products import views as product_view
 from orders import views as order_view
@@ -93,6 +93,8 @@ class TISMainWindow(QMainWindow):
         self.ui.tableW_samplecheck_order.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents) #in PyQt5 allow to adjust to cotent
         self.ui.btn_save_testreport.clicked.connect(self.save_test_report)
         self.ui.btnAuwinSplit.clicked.connect(self.split_shipment_aw)
+        self.ui.toolB_refresh_shipment_auwin.clicked.connect(self.refresh_shipment_au_split)
+        self.ui.comb_shipment_auwin_origin.currentTextChanged.connect(self.reload_shipment_au_split)
 
 
     def load_initial_data(self):
@@ -724,19 +726,11 @@ class TISMainWindow(QMainWindow):
                 else:
                     target_items[0]=pre_tis_no
                     target_items[1]=pre_style
-                '''
-                if line.startswith('SO'):
-                    match=re.search('(\w+)\s+(\w+)\s+(\w+)\s+(\d+)\s+(\d+)\s+([\w\.]+)',line)
-                    if match:
-                        target_items=[match.group(1),match.group(2),match.group(3),match.group(4),match.group(5),match.group(6)]
-                        pre_tis_no=match.group(1)
-                        pre_style=match.group(2)
-                else:
-                '''
-
 
                 logger.debug('get line:{0}'.format(target_items))
                 target_l.append(target_items)
+
+        #below check the volume of each contianer
         import numpy as np
         try:
             target_np=np.array(target_l)
@@ -750,4 +744,57 @@ class TISMainWindow(QMainWindow):
         for i in range(len(target_l)):
             volumes[target_l[i][6]]+=float(target_l[i][5])
         logger.debug(' volumes is :{0}'.format(volumes))
+
+        #below check each order in db according to the order in email list
+        for line in target_l:
+            tis_no=line[0] #'SO4378'
+            colour=line[2] #'C.BLUE'
+            #get formal colour name and check
+            colour=product_price.get_formal_colourname_from_alias(colour) #'CobaltBlue'
+            if not colour:
+                logger.error(' Can not find this colour alias : {0}, please add to product_price.colour_alias'.foramt(colour))
+                return
+            #get order in db
+            try:
+                order=Order.objects.get(tis_no__iendswith=tis_no,colour__iexact=colour)
+            except Exception as e:
+                logger.error(' error when get order for {0}/{1}: {2}'.format(tis_no,colour,e))
+                return
+            #check style name and quantity for this order in db comparing with email
+            #check if the order is in the same origin shipment
+            if order.shipment.code!=self.ui.comb_shipment_auwin_origin.currentText():
+                logger.error(' the order is not in the origin shipment')
+            #check if all orders in db belonging original shipment are included in email
+            #update shipment
+
+
+    def refresh_shipment_au_split(self):
+        self.ui.comb_shipment_auwin_origin.clear()
+        self.ui.listW_allshipment_au.clear()
+        self.ui.listW_targetshipment_au.clear()
+        shipments=Shipment.objects.filter(supplier__iexact='AUWIN',mode='Sea',etd__gt=datetime.date.today()).order_by('etd')
+        logger.debug('get Auwin undeparture shipment number {0}'.format(len(shipments)))
+
+        for shipment in shipments:
+            self.ui.comb_shipment_auwin_origin.addItem(shipment.code)
+
+    def reload_shipment_au_split(self):
+        self.ui.listW_targetshipment_au.clear()
+        self.ui.listW_allshipment_au.clear()
+        shipments=Shipment.objects.filter(supplier__iexact='AUWIN',mode='Sea',etd__gt=datetime.date.today()).order_by('etd')
+        logger.debug('get Auwin undeparture shipment number {0}'.format(len(shipments)))
+        for shipment in shipments:
+            self.ui.listW_allshipment_au.addItem(shipment.code)
+        #below move current combox origin shipment from all_list to target_list
+        current_text=self.ui.comb_shipment_auwin_origin.currentText()
+        self.ui.listW_targetshipment_au.addItem(current_text)
+        try:
+            #items=self.ui.listW_allshipment_au.findItems(current_text,Q_FLAGS(0))
+            item=QListWidgetItem(current_text)
+        except Exception as e:
+            logger.error(' error find list widget : {0}'.format(e))
+        row_no=self.ui.listW_allshipment_au.row(item)
+        self.ui.listW_allshipment_au.takeItem(row_no)
+
+
 
