@@ -95,6 +95,8 @@ class TISMainWindow(QMainWindow):
         self.ui.btnAuwinSplit.clicked.connect(self.split_shipment_aw)
         self.ui.toolB_refresh_shipment_auwin.clicked.connect(self.refresh_shipment_au_split)
         self.ui.comb_shipment_auwin_origin.currentTextChanged.connect(self.reload_shipment_au_split)
+        self.ui.toolB_move_shipment_to_target.clicked.connect(self.shipment_selected_move)
+        self.ui.toolB_move_shipment_to_all.clicked.connect(self.shipment_selected_move)
 
 
     def load_initial_data(self):
@@ -789,12 +791,26 @@ class TISMainWindow(QMainWindow):
         current_text=self.ui.comb_shipment_auwin_origin.currentText()
         self.ui.listW_targetshipment_au.addItem(current_text)
         try:
-            #items=self.ui.listW_allshipment_au.findItems(current_text,Q_FLAGS(0))
-            item=QListWidgetItem(current_text)
+            items=self.ui.listW_allshipment_au.findItems(current_text,Qt.MatchExactly)
+            logger.debug(' find items {0}'.format(items))
+            row_no = self.ui.listW_allshipment_au.row(items[0])
         except Exception as e:
             logger.error(' error find list widget : {0}'.format(e))
-        row_no=self.ui.listW_allshipment_au.row(item)
+
         self.ui.listW_allshipment_au.takeItem(row_no)
+
+    def shipment_selected_move(self):
+        if self.sender()==self.ui.toolB_move_shipment_to_target:
+            target=self.ui.listW_targetshipment_au
+            source=self.ui.listW_allshipment_au
+        else:
+            target=self.ui.listW_allshipment_au
+            source=self.ui.listW_targetshipment_au
+        current_text=source.currentItem().text()
+        source.takeItem(source.currentRow())
+        target.addItem(current_text)
+
+
 
 
 
