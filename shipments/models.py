@@ -31,6 +31,8 @@ class Shipment(models.Model):
         ('MELBOURNE', 'Melbourne'),
         ('OTHER', 'Other'),
     )
+
+    TT_DAYS={'GUANGZHOU_SEA':(13,3),'NINGBO_SEA':(11,7),'SHANGHAI_SEA':(13,7),'XINGANG_SEA':(35,3)} #define the tt days
     code=models.TextField(max_length=20)
     supplier = models.TextField(max_length=50)
     etd=models.DateField(default=datetime.datetime.now().date())
@@ -58,7 +60,39 @@ class Shipment(models.Model):
         return reverse('shipment_detail',kwargs={'pk':self.pk})
 
 
+    @staticmethod
+    def get_tt_days(mode,etd_port):
+        tt_days={}
+        mode=mode.upper()
+        if mode in ['AIR','COURIER']: #all airfreight or courier to be assumed as 4 days flight and 1 days clear
+            tt_days['tt_freight']=4
+            tt_days['tt_cls']=1
+        else: #seafreight
+            days=Shipment.TT_DAYS.get('{0}_SEA'.format(etd_port.upper()),(35,3))
+            tt_days['tt_freight']=days[0]
+            tt_days['tt_cls']=days[1]
+        return tt_days
 
+    @staticmethod
+    def get_current_and_next_shipment_code(supplier,etd_date):
+        codes={}
+        mon_year=etd_date.strftime('%b %y').upper()
+        supplier_abbr=product_price.supplier_abbreviation.get(supplier.upper(),'OT')
+        starts_with='{0}-{1}'.format(supplier_abbr,mon_year)
+        logger.debug('starts_with is {0}'.format(starts_with))
+        shipment_code_list=[shipment.get('code') for shipment in \
+                            Shipment.objects.filter(code__istartswith=starts_with).values('code').order_by('code').distinct()]
+        logger.debug('get shipment_code_list {0}'.format(shipment_code_list))
+        codes['current']=shipment_code_list
+        if shipment_code_list:
+            max=int(shipment_code_list[-1].split('-')[2])
+        else:
+            max=0
+        next_no=max+1
+        next_ship_code=starts_with+'-'+str(next_no)
+        logger.debug('get next ship code {0}'.format(next_ship_code))
+        codes['next']=next_ship_code
+        return codes
 
     @staticmethod
     def get_shipment(ship_code,etd,supplier,freight,etd_port):

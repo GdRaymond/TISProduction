@@ -5,6 +5,8 @@ from TISDesk.TIS_edit_order_dialog import Ui_editDialog_Order
 from shipments.models import Shipment
 from products import size_chart
 from TISProduction import tis_log
+import datetime
+from dateutil import relativedelta
 
 logger=tis_log.get_tis_logger()
 
@@ -152,5 +154,95 @@ class Edit_dialog_shipment(QDialog):
         eta_port_list=[a[0] for a in list(Shipment.ETA_PORT)]
         self.ui.comb_etaport.addItems(eta_port_list)
         self.ui.comb_etaport.setCurrentText(str(kwargs.get('eta_port')).upper())
+
+        #below set unvisible for new shipment widget
+        self.ui.lb_supplier_new_shipment.setVisible(False)
+        self.ui.comb_supplier_new_shipment.setVisible(False)
+        self.ui.lb_curentcode_new_shipment.setVisible(False)
+        self.ui.listW_currentcode_new_shipment.setVisible(False)
+        self.ui.lb_code_new_shipment.setVisible(False)
+        self.ui.lin_code_new_shipment.setVisible(False)
+
+class Dialog_New_Shipment(QDialog):
+    def __init__(self,parent=None,**kwargs):
+        super(Dialog_New_Shipment,self).__init__(parent)
+        self.ui=Ui_editDialogShipment()
+        self.ui.setupUi(self)
+        #below set unvisible for edit_shipment recap label
+        self.setWindowTitle('Create New Shipment')
+        self.ui.lb_recap.setVisible(False)
+        self.ui.lb_recap_1.setVisible(False)
+        self.ui.lb_recap_2.setVisible(False)
+        self.ui.lb_recap_3.setVisible(False)
+        self.ui.dateE_etd.setDate(datetime.date.today())
+        self.ui.dateE_eta.setDate(datetime.date.today())
+        self.ui.dateE_instore.setDate(datetime.date.today())
+        self.ui.dateE_instore_abm.setDate(datetime.date.today())
+        mode_list=[a[0] for a in list(Shipment.MODE) ]
+        self.ui.comb_mode.addItems(mode_list)
+        self.ui.comb_mode.setCurrentText(str(kwargs.get('mode')))
+        etd_port_list=[a[0] for a in list(Shipment.ETD_PORT)]
+        self.ui.comb_etdport.addItems(etd_port_list)
+        self.ui.comb_etdport.setCurrentText(str(kwargs.get('etd_port')).upper())
+        eta_port_list=[a[0] for a in list(Shipment.ETA_PORT)]
+        self.ui.comb_etaport.addItems(eta_port_list)
+        self.ui.comb_etaport.setCurrentText(str(kwargs.get('eta_port')).upper())
+
+
+        #load supplier
+        suppliers=[supplier.get('supplier') for supplier in Shipment.objects.all().order_by('supplier').values('supplier').distinct()]
+        logger.debug('get supplier {0}'.format(suppliers))
+        self.ui.comb_supplier_new_shipment.addItems(suppliers)
+        self.ui.comb_supplier_new_shipment.addItem('--')
+        self.ui.comb_supplier_new_shipment.setCurrentText('--')
+
+        self.ui.comb_supplier_new_shipment.currentTextChanged.connect(self.update_widget)
+        self.ui.comb_etdport.currentTextChanged.connect(self.update_widget)
+        self.ui.comb_mode.currentTextChanged.connect(self.update_widget)
+        self.ui.dateE_etd.dateChanged.connect(self.update_widget)
+
+
+
+
+    def update_widget(self):
+        logger.debug(' start to update widget')
+        #get value form widget
+        supplier=self.ui.comb_supplier_new_shipment.currentText().upper()
+        mode=self.ui.comb_mode.currentText().upper()
+        etd_port=self.ui.comb_etdport.currentText().upper()
+        etd_date=self.ui.dateE_etd.date().toPyDate()
+
+        #update eta_date in_store_date
+        tt_days=Shipment.get_tt_days(mode,etd_port)
+        eta_date=etd_date+relativedelta.relativedelta(days=+tt_days.get('tt_freight'))
+        instore_date=eta_date+relativedelta.relativedelta(days=+tt_days.get('tt_cls'))
+        self.ui.dateE_eta.setDate(eta_date)
+        self.ui.dateE_instore.setDate(instore_date)
+        self.ui.dateE_instore_abm.setDate(instore_date)
+
+        #update code and current shipment code
+        if self.sender()==self.ui.comb_supplier_new_shipment or self.sender()==self.ui.dateE_etd:
+            self.ui.listW_currentcode_new_shipment.clear()
+            codes=Shipment.get_current_and_next_shipment_code(supplier,etd_date)
+            current_codes=codes.get('current')
+            next_shipment_code=codes.get('next')
+            if current_codes:
+                self.ui.listW_currentcode_new_shipment.addItems(current_codes)
+            self.ui.lin_code_new_shipment.setText(next_shipment_code)
+
+    def save_new_shipment(self):
+        #get value form widget
+        supplier=self.ui.comb_supplier_new_shipment.currentText().upper()
+        mode=self.ui.comb_mode.currentText()
+        etd_port=self.ui.comb_etdport.currentText().upper()
+        etd_date=self.ui.dateE_etd.date().toPyDate()
+        eta_date=self.ui.dateE_eta.date().toPyDate()
+        instore=self.ui.dateE_instore.date().toPyDate()
+        instore_abm=self.ui.dateE_instore_abm.date().toPyDate()
+        eta_port=self.ui.comb_etaport.currentText()
+        code=self.ui.lin_code_new_shipment.text()
+        shipment_dict={'supplier':supplier,'mode':mode,'etd':etd_date,'eta':eta_date,'instore':instore,'instore_abm':instore_abm\
+                       ,'code':code,'etd_port':etd_port,'eta_port':eta_port}
+        Shipment.objects.create(**shipment_dict)
 
 

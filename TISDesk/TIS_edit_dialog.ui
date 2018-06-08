@@ -43,7 +43,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>25</y>
+     <y>0</y>
      <width>111</width>
      <height>51</height>
     </rect>
@@ -202,7 +202,7 @@
    <property name="geometry">
     <rect>
      <x>140</x>
-     <y>30</y>
+     <y>10</y>
      <width>481</width>
      <height>41</height>
     </rect>
@@ -220,7 +220,7 @@
    <property name="geometry">
     <rect>
      <x>140</x>
-     <y>70</y>
+     <y>60</y>
      <width>481</width>
      <height>41</height>
     </rect>
@@ -268,6 +268,124 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
    </property>
   </widget>
+  <widget class="QComboBox" name="comb_supplier_new_shipment">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>60</y>
+     <width>131</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="editable">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lb_supplier_new_shipment">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>47</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Supplier</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lb_code_new_shipment">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>110</y>
+     <width>47</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Code</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lin_code_new_shipment">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>110</y>
+     <width>131</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lb_curentcode_new_shipment">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>20</y>
+     <width>51</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Current&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Code&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="listW_currentcode_new_shipment">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>10</y>
+     <width>161</width>
+     <height>141</height>
+    </rect>
+   </property>
+  </widget>
+  <zorder>lb_recap_1</zorder>
+  <zorder>comb_supplier_new_shipment</zorder>
+  <zorder>lb_instoreabm</zorder>
+  <zorder>lb_etd</zorder>
+  <zorder>lb_recap</zorder>
+  <zorder>lb_etaport</zorder>
+  <zorder>lb_mode</zorder>
+  <zorder>lb_etdport</zorder>
+  <zorder>lb_eta</zorder>
+  <zorder>lb_instroe</zorder>
+  <zorder>dateE_etd</zorder>
+  <zorder>comb_mode</zorder>
+  <zorder>comb_etdport</zorder>
+  <zorder>comb_etaport</zorder>
+  <zorder>dateE_eta</zorder>
+  <zorder>dateE_instore</zorder>
+  <zorder>dateE_instore_abm</zorder>
+  <zorder>lb_recap_2</zorder>
+  <zorder>lb_recap_3</zorder>
+  <zorder>buttonBox</zorder>
+  <zorder>lb_supplier_new_shipment</zorder>
+  <zorder>lb_code_new_shipment</zorder>
+  <zorder>lin_code_new_shipment</zorder>
+  <zorder>lb_curentcode_new_shipment</zorder>
+  <zorder>listW_currentcode_new_shipment</zorder>
  </widget>
  <resources/>
  <connections>

@@ -568,21 +568,21 @@
      <widget class="QGroupBox" name="groupBox_3">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>10</y>
+        <x>300</x>
+        <y>20</y>
         <width>301</width>
-        <height>281</height>
+        <height>301</height>
        </rect>
       </property>
       <property name="title">
-       <string>Auwin</string>
+       <string>Auwin Split</string>
       </property>
       <widget class="QPushButton" name="btnAuwinSplit">
        <property name="geometry">
         <rect>
-         <x>100</x>
-         <y>250</y>
-         <width>121</width>
+         <x>20</x>
+         <y>260</y>
+         <width>271</width>
          <height>23</height>
         </rect>
        </property>
@@ -617,7 +617,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>80</y>
+         <y>90</y>
          <width>111</width>
          <height>151</height>
         </rect>
@@ -640,7 +640,7 @@
        <property name="geometry">
         <rect>
          <x>180</x>
-         <y>80</y>
+         <y>90</y>
          <width>111</width>
          <height>151</height>
         </rect>
@@ -663,7 +663,7 @@
        <property name="geometry">
         <rect>
          <x>130</x>
-         <y>110</y>
+         <y>120</y>
          <width>41</width>
          <height>19</height>
         </rect>
@@ -676,7 +676,7 @@
        <property name="geometry">
         <rect>
          <x>130</x>
-         <y>160</y>
+         <y>170</y>
          <width>41</width>
          <height>19</height>
         </rect>
@@ -708,6 +708,45 @@
         </size>
        </property>
       </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_4">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>20</y>
+        <width>241</width>
+        <height>80</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>New Shipment</string>
+      </property>
+      <widget class="QPushButton" name="btn_new_shipment">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>30</y>
+         <width>191</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>CreateNewShipment</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_5">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>120</y>
+        <width>241</width>
+        <height>201</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Edit Shipment</string>
+      </property>
      </widget>
     </widget>
    </widget>

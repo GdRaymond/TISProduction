@@ -15,7 +15,7 @@ from orders.models import Order,FabricTrim,SampleCheck
 from shipments import views as shipment_view
 from shipments.models import Shipment
 from PyQt5.QtSql import QSqlRelationalTableModel,QSqlRelation,QSqlRelationalDelegate
-from TISDesk.edit_dialog import Edit_dialog_shipment,Edit_Dialog_Order
+from TISDesk.edit_dialog import Edit_dialog_shipment,Edit_Dialog_Order,Dialog_New_Shipment
 from core import fts_search
 from TISDesk import clipboard
 
@@ -97,6 +97,7 @@ class TISMainWindow(QMainWindow):
         self.ui.comb_shipment_auwin_origin.currentTextChanged.connect(self.reload_shipment_au_split)
         self.ui.toolB_move_shipment_to_target.clicked.connect(self.shipment_selected_move)
         self.ui.toolB_move_shipment_to_all.clicked.connect(self.shipment_selected_move)
+        self.ui.btn_new_shipment.clicked.connect(self.creat_new_shipment)
 
 
     def load_initial_data(self):
@@ -774,7 +775,7 @@ class TISMainWindow(QMainWindow):
         self.ui.comb_shipment_auwin_origin.clear()
         self.ui.listW_allshipment_au.clear()
         self.ui.listW_targetshipment_au.clear()
-        shipments=Shipment.objects.filter(supplier__iexact='AUWIN',mode='Sea',etd__gt=datetime.date.today()).order_by('etd')
+        shipments=Shipment.objects.filter(supplier__iexact='AUWIN',mode__iexact='Sea',etd__gt=datetime.date.today()).order_by('etd')
         logger.debug('get Auwin undeparture shipment number {0}'.format(len(shipments)))
 
         for shipment in shipments:
@@ -810,6 +811,16 @@ class TISMainWindow(QMainWindow):
         source.takeItem(source.currentRow())
         target.addItem(current_text)
 
+    def creat_new_shipment(self):
+        dialog=Dialog_New_Shipment()
+        try:
+            if dialog.exec_():
+                dialog.save_new_shipment()
+                logger.debug(' saved new shipment')
+            else:
+                logger.debug(' cancel save new shipment')
+        except Exception as e:
+            logger.error(' error {0}'.format(e))
 
 
 
