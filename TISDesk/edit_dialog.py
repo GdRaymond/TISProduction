@@ -27,6 +27,12 @@ class Edit_Dialog_Order(QDialog):
             self.ui.dateE_orderdate.setDate(kwargs.get('order_date'))
 
         size_show_l=size_chart.get_size_show(kwargs.get('style')) #get the size show list according to style, it is 2-d list
+        if not size_show_l: #there is this sytle in the size _show_ need add
+            logger.warning(' No this style {} in size show, so not display the size breakup widget'.format(kwargs.get('style')))
+            self.ui.groupB_size_1.setTitle('No style {0} in size show ,please add to size_chart.py'.format(kwargs.get('style')))
+            self.ui.groupB_size_1.setEnabled(False)
+            return
+
         logger.debug(' get size_show_l for {0}: {1}'.format(kwargs.get('style'),size_show_l))
         size_index_whole=0 #to increase to indicate the size index in all size chart from 1-30, index 0 is total quantity
         for group_no in range(len(size_show_l)): #iterate every group , for shirt only one, for trousers, 2 or 3
@@ -65,30 +71,6 @@ class Edit_Dialog_Order(QDialog):
             self.ui.gridL_size_R.addWidget(lb_size,0,index)
             self.ui.gridL_size_R.addWidget(lin_size, 1, index)
         '''
-    def add_quantity_group_1(self):
-        columns=self.ui.tableW_size_1.columnCount()
-        #self.ui.tableW_size_1.setFont(QFont('SimHei',11,QFont.Bold))
-        for index in range(columns):
-            logger.debug(' check group1 change item{0} :{1}'.format(index,self.ui.tableW_size_1.item(1,index).text()))
-            try:
-                change = int(self.ui.tableW_size_1.item(1,index).text())
-            except Exception as e:
-                logger.error(' not int ')
-                continue
-            if change!=0:
-                try:
-                    origin=int(self.ui.tableW_size_1.item(0,index).text())
-                    result=origin+change
-                    if result<0:
-                        self.ui.tableW_size_1.item(1,index).setBackground(QColor(202,223,79)) #yellow 255,255,79
-                        reply=QMessageBox.information(self,'Warning','Final quantity must not be less than 0',QMessageBox.Ok)
-                        continue
-                    item=QTableWidgetItem(str(origin+change))
-                    item.setForeground(QColor(255, 19, 1))
-                    self.ui.tableW_size_1.setItem(0,index,item)
-                    self.ui.tableW_size_1.setItem(1,index,QTableWidgetItem('0'))
-                except Exception as e:
-                    logger.error(' error calculating quantity :{0}'.format(e))
 
     def add_quantity_group(self):
         if self.sender() == self.ui.toolBtn_plus_1:

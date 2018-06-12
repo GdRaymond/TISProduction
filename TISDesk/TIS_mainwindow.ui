@@ -22,7 +22,7 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>0</y>
+      <y>-30</y>
       <width>1341</width>
       <height>661</height>
      </rect>
@@ -738,15 +738,93 @@
      <widget class="QGroupBox" name="groupBox_5">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>120</y>
-        <width>241</width>
-        <height>201</height>
+        <x>620</x>
+        <y>20</y>
+        <width>451</width>
+        <height>291</height>
        </rect>
       </property>
       <property name="title">
-       <string>Edit Shipment</string>
+       <string>Shipment Tool</string>
       </property>
+      <widget class="QLabel" name="label_12">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>41</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Supplier</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comb_shipmenttool_supplier">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>20</y>
+         <width>71</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comb_shipmenttool_shipment">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>20</y>
+         <width>251</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_13">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>20</y>
+         <width>51</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Shipment</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_shipmenttool_getshipmentorderinfo">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>60</y>
+         <width>81</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>Get the shipment order No. container and ETD , copy to clipboard for email paste</string>
+       </property>
+       <property name="text">
+        <string>GetOrderIno</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_shipmenttool_checkbooking">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>60</y>
+         <width>121</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>Compare the booking spreadsheet with shipment order, copy difference to clipboard for email</string>
+       </property>
+       <property name="text">
+        <string>CheckShipmentBooking</string>
+       </property>
+      </widget>
      </widget>
     </widget>
    </widget>

@@ -42,12 +42,18 @@ class TIS_Excel():
             if self.wb_order:
                 self.wb_order.Close()
         except Exception as e:
-            print(e)
+            logger.error('error when closing order spreadsheet:{0}'.format(e))
         try:
             if self.wb_finance:
                 self.wb_finance.Close()
         except Exception as e:
-            print(e)
+            logger.error('error when closing finance spreadsheet:{0}'.format(e))
+        try:
+            if self.wb_booking:
+                self.wb_booking.Close()
+        except Exception as e:
+            logger.error('error when closing booking spreadsheet:{0}'.format(e))
+
         number_wb=self.excelapp.Workbooks.Count
         if number_wb>0:
             print('There are still {0} books opening'.format(number_wb))
@@ -91,6 +97,87 @@ class TIS_Excel():
             #print(d_row)
             l_result.append(d_row)
         return l_result
+
+    def read_shipmentbooking(self,filename='media/booking.xls'):
+        try:
+            self.wb_booking=self.excelapp.Workbooks.open(filename)
+            self.ws_booking=self.wb_booking.Worksheets[0]
+            ws=self.ws_booking
+        except Exception as e:
+            logger.error(' error reading booking file{0} :{1}'.format(filename,e))
+            return
+        logger.debug('l-start to parse excel {0}'.format(filename))
+        l_result=[]
+        row_count=ws.UsedRange.Rows.Count
+        logger.debug('get row number:{0}'.format(row_count))
+        for row_num in range(1,row_count+1):
+            order={}
+            order_cell_name='A{0}'.format(row_num)
+            order_cell_value=ws.Range(order_cell_name).Value
+            logger.debug(' reading cell:{0} value:{1}, typpe:{2}'.format(order_cell_name,order_cell_value,type(order_cell_value)))
+            if not order_cell_value:
+                continue
+            if order_cell_value.startswith('PURCHASE'):
+                tis_no=order_cell_value[18:]
+                logger.debug('get tis_no: {0}'.format(tis_no))
+                order['tis_no']=tis_no
+
+                style_cell_name = 'A{0}'.format(row_num + 2)
+                style_cell_value = ws.Range(style_cell_name).Value
+                if style_cell_value:
+                    style=style_cell_value.split(':')[1].strip()
+                else:
+                    style='Unknow'
+
+                colour_cell_name='A{0}'.format(row_num+3)
+                colour_cell_value=ws.Range(colour_cell_name).Value
+                if colour_cell_value:
+                    colour=colour_cell_value[7:]
+                    if not colour:
+                        colour='ALL'
+                else:
+                    colour='ALL'
+
+
+                quantity_cell_name = 'K{0}'.format(row_num - 1)
+                quantity_cell_value = ws.Range(quantity_cell_name).Value
+                if quantity_cell_value:
+                    logger.debug(' parsing quantity content:{0}'.format(quantity_cell_value.strip()))
+                    match=re.search(r'^(?P<qty>\d+)PCS.*/\s*(?P<carton>\d+)CTNS.*',quantity_cell_value.strip())
+                    if match:
+                        quantity=int(match.group('qty'))
+                        cartons=int(match.group('carton'))
+                    else:
+                        logger.warn('Can not match quantity for {0}'.format(tis_no))
+                        quantity=0
+                        cartons=0
+                else:
+                    logger.warn('Can not find the  quantity for {0}'.format(tis_no))
+                    quantity = 0
+                    cartons = 0
+
+                volume_cell_name = 'AA{0}'.format(row_num -1)
+                volume_cell_value = ws.Range(volume_cell_name).Value
+                if volume_cell_value:
+                    logger.warn('the volume is {1}  for {0}'.format(tis_no, volume_cell_value))
+                    try:
+                        volume=float(volume_cell_value)
+                    except Exception as e:
+                        logger.warn('the volume is not float for {0}'.format(tis_no))
+                        volume=0
+                else:
+                    logger.warn('can not find volume for {0}'.format(tis_no))
+                    volume=0
+                order={'tis_no':tis_no,'style':style,'colour':colour,'quantity':quantity,'cartons':cartons,'volume':volume}
+
+                l_result.append(order)
+        try:
+            self.close_wb()
+        except Exception as e:
+            logger.error('error when closing excel')
+
+        return l_result
+
 
     def read_order(self,filename="media/order.xls"):
         '''

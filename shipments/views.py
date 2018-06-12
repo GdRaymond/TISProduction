@@ -180,6 +180,27 @@ def write_inspection_shipment(shipments):
                 ins_file.write('\n Total Quantity: {0:,} pcs'.format(total_qty))
     logger.debug('finish writing inspection file')
 
+def get_shipment_order_info(shipment_code):
+    infos=[]
+    shipments=Shipment.objects.filter(code__iexact=shipment_code)
+    for shipment in shipments:
+        orders=shipment.order_set.all()
+        if orders:
+            clients=[]
+            tis_no=orders[0].tis_no[:8] #TIS18-
+            tis_no_list=[]
+            for order in orders:
+                if order.tis_no[8:] not in tis_no_list:
+                    tis_no_list.append(order.tis_no[8:])
+                if order.client not in clients:
+                    clients.append(order.client)
+            tis_no_list.sort()
+            tis_no+=' '.join(tis_no_list).strip()
+            info='{0}-{1}-{2}-ETA:{3}'.format(tis_no,' '.join(clients),shipment.container,shipment.eta)
+            infos.append(info)
+        else:
+            logger.warn('shipment {0} has no orders info'.format(shipment))
+    return infos
 
 
 

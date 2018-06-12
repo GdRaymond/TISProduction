@@ -98,14 +98,20 @@ class TISMainWindow(QMainWindow):
         self.ui.toolB_move_shipment_to_target.clicked.connect(self.shipment_selected_move)
         self.ui.toolB_move_shipment_to_all.clicked.connect(self.shipment_selected_move)
         self.ui.btn_new_shipment.clicked.connect(self.creat_new_shipment)
+        self.ui.comb_shipmenttool_supplier.currentTextChanged.connect(self.load_shipment_from_supplier)
+        self.ui.btn_shipmenttool_getshipmentorderinfo.clicked.connect(self.shipment_tool_getorderinfo)
+        self.ui.btn_shipmenttool_checkbooking.clicked.connect(self.check_shipment_booking)
 
 
     def load_initial_data(self):
         suppliers=[supplier.get('supplier') for supplier in Order.objects.order_by().values('supplier').distinct()]
         logger.debug( 'get suppliers list {0}'.format(suppliers))
         self.ui.comb_supplier.addItems(suppliers)
+        self.ui.comb_shipmenttool_supplier.addItems(suppliers)
         self.ui.comb_supplier.addItem('--')
+        self.ui.comb_shipmenttool_supplier.addItem('--')
         self.ui.comb_supplier.setCurrentText('--')
+        self.ui.comb_shipmenttool_supplier.setCurrentText('--')
 
     def load_comb_fabric(self):
         self.ui.comb_fabric.clear()
@@ -218,8 +224,8 @@ class TISMainWindow(QMainWindow):
             self.ui.textBrowser.append(count_range)
 
     def copy_finance(self):
-        order_file=QFileDialog.getOpenFileName(self,'Open file',os.path.join(os.path.abspath('..'),'media'))[0]
-        finance_file=QFileDialog.getOpenFileName(self,'Open file',os.path.join(os.path.abspath('..'),'media'))[0]
+        order_file=QFileDialog.getOpenFileName(self,'Please select latest Order Trace spreadsheet',os.path.join(os.path.abspath('..'),'media'))[0]
+        finance_file=QFileDialog.getOpenFileName(self,'Please select latest Finance spreadsheet',os.path.join(os.path.abspath('..'),'media'))[0]
         excel=TIS_Excel()
         excel.copy_order_to_finance(order_file,finance_file)
         self.ui.textBrowser.append('finish copy')
@@ -242,7 +248,7 @@ class TISMainWindow(QMainWindow):
         TIS_Excel.generate_from_requisition(requisition_path,etd_dict)
 
     def create_order_trace(self):
-        order_file=QFileDialog.getOpenFileName(self,'Open file',os.path.join(os.path.abspath('..'),'media'))[0]
+        order_file=QFileDialog.getOpenFileName(self,'Please select latest Order Trace spreadsheet',os.path.join(os.path.abspath('..'),'media'))[0]
         excel=TIS_Excel()
         order_list=excel.read_order(order_file)
         #result=excel.create_from_trace(order_file)
@@ -527,15 +533,18 @@ class TISMainWindow(QMainWindow):
                     order.shipment=shipment
                     #below saving the size break up
                     size_show_l=size_chart.get_size_show(order.product.style_no)
-                    size_no_whole=0
-                    for group_no in range(len(size_show_l)):
-                        size_group=size_show_l[group_no]
-                        table_w=getattr(dialog.ui,'tableW_size_{0}'.format(group_no+1))
-                        logger.debug('start to save data {0} to size {1} '.format(table_w,size_group))
-                        for size_no in range(len(size_group)):
-                            size_no_whole+=1
-                            quantity=int(table_w.item(0,size_no).text())
-                            setattr(order,'size{0}'.format(size_no_whole),quantity)
+                    if size_show_l: #below get each size
+                        size_no_whole=0
+                        for group_no in range(len(size_show_l)):
+                            size_group=size_show_l[group_no]
+                            table_w=getattr(dialog.ui,'tableW_size_{0}'.format(group_no+1))
+                            logger.debug('start to save data {0} to size {1} '.format(table_w,size_group))
+                            for size_no in range(len(size_group)):
+                                size_no_whole+=1
+                                quantity=int(table_w.item(0,size_no).text())
+                                setattr(order,'size{0}'.format(size_no_whole),quantity)
+                    else: #new style NO. for size show,
+                        logger.warn(' No this style in size show, please add to size_chart.py')
 
                     order.save()
                     logger.debug('order saved {0}-{1}-{2}-{3}'.format(order,order.shipment,order.internal_no,order.ctm_no))
@@ -821,6 +830,47 @@ class TISMainWindow(QMainWindow):
                 logger.debug(' cancel save new shipment')
         except Exception as e:
             logger.error(' error {0}'.format(e))
+
+    def load_shipment_from_supplier(self):
+        self.ui.comb_shipmenttool_shipment.clear()
+        supplier=self.ui.comb_shipmenttool_supplier.currentText()
+        shipments=Shipment.objects.filter(supplier__iexact=supplier,instore__gt=datetime.date.today()).order_by('etd')
+        logger.debug('get  un arrival shipment number {0}'.format(len(shipments)))
+
+        for shipment in shipments:
+            shipment_info='{0} / ETD:{1} / {2}'.format(shipment.code,shipment.etd,shipment.container) #AW-JUN 18-1 / ETD:12/06/2018 / 40GP
+            self.ui.comb_shipmenttool_shipment.addItem(shipment_info)
+
+    def shipment_tool_getorderinfo(self):
+        shipment_code=self.ui.comb_shipmenttool_shipment.currentText().split('/')[0].strip() #AW-JUN 18-1
+        if shipment_code:
+            infoes=shipment_view.get_shipment_order_info(shipment_code)
+        msg=''
+        for info in infoes:
+            msg='{0}{1}'.format(msg,info)
+        clipboard.write(msg)
+        qm=QMessageBox()
+        qm.question(self,'Copy shipment order info','Below shipment info alread write to clipboard, you can paste to your email \n{0}'.format(msg))
+
+    def check_shipment_booking(self):
+        filename=QFileDialog.getOpenFileName(self,'Please select shipment booking spreadsheet',os.path.join(os.path.abspath('..'),'media'))[0]
+        tis_app=TIS_Excel()
+        try:
+            #get orders in spread sheet
+            l_result=tis_app.read_shipmentbooking(filename)
+            logger.debug(' get booking info {0}'.format(l_result))
+
+            #get orders in db
+            ship_code=self.ui.comb_shipmenttool_shipment.currentText().split('/')[0].strip()
+            orders=Order.objects.filter(shipment__code_iexact=ship_code)
+            for order in orders:
+                tis_no=order.tis_no
+                colour=order.colour
+
+
+        except Exception as e:
+            logger.error('error when read shipment booking'.format(e))
+
 
 
 
