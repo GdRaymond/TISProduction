@@ -18,7 +18,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.tabShipment = QtWidgets.QTabWidget(self.centralwidget)
-        self.tabShipment.setGeometry(QtCore.QRect(0, -30, 1341, 661))
+        self.tabShipment.setGeometry(QtCore.QRect(0, 0, 1341, 661))
         self.tabShipment.setObjectName("tabShipment")
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")

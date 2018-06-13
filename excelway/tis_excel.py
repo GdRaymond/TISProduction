@@ -168,7 +168,7 @@ class TIS_Excel():
                 else:
                     logger.warn('can not find volume for {0}'.format(tis_no))
                     volume=0
-                order={'tis_no':tis_no,'style':style,'colour':colour,'quantity':quantity,'cartons':cartons,'volume':volume}
+                order={'TISNo':tis_no,'Style':style,'colour':colour,'quantity':quantity,'cartons':cartons,'volume':volume}
 
                 l_result.append(order)
         try:

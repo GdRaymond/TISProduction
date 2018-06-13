@@ -858,18 +858,124 @@ class TISMainWindow(QMainWindow):
         try:
             #get orders in spread sheet
             l_result=tis_app.read_shipmentbooking(filename)
-            logger.debug(' get booking info {0}'.format(l_result))
+            orders_booking=tis_app.consolidate_order(l_result)
+            logger.debug(' get booking info {0}'.format(orders_booking)) #{'TIS18-SO':{'RM123':[{'colour':},{'colour':}],'RM234':[]}}
 
             #get orders in db
             ship_code=self.ui.comb_shipmenttool_shipment.currentText().split('/')[0].strip()
-            orders=Order.objects.filter(shipment__code_iexact=ship_code)
+            orders=Order.objects.filter(shipment__code__iexact=ship_code)
+            l_orders_db=[]
             for order in orders:
                 tis_no=order.tis_no
                 colour=order.colour
+                quantity=order.quantity
+                cartons=order.cartons
+                volume=order.volumes
+                style=order.product.style_no
+                order_info={'TISNo':tis_no,'Style':style,'colour':colour,'quantity':quantity,'cartons':cartons,'volume':volume}
+                l_orders_db.append(order_info)
+            order_db=tis_app.consolidate_order(l_orders_db)
+            logger.debug(' get order from db :{0}'.format(order_db))#{'TIS18-SO':{'RM123':[{'colour':},{'colour':}],'RM234':[]}}
+
+            #compare orders_booking with orders_db
+            successful_msgs=[]
+            warning_msgs=[]
+            for tis_no_booking,v1_booking in orders_booking.items():
+                v1_db=order_db.get(tis_no_booking)
+                if not v1_db:
+                    warning_msg=' Not found {0} in db '.format(tis_no_booking)
+                    logger.warn(warning_msg)
+                    warning_msgs.append(warning_msg)
+                    continue
+                for style_booking,v2_booking in v1_booking.items(): #v2=[{'colour':},{'colour'}]
+                    v2_db=v1_db.get(style_booking)
+                    if not v2_db:
+                        warning_msg = ' Not found {0} in {1} in db'.format(style_booking,tis_no_booking)
+                        logger.warn(warning_msg)
+                        warning_msgs.append(warning_msg)
+                        continue
+                    for item_booking in v2_booking:  #item={'colour':'Navy','quantity':100,'cartons':5,'volume':0.5}
+                        colour_booking=item_booking.get('colour')
+                        if colour_booking=='ALL': #in booking sheet, often combine whole all order
+                            quantity_db=0
+                            for item_db in v2_db:
+                                quantity_db+=item_db.get('quantity')
+                            if quantity_db==item_booking.get('quantity'):
+                                successful_msg = ' Sucessfully compare {0} {1} with quantity:{2}'.format(tis_no_booking,\
+                                                                                                    style_booking,quantity_db)
+                                logger.info(successful_msg)
+                                successful_msgs.append(successful_msg)
+                            else:
+                                warning_msg = ' Quantity not same  {0} {1} with booking:{2} , db:{3}'\
+                                            .format(tis_no_booking,style_booking,item_booking.get('quantity'),quantity_db)
+                                logger.warn(warning_msg)
+                                warning_msgs.append(warning_msg)
+                            #below delete the style in relative tis_no in order_db
+                            v1_db.pop(style_booking)
+                            if not v1_db:
+                                order_db.pop(tis_no_booking)
+
+                        else:#Single colour, compare each
+                            item_db=None
+                            index=None
+                            for i,e in enumerate(v2_db):
+                                if e.get('colour')==colour_booking:
+                                    item_db=e
+                                    index=i
+                            if not item_db:
+                                warning_msg = ' Not found colour {0} in {1}{2} in db'. \
+                                            format(colour_booking, style_booking, tis_no_booking)
+                                logger.warn(warning_msg)
+                                warning_msgs.append(warning_msg)
+                                continue
+                            #find the matched colour in db
+                            quantity_db=item_db.get('quantity')
+                            if quantity_db==item_booking.get('quantity'):
+                                successful_msg = ' Sucessfully compare {0} {1} {2} with quantity:{3}'.format(tis_no_booking, \
+                                                                                                    style_booking,colour_booking,
+                                                                                                    quantity_db)
+                                logger.info(successful_msg)
+                                successful_msgs.append(successful_msg)
+                            else:
+                                warning_msg = ' Quantity not same  {0} {1} {2} with booking:{3} , db:{4}' \
+                                            .format(tis_no_booking, style_booking,colour_booking, item_booking.get('quantity'),
+                                                    quantity_db)
+                                logger.warn(warning_msg)
+                                warning_msgs.append(warning_msg)
+                            #below delet the colour style in relative style,  tis_no in order_db
+                            del(v2_db[index])
+                            if not v2_db:
+                                v1_db.pop(style_booking)
+                                if not v1_db:
+                                    order_db.pop(tis_no_booking)
+
+
+            #check the leftover of the order_db which were not matched in order_booking
+            if order_db:
+                warning_msg = 'Below order in db not shown in booking'
+                logger.warn(warning_msg)
+                warning_msgs.append(warning_msg)
+
+                for tis_no,v1 in order_db.items():
+                    warning_msg = '  {0}-{1}'.format(tis_no,v1)
+                    logger.warn(warning_msg)
+                    warning_msgs.append(warning_msg)
+
+            else:
+                successful_msg = 'All order in db has been booked'
+                logger.info(successful_msg)
+                successful_msgs.append(successful_msg)
+
+            warn_str='\n'.join(warning_msgs)
+            successful_str='\n'.join(successful_msgs)
+            email_msg=successful_str+'\n'+warn_str
+            clipboard.write(email_msg)
+            qm=QMessageBox()
+            qm.question(self,'check booking','below checking result has copy to clipborad, you can paste to your email:{0}'.format(email_msg))
 
 
         except Exception as e:
-            logger.error('error when read shipment booking'.format(e))
+            logger.error('error when read shipment booking {0}'.format(e))
 
 
 
