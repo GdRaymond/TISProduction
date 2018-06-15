@@ -101,6 +101,7 @@ class TISMainWindow(QMainWindow):
         self.ui.comb_shipmenttool_supplier.currentTextChanged.connect(self.load_shipment_from_supplier)
         self.ui.btn_shipmenttool_getshipmentorderinfo.clicked.connect(self.shipment_tool_getorderinfo)
         self.ui.btn_shipmenttool_checkbooking.clicked.connect(self.check_shipment_booking)
+        self.ui.btn_shipmenttool_checktestreport.clicked.connect(self.check_shipment_testreport)
 
 
     def load_initial_data(self):
@@ -640,7 +641,7 @@ class TISMainWindow(QMainWindow):
         colours_selected=self.get_colour_checkbox_status()
         logger.debug(' colours seleted is {0}'.format(colours_selected))
         orders=Order.objects.filter(supplier=supplier,product__fabric__nickname=fabric,\
-                                    fabrictrim__colour_solid__in=colours_selected.keys(),shipment__eta__gt=datetime.date.today())
+                                    fabrictrim__colour_solid__in=colours_selected.keys(),shipment__instore__gt=datetime.date.today())
         logger.debug(' get check sample orders number: {0}'.format(len(orders)))
         for order in orders:
             self.append_samplecheck_one_order(order)
@@ -668,9 +669,9 @@ class TISMainWindow(QMainWindow):
         colours_selected=self.get_colour_checkbox_status()
         orders_checked=0
         email_msg='Regarding test report {0} - {1} {2}'.format(test_report,fabric,' '.join(colours_selected.keys()))
-        order_str='TIS18-SO'
-        style_str=''
-        comment_str=''
+        l_orders=[]
+        l_style=[]
+
         for i in range(self.ui.tableW_samplecheck_order.rowCount()):
             check_box=getattr(self.ui,'checkB_samplecheck_order_{0}'.format(i))
             if not check_box.isChecked():
@@ -679,8 +680,10 @@ class TISMainWindow(QMainWindow):
                 order_id=int(self.ui.tableW_samplecheck_order.item(i,14).text())
                 tis_no=self.ui.tableW_samplecheck_order.item(i,1).text()[-4:] #get last 4 digits after SO,
                 style=self.ui.tableW_samplecheck_order.item(i,2).text()
-                order_str='{0}{1} '.format(order_str,tis_no)
-                style_str='{0} {1}'.format(style_str,style)
+                if tis_no not in l_orders:
+                    l_orders.append(tis_no) #only get distince order NO.
+                if style not in l_style:
+                    l_style.append(style)
             except Exception as e:
                 logger.error(' error get order_id from tableW : {0}'.format(e))
             #colour=self.ui.tableW_samplecheck_order.item(i,3).text()
@@ -698,6 +701,9 @@ class TISMainWindow(QMainWindow):
             orders_checked+=1
         logger.debug(' finish save test report chech for {0} orders'.format(orders_checked))
         #below assemble the msg for email
+        order_str='TIS18-SO{0}'.format(' '.join(l_orders))
+        style_str=' '.join(l_style)
+        comment_str=''
         for k,v in colours_selected.items():
             comment_str += k
             if v=='A':
@@ -976,6 +982,23 @@ class TISMainWindow(QMainWindow):
 
         except Exception as e:
             logger.error('error when read shipment booking {0}'.format(e))
+
+    def check_shipment_testreport(self):
+        shipment_code=self.ui.comb_shipmenttool_shipment.currentText().split('/')[0].strip() #AW-JUN 18-1
+        if shipment_code:
+            try:
+                infoes=shipment_view.check_testreport_shipment(shipment_code)
+            except Exception as e:
+                logger.error(' error when check test report:{0}'.format(e))
+            shipment_no=shipment_code.split('-')[1][:3]+' '+shipment_code.split('-')[2] #AW-JUN 18-2  -> JUN 2
+            msg_email='Regarding shipment {0}, below fabric test report are outstanding, please provide asap\n{1}'.format(shipment_no,'\n'.join(infoes))
+            clipboard.write(msg_email)
+            qm=QMessageBox()
+            qm.question(self,'Outstanding test report','Below info has been write to clipboard, you can paste to your email:\n{0}'.format(msg_email))
+        else:
+            logger.warn('please select shipment')
+
+
 
 
 

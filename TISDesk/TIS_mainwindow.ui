@@ -419,6 +419,9 @@
          <height>23</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>get the order Instore Date later than today for selected colour</string>
+       </property>
        <property name="text">
         <string>CheckOrder</string>
        </property>
@@ -823,6 +826,22 @@
        </property>
        <property name="text">
         <string>CheckShipmentBooking</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_shipmenttool_checktestreport">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>60</y>
+         <width>121</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check outstanding test report for selected shipment, including no report and rejected report&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>CheckTestReport</string>
        </property>
       </widget>
      </widget>

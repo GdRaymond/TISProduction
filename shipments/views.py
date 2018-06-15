@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.views.generic import ListView
 import datetime,dateutil,calendar,os
 from TISProduction import tis_log
-from orders.models import Order
+from orders.models import Order,FabricTrim,SampleCheck
 from django.conf import settings
 from django.db.models import Q
 
@@ -183,7 +183,7 @@ def write_inspection_shipment(shipments):
 def get_shipment_order_info(shipment_code):
     infos=[]
     shipments=Shipment.objects.filter(code__iexact=shipment_code)
-    for shipment in shipments:
+    for shipment in shipments: #just in case for expansion to several shipment share similar code
         orders=shipment.order_set.all()
         if orders:
             clients=[]
@@ -201,6 +201,17 @@ def get_shipment_order_info(shipment_code):
         else:
             logger.warn('shipment {0} has no orders info'.format(shipment))
     return infos
+
+def check_testreport_shipment(shipment_code):
+    infoes=[]
+    sample_checks=SampleCheck.objects.filter(order__shipment__code=shipment_code,type='T',status='A')
+    fabric_trims=FabricTrim.objects.filter(order__shipment__code=shipment_code).exclude(samplecheck__in=sample_checks)
+    for fabric_trim in fabric_trims:
+        info='{0} / {1} / {2}'.format(fabric_trim.order.tis_no,fabric_trim.order.product.style_no,fabric_trim.colour_solid)
+        if info not in infoes:
+            logger.debug(' fabric_trim:{0}'.format(info))
+            infoes.append(info)
+    return infoes
 
 
 
