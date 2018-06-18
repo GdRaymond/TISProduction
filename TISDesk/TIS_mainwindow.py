@@ -216,6 +216,9 @@ class Ui_MainWindow(object):
         self.btn_shipmenttool_checktestreport = QtWidgets.QPushButton(self.groupBox_5)
         self.btn_shipmenttool_checktestreport.setGeometry(QtCore.QRect(280, 60, 121, 31))
         self.btn_shipmenttool_checktestreport.setObjectName("btn_shipmenttool_checktestreport")
+        self.btn_shipmenttool_checkdocument = QtWidgets.QPushButton(self.groupBox_5)
+        self.btn_shipmenttool_checkdocument.setGeometry(QtCore.QRect(40, 100, 121, 31))
+        self.btn_shipmenttool_checkdocument.setObjectName("btn_shipmenttool_checkdocument")
         self.tabShipment.addTab(self.tab_7, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -282,5 +285,7 @@ class Ui_MainWindow(object):
         self.btn_shipmenttool_checkbooking.setText(_translate("MainWindow", "CheckShipmentBooking"))
         self.btn_shipmenttool_checktestreport.setToolTip(_translate("MainWindow", "<html><head/><body><p>Check outstanding test report for selected shipment, including no report and rejected report</p></body></html>"))
         self.btn_shipmenttool_checktestreport.setText(_translate("MainWindow", "CheckTestReport"))
+        self.btn_shipmenttool_checkdocument.setToolTip(_translate("MainWindow", "Compare the booking spreadsheet with shipment order, copy difference to clipboard for email"))
+        self.btn_shipmenttool_checkdocument.setText(_translate("MainWindow", "CheckShipDocument"))
         self.tabShipment.setTabText(self.tabShipment.indexOf(self.tab_7), _translate("MainWindow", "Shipment"))
 

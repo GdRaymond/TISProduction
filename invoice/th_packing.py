@@ -2,6 +2,7 @@ import xdrlib,sys
 import xlrd
 #from save_db import save
 from TISProduction import tis_log
+from invoice.common_validate import validate_summary as validate_summary_common
 logger=tis_log.get_tis_logger()
 
 
@@ -23,7 +24,7 @@ The diction of packing_lis is as below:
 
 
 #if the cell given row&col is in the area of size title
-def is_size_title(current_row,current_col,row_size_head,left_col,right_col):
+def is_size_title(current_row,current_col,upper_row,left_col,right_col):
     if current_row==upper_row+1 and current_col>left_col and current_col<right_col:
         #print("&&&&now it is the size row , current row="+str(current_row))
         return 1
@@ -886,6 +887,10 @@ def validate_summary(packing_list={},file='test.xlsx',by_name="RM500BT(TIS16-SO3
     logger.debug('Start validate summary')
     #validate sumary on ratio and balance
     value_summary=packing_list.get('summary')
+    l_msg_success=[]
+    msg='\nStart verify {0} {1}'.format(file,by_name)
+    l_msg_success.append(msg)
+    l_msg_error=[]
     for colour in value_summary:     
         value_colour=value_summary.get(colour)
         
@@ -896,8 +901,10 @@ def validate_summary(packing_list={},file='test.xlsx',by_name="RM500BT(TIS16-SO3
             ratio=value_colour.get('Ratio').get('size_qty')
             balance=value_colour.get('Balance').get('size_qty')
         except Exception as err:
-            logger.error('--%s - %s - Ratio or balance can not find, error--%s'\
-                             %(file,by_name,err))
+            msg='--%s - %s - Ratio or balance can not find, error--%s'\
+                             %(file,by_name,err)
+            logger.error(msg)
+            l_msg_error.append(msg)
             continue
         balance_by_cal=0
         for size in ratio:
@@ -907,15 +914,21 @@ def validate_summary(packing_list={},file='test.xlsx',by_name="RM500BT(TIS16-SO3
             #logger.debug('size:%s--ratio:%s'%(size,ratio_value))
             if str(ratio_value).strip()!="" and ratio_value>0.05 \
                and str(balance_value).strip()!="" and balance_value>9:
-                logger.error('--%s - %s - Ratio warning at colour:%s size:%s - ratio: %s, balance:%s'\
-                             %(file,by_name,colour,size,ratio_value,balance_value))
+                msg='--%s - %s - Ratio warning at colour:%s size:%s - ratio: %s, balance:%s'\
+                             %(file,by_name,colour,size,ratio_value,balance_value)
+                logger.error(msg)
+                l_msg_error.append(msg)
                 all_correct=False
         if balance_by_cal!=value_colour.get('Balance').get('total'):
-            logger.error('--%s-%s - Balance total is not correct at colour: %s, in doc=%s, cal=%s'\
-                         %(file,by_name,colour,value_colour.get('Balance').get('total'),balance_by_cal))
+            msg='--%s-%s - Balance total is not correct at colour: %s, in doc=%s, cal=%s'\
+                         %(file,by_name,colour,value_colour.get('Balance').get('total'),balance_by_cal)
+            logger.error(msg)
+            l_msg_error.append(msg)
             all_correct=False
         if all_correct:
-            logger.debug('--The total balance is correct and  ratio for colour: %s is ok without exceeding 5%% and balance greater than 10pcs'%colour)
+            msg='--The total balance is correct and  ratio for colour: %s is ok without exceeding 5%% and balance greater than 10pcs'%colour
+            logger.debug(msg)
+            l_msg_success.append(msg)
         else:
             all_summary_correct=False
 
@@ -940,15 +953,19 @@ def validate_summary(packing_list={},file='test.xlsx',by_name="RM500BT(TIS16-SO3
             summary_total_qty+=actual_qty.get('total')
             actual_qty_size_qty=actual_qty.get('size_qty')
         except Exception as e:
-            logger.error('---%s - %s - Can not find Actual Qty name: %s'%(file,by_name,e))
+            msg='---%s - %s - Can not find Actual Qty name: %s'%(file,by_name,e)
+            logger.error(msg)
+            l_msg_error.append(msg)
             continue
         """
           if the colour name in detail not consistant with summary, error will occur
           for example, in LM16ZF214-SO3469, coulur in detail is INK, in summary is INK NAVY
         """
         if detail.get(colour) is None:
-            logger.error('---%s - %s - Can not find colour:%s in detail '\
-                             %(file,by_name,colour))
+            msg='---%s - %s - Can not find colour:%s in detail '\
+                             %(file,by_name,colour)
+            logger.error(msg)
+            l_msg_error.append()
             continue
         detail_size_qty=detail.get(colour).get('size_qty')
         #validate the actural qty , 1.1 - size from summary to detail
@@ -964,15 +981,19 @@ def validate_summary(packing_list={},file='test.xlsx',by_name="RM500BT(TIS16-SO3
                     if ((actual_qty_size_qty_value is None) and detail_size_qty.get(size)==0) or \
                        (actual_qty_size_qty_value==0 and (detail_size_qty.get(size) is None)):
                         continue
-                    logger.error('---%s - %s - Qty warning at colour:%s size:%s - summary: %s, detail:%s'\
-                             %(file,by_name,colour,size,actual_qty_size_qty_value,detail_size_qty.get(size)))
+                    msg='---%s - %s - Qty warning at colour:%s size:%s - summary: %s, detail:%s'\
+                             %(file,by_name,colour,size,actual_qty_size_qty_value,detail_size_qty.get(size))
+                    logger.error(msg+' Colour:sum->detai size:sum->detal')
+                    l_msg_error.append(msg)
                     all_correct=False
                     summary_correct=False
         
         #validate the actual qty total, comparing with calculation
         if actual_qty.get('total')!=total_by_cal:
-            logger.error('---%s - %s - Actual qty total warning at colour:%s  - in doc: %s, by calculation:%s'\
-                        %(file,by_name,colour,actual_qty.get('total'),total_by_cal))
+            msg='---%s - %s - Actual qty total warning at colour:%s  - in doc: %s, by calculation:%s'\
+                        %(file,by_name,colour,actual_qty.get('total'),total_by_cal)
+            logger.error(msg)
+            l_msg_error.append(msg)
 
         
         #validate the actural qty , 1.2 - size from detail to summary
@@ -983,15 +1004,22 @@ def validate_summary(packing_list={},file='test.xlsx',by_name="RM500BT(TIS16-SO3
                     if ((actual_qty_size_qty_value is None) and detail_size_qty.get(size)==0) or \
                        (actual_qty_size_qty_value==0 and (detail_size_qty.get(size) is None)):
                         continue
-                    logger.error('---%s - %s - Qty warning at colour:%s size:%s - detail: %s, summary:%s'\
-                             %(file,by_name,colour,size,detail_size_qty.get(size),actual_qty_size_qty_value))
+                    msg='---%s - %s - Qty warning at colour:%s size:%s - summary: %s, detail:%s'\
+                             %(file,by_name,colour,size,actual_qty_size_qty_value,detail_size_qty.get(size))
+                    logger.error(msg+' Colour:sum->detai size:detail->sum')
+                    if msg not in l_msg_error:
+                        l_msg_error.append(msg)
                     all_correct=False
                     summary_correct=False
 
         if all_correct:
-             logger.debug('---Correct: the quantity for colour:%s, summary-> detail '%colour)
+            msg='---Correct: the quantity for colour:%s, summary-> detail '%colour
+            logger.debug(msg)
+            l_msg_success.append(msg)
     if summary_correct:
-        logger.debug('--All Correct: the quantity colour summary-> detail ')
+        msg='--All Correct: the quantity colour summary-> detail '
+        logger.debug(msg)
+        l_msg_success.append(msg)
     else:
         all_summary_correct=False
         
@@ -1010,15 +1038,19 @@ def validate_summary(packing_list={},file='test.xlsx',by_name="RM500BT(TIS16-SO3
           for example, in LM16ZF214-SO3469, coulur in detail is INK, in summary is INK NAVY
         """
         if value_colour is None:
-            logger.error('---%s - %s - Can not find colour:%s in summary '\
-                             %(file,by_name,colour))
+            msg='---%s - %s - Can not find colour:%s in summary '\
+                             %(file,by_name,colour)
+            logger.error(msg)
+            l_msg_error.append(msg)
             continue
 
         try:
             actual_qty=value_colour.get('Actual Qty')
             actual_qty_size_qty=actual_qty.get('size_qty')
         except Exception as e:
-            logger.error('---%s-%s-Can not find Actural Qty name - %s'%(file,by_name,e))
+            msg='---%s-%s-Can not find Actural Qty name - %s'%(file,by_name,e)
+            logger.error(msg)
+            l_msg_error.append(msg)
             continue
         detail_size_qty=detail.get(colour).get('size_qty')
         #validate the actural qty , 2.1 - size from summary to detail
@@ -1029,8 +1061,11 @@ def validate_summary(packing_list={},file='test.xlsx',by_name="RM500BT(TIS16-SO3
                     if ((actual_qty_size_qty_value is None) and detail_size_qty.get(size)==0) or \
                        (actual_qty_size_qty_value==0 and (detail_size_qty.get(size) is None)):
                         continue
-                    logger.error('---%s - %s - Qty warning at colour:%s size:%s - summary: %s, detail:%s'\
-                             %(file,by_name,colour,size,actual_qty_size_qty_value,detail_size_qty.get(size)))
+                    msg='---%s - %s - Qty warning at colour:%s size:%s - summary: %s, detail:%s'\
+                             %(file,by_name,colour,size,actual_qty_size_qty_value,detail_size_qty.get(size))
+                    logger.error(msg+' Colour:detail->sum size:sum->detail')
+                    if msg not in l_msg_error:
+                        l_msg_error.append(msg)
                     all_correct=False
                     summary_correct=False
         
@@ -1042,42 +1077,57 @@ def validate_summary(packing_list={},file='test.xlsx',by_name="RM500BT(TIS16-SO3
                     if ((actual_qty_size_qty_value is None) and detail_size_qty.get(size)==0) or \
                        (actual_qty_size_qty_value==0 and (detail_size_qty.get(size) is None)):
                         continue
-                    logger.error('---%s - %s - Qty warning at colour:%s size:%s - detail: %s, summary:%s'\
-                             %(file,by_name,colour,size,detail_size_qty.get(size),actual_qty_size_qty_value))
+                    msg='---%s - %s - Qty warning at colour:%s size:%s - summary: %s, detail:%s'\
+                             %(file,by_name,colour,size,actual_qty_size_qty_value,detail_size_qty.get(size))
+                    logger.error(msg+' Colour:detail->sum size:detail->sum')
+                    if msg not in l_msg_error:
+                        l_msg_error.append(msg)
                     all_correct=False
                     summary_correct=False
 
         if all_correct:
-             logger.debug('---Correct: the quantity for colour:%s, detail-> summary '%colour)
+            msg='---Correct: the quantity for colour:%s, detail-> summary '%colour
+            logger.debug(msg)
+            l_msg_success.append(msg)
     if summary_correct:
-        logger.debug('--All Correct: the quantity colour detail-> summary ')
+        msg='--All Correct: the quantity colour detail-> summary '
+        logger.debug(msg)
+        l_msg_success.append(msg)
     else:
         all_summary_correct=False
         
     #validate total quantity in doc comparing with sum of each colour in summary
     logger.debug('-Start validate total quantity ')
     if packing_list.get('total_quantity')!=summary_total_qty:
-        logger.error('--%s - %s -Validate total quantity Wrong: in doc:%s - sum  in summary %s '\
-                     %(file,by_name,packing_list.get('total_quantity'),summary_total_qty))
+        msg='--%s - %s -Validate total quantity Wrong: in doc:%s - sum  in summary %s '\
+                     %(file,by_name,packing_list.get('total_quantity'),summary_total_qty)
+        logger.error(msg)
+        l_msg_error.append(msg)
         all_summary_correct=False
 
-    else:    
-        logger.debug('--Validate total quantity Correct')
+    else:
+        msg='--Validate total quantity Correct'
+        logger.debug(msg)
+        l_msg_success.append(msg)
 
     if all_summary_correct:
-        logger.debug('-All correct of summary')
+        msg='-All correct of summary'
+        logger.debug(msg)
+        l_msg_success.append(msg)
 
     #return all_summary_correct
-    return packing_list.get('total_carton')
+    result={'msg_success':l_msg_success,'msg_error':l_msg_error,'total_carton':packing_list.get('total_carton')}
+    return result
 
 """
 
 """
 def validate_packinglist_by_sheet(cell_list=[],filename='',sheetname='',save_db=False):
     packing_list=parse_packing_list(cell_list=cell_list,file=filename,by_name=sheetname)
-    result=validate_summary(packing_list=packing_list,file=filename,by_name=sheetname)
+    verify_result=validate_summary_common(packing_list=packing_list,file=filename,by_name=sheetname)
     #if save_db==True:
         #count=save(packing_list=packing_list,fty='TH',file=filename,by_name=sheetname)
+    result={'verify':verify_result,'packing_list':packing_list}
 
     return result
         

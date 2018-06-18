@@ -18,6 +18,7 @@ from PyQt5.QtSql import QSqlRelationalTableModel,QSqlRelation,QSqlRelationalDele
 from TISDesk.edit_dialog import Edit_dialog_shipment,Edit_Dialog_Order,Dialog_New_Shipment
 from core import fts_search
 from TISDesk import clipboard
+from invoice.inv_pack import check_shipment_document
 
 
 logger=tis_log.get_tis_logger()
@@ -102,6 +103,7 @@ class TISMainWindow(QMainWindow):
         self.ui.btn_shipmenttool_getshipmentorderinfo.clicked.connect(self.shipment_tool_getorderinfo)
         self.ui.btn_shipmenttool_checkbooking.clicked.connect(self.check_shipment_booking)
         self.ui.btn_shipmenttool_checktestreport.clicked.connect(self.check_shipment_testreport)
+        self.ui.btn_shipmenttool_checkdocument.clicked.connect(self.check_shipment_document)
 
 
     def load_initial_data(self):
@@ -998,7 +1000,23 @@ class TISMainWindow(QMainWindow):
         else:
             logger.warn('please select shipment')
 
+    def check_shipment_document(self):
+        shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
+        doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('C:\\Users\\rhe\\WebWork\\TISWork\\Invoice'))
+        result=check_shipment_document(shipment_code,doc_path)
+        if result:
+            for msg in result.get('msg_success'):
+                logger.info(msg)
 
+            l_msg_error=result.get('msg_error')
+            logger.error('There are below {0} errors: {0}'.format(len(l_msg_error)))
+            email_msg = 'Regarding packing list, please check below mistake or discrepancy \n'
+            for i, msg in enumerate(l_msg_error):
+                logger.error('{0}:{1}'.format(i, msg))
+                email_msg = '{0}{1}:{2}\n'.format(email_msg, i, msg)
+            clipboard.write(email_msg)
+            qm =QMessageBox()
+            qm.question(self,'Checking shipping document','Below verify errors have been writen to clipboard, you can paste to your email\n{0}'.format(email_msg))
 
 
 

@@ -844,6 +844,22 @@
         <string>CheckTestReport</string>
        </property>
       </widget>
+      <widget class="QPushButton" name="btn_shipmenttool_checkdocument">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>100</y>
+         <width>121</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>Compare the booking spreadsheet with shipment order, copy difference to clipboard for email</string>
+       </property>
+       <property name="text">
+        <string>CheckShipDocument</string>
+       </property>
+      </widget>
      </widget>
     </widget>
    </widget>
