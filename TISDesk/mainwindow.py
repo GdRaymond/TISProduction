@@ -1004,7 +1004,7 @@ class TISMainWindow(QMainWindow):
         shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
         doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('C:\\Users\\rhe\\WebWork\\TISWork\\Invoice'))
         result=check_shipment_document(shipment_code,doc_path)
-        if result:
+        if result.get('status')=='Finished':
             for msg in result.get('msg_success'):
                 logger.info(msg)
 
@@ -1017,6 +1017,10 @@ class TISMainWindow(QMainWindow):
             clipboard.write(email_msg)
             qm =QMessageBox()
             qm.question(self,'Checking shipping document','Below verify errors have been writen to clipboard, you can paste to your email\n{0}'.format(email_msg))
+        else:
+            qm =QMessageBox()
+            qm.question(self,'Checking shipping document',result.get('status'))
+
 
 
 
