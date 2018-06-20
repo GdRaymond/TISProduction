@@ -219,6 +219,9 @@ class Ui_MainWindow(object):
         self.btn_shipmenttool_checkdocument = QtWidgets.QPushButton(self.groupBox_5)
         self.btn_shipmenttool_checkdocument.setGeometry(QtCore.QRect(40, 100, 121, 31))
         self.btn_shipmenttool_checkdocument.setObjectName("btn_shipmenttool_checkdocument")
+        self.btn_shipmenttool_checkinvoice = QtWidgets.QPushButton(self.groupBox_5)
+        self.btn_shipmenttool_checkinvoice.setGeometry(QtCore.QRect(170, 100, 121, 31))
+        self.btn_shipmenttool_checkinvoice.setObjectName("btn_shipmenttool_checkinvoice")
         self.tabShipment.addTab(self.tab_7, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -287,5 +290,7 @@ class Ui_MainWindow(object):
         self.btn_shipmenttool_checktestreport.setText(_translate("MainWindow", "CheckTestReport"))
         self.btn_shipmenttool_checkdocument.setToolTip(_translate("MainWindow", "Compare the booking spreadsheet with shipment order, copy difference to clipboard for email"))
         self.btn_shipmenttool_checkdocument.setText(_translate("MainWindow", "CheckShipDocument"))
+        self.btn_shipmenttool_checkinvoice.setToolTip(_translate("MainWindow", "Compare the booking spreadsheet with shipment order, copy difference to clipboard for email"))
+        self.btn_shipmenttool_checkinvoice.setText(_translate("MainWindow", "CheckShipInvoice"))
         self.tabShipment.setTabText(self.tabShipment.indexOf(self.tab_7), _translate("MainWindow", "Shipment"))
 

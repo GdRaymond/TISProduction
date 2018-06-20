@@ -18,7 +18,7 @@ from PyQt5.QtSql import QSqlRelationalTableModel,QSqlRelation,QSqlRelationalDele
 from TISDesk.edit_dialog import Edit_dialog_shipment,Edit_Dialog_Order,Dialog_New_Shipment
 from core import fts_search
 from TISDesk import clipboard
-from invoice.inv_pack import check_shipment_document
+from invoice.inv_pack import check_shipment_document,check_shipment_invoice
 
 
 logger=tis_log.get_tis_logger()
@@ -104,6 +104,7 @@ class TISMainWindow(QMainWindow):
         self.ui.btn_shipmenttool_checkbooking.clicked.connect(self.check_shipment_booking)
         self.ui.btn_shipmenttool_checktestreport.clicked.connect(self.check_shipment_testreport)
         self.ui.btn_shipmenttool_checkdocument.clicked.connect(self.check_shipment_document)
+        self.ui.btn_shipmenttool_checkinvoice.clicked.connect(self.check_shipment_invoice)
 
 
     def load_initial_data(self):
@@ -1020,6 +1021,15 @@ class TISMainWindow(QMainWindow):
         else:
             qm =QMessageBox()
             qm.question(self,'Checking shipping document',result.get('status'))
+        l_msg_recap=result.get('msg_recap')
+        logger.info('Recap as below:\n')
+        for i,msg in enumerate(l_msg_recap):
+            logger.info('{0}:{1}'.format(i,msg))
+
+    def check_shipment_invoice(self):
+        shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
+        doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('C:\\Users\\rhe\\WebWork\\TISWork\\Invoice'))
+        result=check_shipment_invoice(shipment_code,doc_path)
 
 
 

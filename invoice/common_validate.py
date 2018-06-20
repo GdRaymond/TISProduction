@@ -1,4 +1,4 @@
-import os
+import os,re
 from TISProduction import tis_log
 logger=tis_log.get_tis_logger()
 
@@ -112,9 +112,12 @@ def validate_summary(packing_list={}, file='test.xlsx', by_name="RM500BT(TIS16-S
     # validate sumary on ratio and balance
     value_summary = packing_list.get('summary')
     l_msg_success = []
-    msg = '\nStart verify {0} {1}'.format(file, by_name)
+    msg = 'Start verify {0} {1}'.format(file, by_name)
     l_msg_success.append(msg)
     l_msg_error = []
+    l_msg_recap=[]
+    l_msg_recap.append('')
+    l_msg_recap.append(msg)
     for colour in value_summary:
         value_colour = value_summary.get(colour)
 
@@ -188,7 +191,7 @@ def validate_summary(packing_list={}, file='test.xlsx', by_name="RM500BT(TIS16-S
             msg = '---%s - %s - Can not find colour:%s in detail ' \
                   % (file, by_name, colour)
             logger.error(msg)
-            l_msg_error.append()
+            l_msg_error.append(msg)
             continue
         detail_size_qty = detail.get(colour).get('size_qty')
         # validate the actural qty , 1.1 - size from summary to detail
@@ -334,8 +337,214 @@ def validate_summary(packing_list={}, file='test.xlsx', by_name="RM500BT(TIS16-S
         msg = '-All correct of summary'
         logger.debug(msg)
         l_msg_success.append(msg)
+        l_msg_recap.append(msg)
+    else:
+        l_msg_recap.extend(l_msg_error)
+    try:
+        quantity_info='Order:{0} style:{1} {2:d} cartons total:{3:d}pcs'.format(packing_list.get('order_no'),packing_list.get('style_no'),
+                                                                      int(packing_list.get('total_carton')),int(packing_list.get('total_quantity')))
+        for colour_key,colour_value in packing_list.get('summary').items():
+            colour_quantity=int(colour_value.get('Actual Qty').get('total'))
+            quantity_info='{0} {1}:{2:d} '.format(quantity_info,colour_key,colour_quantity)
+        l_msg_recap.append(quantity_info)
+    except Exception as e:
+        logger.error('error when get quantity from packing list:{0}'.format(e))
+
 
     # return all_summary_correct
-    result = {'msg_success': l_msg_success, 'msg_error': l_msg_error, 'total_carton': packing_list.get('total_carton')}
+    result = {'msg_success': l_msg_success, 'msg_error': l_msg_error, 'msg_recap':l_msg_recap,'total_carton': packing_list.get('total_carton')}
     return result
 
+def search_field(cell_list,key_patterns,value_pattern):
+    logger.debug('start to search field {0} validated with {1}'.format(key_patterns,value_pattern))
+    nrows, ncols=len(cell_list),len(cell_list[0])
+    found=False
+    status='Finished'
+    start_row=None
+    field_col=None
+    for row in range(nrows):
+        for col in range(ncols):
+            current_cell=str(cell_list[row][col])
+            for key_pattern in key_patterns: #there may be different key in suppliers, lie quantity, qty
+                match=re.search(key_pattern,current_cell,re.I)
+                if match: #if some cell contain key_pattern('order'), search under cell of same colume , if contain value_pattern('TIS18-' then regard as order column
+                    for row_under in range(row,nrows):
+                        cell_under=str(cell_list[row_under][col])
+                        match_under=re.search(value_pattern,cell_under,re.I)
+                        if match_under:
+                            field_col=col
+                            found=True
+                            break
+                if found:
+                    break
+            if found:
+                break
+        if found:
+            start_row=row
+            break
+    else: #finish iteration, can't find then pop error
+        status='Can not find the colum No. of {0}'.format(key_patterns)
+        logger.error(status)
+    result={'status':status,'start_row':start_row,'field_col':field_col}
+    logger.info('get result {0}'.format(result))
+    return result
+
+def get_horizontal_field(cell_list,key_patterns,value_pattern):
+    logger.debug('start to search field {0} validated with {1}'.format(key_patterns,value_pattern))
+    nrows, ncols=len(cell_list),len(cell_list[0])
+    found=False
+    status='Finished'
+    field_row=None
+    field_col=None
+    content=None
+    for row in range(nrows):
+        for col in range(ncols):
+            current_cell=str(cell_list[row][col])
+            for key_pattern in key_patterns: #there may be different key for suppliers, like Invoice No. Inv No.
+                match=re.search(key_pattern,current_cell,re.I)
+                if match: #if some cell contain key_pattern('Inv No.'), search right side cell of same row , if contain value_pattern('AW-' then regard as order column
+                    for col_right in range(col+1,ncols):
+                        cell_under=str(cell_list[row][col_right])
+                        match_right=re.search(value_pattern,cell_under,re.I)
+                        if match_right:
+                            field_col=col
+                            content=cell_under
+                            found=True
+                            break
+                if found:
+                    break
+            if found:
+                break
+        if found:
+            field_row=row
+            break
+    else: #finish iteration, can't find then pop error
+        status='Can not find the colum No. of {0}'.format(key_patterns)
+        logger.error(status)
+    result={'status':status,'field_row':field_row,'field_col':field_col,'content':content}
+    logger.info('get result {0}'.format(result))
+    return result
+
+def get_total(cell_list,key_patterns,value_pattern,start_row,field_col):
+    logger.debug('start to search field {0} validated with {1}'.format(key_patterns,value_pattern))
+    nrows, ncols=len(cell_list),len(cell_list[0])
+    found=False
+    status='Finished'
+    field_row=None
+    content=None
+    for row in range(start_row,nrows):
+        for col in range(ncols):
+            current_cell=str(cell_list[row][col])
+            for key_pattern in key_patterns: #there may be different key for suppliers, like total, sum
+                match=re.search(key_pattern,current_cell,re.I)
+                if match: #if some cell contain key_pattern('Inv No.'), search right side cell of same row , if contain value_pattern('AW-' then regard as order column
+                    cell_field=str(cell_list[row][field_col])
+                    match_field=re.search(value_pattern,cell_field,re.I)
+                    if match_field:
+                        content=cell_field
+                        found=True
+                        break
+                if found:
+                    break
+            if found:
+                break
+        if found:
+            field_row=row
+            break
+    else: #finish iteration, can't find then pop error
+        status='Can not find the colum No. of {0}'.format(key_patterns)
+        logger.error(status)
+    result={'status':status,'field_row':field_row,'field_col':field_col,'content':content}
+    logger.info('get result {0}'.format(result))
+    return result
+
+
+def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier=''):
+    if not cell_list:
+        return
+    nrows = len(cell_list)
+    ncols = len(cell_list[0])
+    invoice = {}
+    invoice["detail"] = []
+    detail_seg = False
+    col_order_no = None
+    col_style=None
+    col_qty = None
+    col_price = None
+    col_amount = None
+    order_start_row=0
+    status='Finished'
+
+    #locate the coloumn and row Nnumber of order
+    key_patterns=[('order')]
+    value_pattern=('TIS\d{2}-')
+    field_location=search_field(cell_list,key_patterns,value_pattern)
+    order_start_row = field_location.get('start_row')
+
+    #locate the column and row number of quantity
+    key_patterns=[(r'\bqty'),(r'\bquantity'),(r'\bcount')]
+    value_pattern=('^((\d+)|(\d+\.\d+))$') #the cell will be read as float to str, like 410.0,so compatible with int and float
+    try:
+        pass
+        #field_location=search_field(cell_list,key_patterns,value_pattern)
+        col_qty=field_location.get('field_col')
+    except Exception as e:
+        logger.error('error when search field: {0}'.format(e))
+
+    #locate the column and row number of price
+    key_patterns=[(r'(unit)?\bprice')]
+    value_pattern=('^(\$?(\d+)|(\d+\.\d+))$') #some with $ , some without
+    try:
+        pass
+        #field_location=search_field(cell_list,key_patterns,value_pattern)
+    except Exception as e:
+        logger.error('error when search field: {0}'.format(e))
+
+    #locate the column and row number of amount
+    key_patterns=[(r'\bamount'),(r'\btotal value')]
+    value_pattern=('^(\$?(\d+)|(\d+\.\d+))$') #some with $ , some without
+    try:
+        #pass
+        field_location=search_field(cell_list,key_patterns,value_pattern)
+        col_amount=field_location.get('field_col')
+    except Exception as e:
+        logger.error('error when search field: {0}'.format(e))
+
+    #fetch the invoice No.
+    key_patterns=[(r'invoice no'),('inv no')]
+    value_pattern=('\w+')
+    try:
+        pass
+        #invoice_no=get_horizontal_field(cell_list,key_patterns,value_pattern)
+    except Exception as e:
+        logger.error('error when search field: {0}'.format(e))
+
+    #fetch the invoice date.
+    key_patterns=[(r'date'),]
+    value_pattern=('\w+')
+    try:
+        pass
+        #invoice_date=get_horizontal_field(cell_list,key_patterns,value_pattern)
+    except Exception as e:
+        logger.error('error when search field: {0}'.format(e))
+
+
+    #fetch the total quantity.
+    key_patterns=[(r'total')]
+    value_pattern = ('^((\d+)|(\d+\.\d+))$')  # the cell will be read as float to str, like 410.0,so compatible with int and float
+    try:
+        pass
+        #total_quantity=get_total(cell_list,key_patterns,value_pattern,order_start_row,col_qty)
+    except Exception as e:
+        logger.error('error when search field: {0}'.format(e))
+
+    #fetch the total amount.
+    key_patterns=[(r'total')]
+    value_pattern=('^\$?(USD)?((\d+)|(\d+\.\d+))$') #some with $ , some without
+    try:
+        #pass
+        total_amount=get_total(cell_list,key_patterns,value_pattern,order_start_row,col_amount)
+    except Exception as e:
+        logger.error('error when search field: {0}'.format(e))
+
+    return
