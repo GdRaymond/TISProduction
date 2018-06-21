@@ -477,16 +477,30 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
 
     #locate the coloumn and row Nnumber of order
     key_patterns=[('order')]
-    value_pattern=('TIS\d{2}-')
-    field_location=search_field(cell_list,key_patterns,value_pattern)
+    value_pattern_order=('(TIS\d{2}-SO\d{4}\w?)') #TIS18-SO1234a
+    field_location=search_field(cell_list,key_patterns,value_pattern_order)
     order_start_row = field_location.get('start_row')
+    col_order_no=field_location.get('field_col')
+
+    #locate the coloumn and row Nnumber of style
+    key_patterns=[('style no')]
+    value_pattern=('\w+')
+    field_location=search_field(cell_list,key_patterns,value_pattern)
+    col_style=field_location.get('field_col')
+
+    #locate the coloumn and row Nnumber of clour, only Tanhoo has the colour
+    key_patterns=[('colour')]
+    value_pattern=('\w+')
+    field_location=search_field(cell_list,key_patterns,value_pattern)
+    col_colour=field_location.get('field_col')
+
 
     #locate the column and row number of quantity
     key_patterns=[(r'\bqty'),(r'\bquantity'),(r'\bcount')]
     value_pattern=('^((\d+)|(\d+\.\d+))$') #the cell will be read as float to str, like 410.0,so compatible with int and float
     try:
-        pass
-        #field_location=search_field(cell_list,key_patterns,value_pattern)
+        #pass
+        field_location=search_field(cell_list,key_patterns,value_pattern)
         col_qty=field_location.get('field_col')
     except Exception as e:
         logger.error('error when search field: {0}'.format(e))
@@ -509,6 +523,21 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
         col_amount=field_location.get('field_col')
     except Exception as e:
         logger.error('error when search field: {0}'.format(e))
+
+    #below iterate the line of order to get order style colour
+    l_detail=[] #[{'tis_no':,'style':,'colour':,'quantity':,'price':,'amount':},{}]
+    for row in range(order_start_row,nrows):
+        content=cell_list[row][col_order_no]
+        match=re.search(value_pattern_order,content,re.I)
+        if not match:
+            continue
+        detail_info={}
+        tis_no=match.group(1)
+        detail_info['tis_no']=tis_no
+        l_detail.append(detail_info)
+        if not col_style: # For Auwin and Jinfeng , the style No. is following the tis no with / or , TIS18-SO1234/RM1004
+            pass
+    logger.debug('get l_detail={0}'.format(l_detail))
 
     #fetch the invoice No.
     key_patterns=[(r'invoice no'),('inv no')]

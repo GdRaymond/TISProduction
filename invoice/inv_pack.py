@@ -79,11 +79,11 @@ def check_shipment_document(shipment_code,doc_path,save_db=None):
                 logger.warn(status)
                 return {'status':status}
 
-            if total_cartons:
-                logger.info('--Correct, total carton=')
-                logger.info(total_cartons)
         logger.info('-Finish file, below success')
         result={'status':status,'total_cartons':total_cartons,'msg_success':l_msg_success,'msg_error':l_msg_error,'msg_recap':l_msg_recap}
+        if total_cartons:
+            logger.info('--Correct, total carton=')
+            logger.info(total_cartons)
         return result
 
 def check_shipment_invoice(shipment_code,doc_path,save_db=None):
