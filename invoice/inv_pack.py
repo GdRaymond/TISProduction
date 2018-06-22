@@ -49,7 +49,7 @@ def check_shipment_document(shipment_code,doc_path,save_db=None):
             logger.warn('please choose shipment code first')
             return
         supplier=shipment_code.split('-')[0]
-        if supplier=='jf':
+        if supplier.lower()=='jf':
             excel_content=read_excel_file(file,'宁波金丰进出口有限公司')
         else:
             excel_content=read_excel_file(file)
@@ -117,11 +117,15 @@ def check_shipment_invoice(shipment_code,doc_path,save_db=None):
         l_msg_recap=[]
         #logger.debug('sheets={0}'.format(excel_content.get('sheets')))
         for sheetname in sorted([each for each in excel_content.get('sheets')]):
-            #logger.info('-Start to check the sheet %s'%sheetname)
+            logger.info('-Start to check the sheet %s'%sheetname)
+            logger.info('============{0} {1}====================='.format(file,sheetname))
             if supplier in ['AW','TH','JF','ST','LT','EL']:
-                result_validate =parse_invoice(cell_list=excel_content.get('sheets').get(sheetname), \
+                try:
+                    result_validate =parse_invoice(cell_list=excel_content.get('sheets').get(sheetname), \
                                                     filename=excel_content.get('filename'), \
                                                     sheetname=sheetname,save_db=save_db,supplier=supplier)
+                except Exception as e:
+                    logger.error('error when parse_invoice {0} :{1}'.format(sheetname,e))
     result={'status':status}
     return result
 

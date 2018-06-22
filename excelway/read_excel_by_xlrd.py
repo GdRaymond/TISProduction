@@ -1,4 +1,3 @@
-import xdrlib,sys
 import xlrd
 from TISProduction import tis_log
 
@@ -69,7 +68,7 @@ def excel_read_everycell(file='test.xlsx',by_name=""):
  read one  excel file and return the content of whole file
  return excel_content={'filename':, 'sheets':{'-sheetname':[list of cell],}}
 """
-def read_excel_file(filename='test.xlsx'):
+def read_excel_file(filename='test.xlsx',split_title=''):
     excel_content={}
     file_splitter='\\'
     if '\\' not in filename:
@@ -84,6 +83,9 @@ def read_excel_file(filename='test.xlsx'):
         table=data.sheet_by_name(sheet_name)
         nrows=table.nrows
         ncols=table.ncols
+        if nrows==0:
+            logger.debug('-- has %s rows %s columns, skip this sheet'%(nrows,ncols))
+            continue
         cell_list=[]
         for rownum in range(nrows):
             row=table.row_values(rownum)
@@ -93,6 +95,29 @@ def read_excel_file(filename='test.xlsx'):
                     cell_list[rownum].append(row[colnum])
         excel_content['sheets'][sheet_name]=cell_list
         logger.debug('--read %s rows , %s coloums'%(nrows,ncols))
-    return excel_content
+
+    if split_title=='': #except Jinfeng
+        return excel_content
+    else: #Jinfeng put all packing list into one sheet, need split_title to divide
+        new_excel_content={'filename':excel_content.get('filename'),'sheets':{}}
+        for sheet_name in excel_content.get('sheets'):
+            #logger.debug('sheet_name=%s'%sheet_name)
+            if str(sheet_name).strip().upper()=='P014806': #Jinfen's 1st sheet no useful
+                continue
+            origin_sheet=excel_content.get('sheets').get(sheet_name)
+            sheet_count=0
+            new_sheet_name = '{0}-{1}'.format(sheet_name, str(sheet_count))
+            for rownum in range(len(origin_sheet)):
+                current_row=origin_sheet[rownum]
+                #logger.debug('-current_row is %s'%current_row)
+                if str(split_title).strip().upper() in [str(cell).strip().upper() for cell in current_row]:
+                    sheet_count+=1
+                    new_sheet_name='{0}-{1}'.format(sheet_name,str(sheet_count))
+                    new_excel_content['sheets'][new_sheet_name]=[] #from 21.06.2018,Jinfeng change packing list format, different order No in different sheet, but may containe different style in one sheet as before for QPS POLO
+                    #logger.debug('-sheet_count=%s, new_excel_content=%s'%(sheet_count,new_excel_content))
+                new_excel_content['sheets'][new_sheet_name].append(current_row)
+        return new_excel_content
+                
+    
         
 

@@ -373,6 +373,9 @@ def search_field(cell_list,key_patterns,value_pattern):
                         match_under=re.search(value_pattern,cell_under,re.I)
                         if match_under:
                             field_col=col
+                            if field_col == 0:
+                                logger.warn('!!!Maybe not correct')
+
                             found=True
                             break
                 if found:
@@ -460,8 +463,12 @@ def get_total(cell_list,key_patterns,value_pattern,start_row,field_col):
 
 
 def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier=''):
+    status='Finished'
+    result_validate={'status':status}
     if not cell_list:
-        return
+        status = 'Regarding sheet: {0} ,Can not read this sheet or sheet is blank'.format(sheetname)
+        result_validate = {'status': status}
+        return result_validate
     nrows = len(cell_list)
     ncols = len(cell_list[0])
     invoice = {}
@@ -477,19 +484,27 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
 
     #locate the coloumn and row Nnumber of order
     key_patterns=[('order')]
-    value_pattern_order=('(TIS\d{2}-SO\d{4}\w?)') #TIS18-SO1234a
+    value_pattern_order=('(TIS\d{2}-S[0O]\d{4}\w?)') #TIS18-SO1234a
     field_location=search_field(cell_list,key_patterns,value_pattern_order)
     order_start_row = field_location.get('start_row')
     col_order_no=field_location.get('field_col')
+    if not order_start_row or not col_order_no:
+        status = 'Can not locate the order NO., please check if the title contain wording "order"'
+        result_validate = {'status': status}
+        return result_validate
 
     #locate the coloumn and row Nnumber of style
-    key_patterns=[('style no')]
+    key_patterns=[('style no\.?[^:]')]
     value_pattern=('\w+')
     field_location=search_field(cell_list,key_patterns,value_pattern)
     col_style=field_location.get('field_col')
+    if not col_style:
+        status = 'Can not locate the style No., please check if the title contain wording "style no"'
+        result_validate = {'status': status}
+        return result_validate
 
     #locate the coloumn and row Nnumber of clour, only Tanhoo has the colour
-    key_patterns=[('colour')]
+    key_patterns=[('color')]
     value_pattern=('\w+')
     field_location=search_field(cell_list,key_patterns,value_pattern)
     col_colour=field_location.get('field_col')
@@ -504,6 +519,10 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
         col_qty=field_location.get('field_col')
     except Exception as e:
         logger.error('error when search field: {0}'.format(e))
+    if not col_qty:
+        status = 'Can not locate the quantity, please check if the title contain wording "qty" or "quantity" or "count"'
+        result_validate = {'status': status}
+        return result_validate
 
     #locate the column and row number of price
     key_patterns=[(r'(unit)?\bprice')]
@@ -511,8 +530,14 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
     try:
         pass
         #field_location=search_field(cell_list,key_patterns,value_pattern)
+        col_price=field_location.get('field_col')
     except Exception as e:
         logger.error('error when search field: {0}'.format(e))
+    if not col_price:
+        status = 'Can not locate the price, please check if the title contain wording "price"'
+        result_validate = {'status': status}
+        return result_validate
+
 
     #locate the column and row number of amount
     key_patterns=[(r'\bamount'),(r'\btotal value')]
@@ -523,17 +548,25 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
         col_amount=field_location.get('field_col')
     except Exception as e:
         logger.error('error when search field: {0}'.format(e))
+    if not col_amount:
+        status = 'Can not locate the amount of each order, please check if the title contain wording "amount" or "total value"'
+        result_validate = {'status': status}
+        return result_validate
+
 
     #below iterate the line of order to get order style colour
     l_detail=[] #[{'tis_no':,'style':,'colour':,'quantity':,'price':,'amount':},{}]
     for row in range(order_start_row,nrows):
-        content=cell_list[row][col_order_no]
+        #get order NO.
+        content=str(cell_list[row][col_order_no])
         match=re.search(value_pattern_order,content,re.I)
         if not match:
             continue
         detail_info={}
         tis_no=match.group(1)
         detail_info['tis_no']=tis_no
+
+        #get style No.
         l_detail.append(detail_info)
         if not col_style: # For Auwin and Jinfeng , the style No. is following the tis no with / or , TIS18-SO1234/RM1004
             pass
