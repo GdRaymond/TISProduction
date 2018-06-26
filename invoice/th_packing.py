@@ -17,8 +17,8 @@ The diction of packing_lis is as below:
                           }
                           ...
             }
- 'total_quantity':,'total_carton':,'total_gw':,'total_nw':,'total_volume':,'style_no':,'style_description':,
- 'invoice_no':,'date':,'order_no':
+ 'total_quantity':,'total_carton':,'total_gw':,'total_nw':,'total_volume':,'Style':,'style_description':,
+ 'invoice_no':,'date':,'TISNo':
 }
 """
 
@@ -361,7 +361,7 @@ def parse_packing_list_by_TIS(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS
             elif str(current_cell).strip()=="Style No.":
                 for col in range(colnum+1,ncols-1):
                     if str(current_row[col]).strip()!="":
-                        packing_list["style_no"]=str(current_row[col]).strip()
+                        packing_list["Style"]=str(current_row[col]).strip()
                         break
             elif str(current_cell).strip()=="Description":
                 for col in range(colnum+1,ncols-1):
@@ -386,11 +386,11 @@ def parse_packing_list_by_TIS(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS
             elif str(current_cell).strip()=="Order No.":
                 for col in range(colnum+1,ncols-1):
                     if str(current_row[col]).strip()!="":
-                        packing_list["order_no"]=str(current_row[col]).strip()
+                        packing_list["TISNo"]=str(current_row[col]).strip()
                         break
 
-    print ('invoice_date=%s,order=%s,style=%s,qty=%s'%(packing_list.get('date'),packing_list.get('order_no')\
-                                                       ,packing_list.get('style_no'),packing_list.get('total_quantity')))
+    print ('invoice_date=%s,order=%s,style=%s,qty=%s'%(packing_list.get('date'),packing_list.get('TISNo')\
+                                                       ,packing_list.get('Style'),packing_list.get('total_quantity')))
     return packing_list
 
 def parse_packing_list(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS16-SO3466)"):
@@ -735,12 +735,12 @@ def parse_packing_list(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS16-SO34
                 if str(cell_list[rownum-1][colnum]).strip()=='':#the value of style No. will be in merged cell with up cell
                     for col in range(colnum+1,colnum+5):
                         if str(cell_list[rownum-1][col]).strip()!="":
-                            packing_list["style_no"]=str(cell_list[rownum-1][col]).strip()
+                            packing_list["Style"]=str(cell_list[rownum-1][col]).strip()
                             break
-                if packing_list.get("style_no") is None:
+                if packing_list.get("Style") is None:
                     for col in range(colnum+1,colnum+5):
                         if str(current_row[col]).strip()!="":
-                            packing_list["style_no"]=str(current_row[col]).strip()
+                            packing_list["Style"]=str(current_row[col]).strip()
                             break
 
             elif str_contain(str(current_cell),["DESCRIPTION"]):
@@ -774,17 +774,17 @@ def parse_packing_list(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS16-SO34
                 if str(cell_list[rownum-1][colnum]).strip()=='':#the value of style No. will be in merged cell with up cell
                     for col in range(colnum+1,colnum+5):
                         if str(cell_list[rownum-1][col]).strip()!="":
-                            packing_list["order_no"]=str(cell_list[rownum-1][col]).strip()
+                            packing_list["TISNo"]=str(cell_list[rownum-1][col]).strip()
                             break
-                if packing_list.get("order_no") is None:
+                if packing_list.get("TISNo") is None:
                     for col in range(colnum+1,colnum+5):
                         if str(current_row[col]).strip()!="":
-                            packing_list["order_no"]=str(current_row[col]).strip()
+                            packing_list["TISNo"]=str(current_row[col]).strip()
                             break
 
     #print(packing_list)
-    print ('invoice_date=%s,order=%s,style=%s,qty=%s'%(packing_list.get('date'),packing_list.get('order_no')\
-                                                       ,packing_list.get('style_no'),packing_list.get('total_quantity')))
+    print ('invoice_date=%s,order=%s,style=%s,qty=%s'%(packing_list.get('date'),packing_list.get('TISNo')\
+                                                       ,packing_list.get('Style'),packing_list.get('total_quantity')))
     return packing_list
 
 """from detail to calculate the summary

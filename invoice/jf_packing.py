@@ -16,8 +16,8 @@ The diction of packing_lis is as below:
                           }
                           ...
             }
- 'total_quantity':,'total_carton':,'total_gw':,'total_nw':,'total_volume':,'style_no':,'style_description':,
- 'invoice_no':,'date':,'order_no':
+ 'total_quantity':,'total_carton':,'total_gw':,'total_nw':,'total_volume':,'Style':,'style_description':,
+ 'invoice_no':,'date':,'TISNo':
 }
 """
 
@@ -355,9 +355,9 @@ def parse_packing_list(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS16-SO34
                 
             elif (re.match(r'(.*)(TIS1\d-SO\d{4})(.*)',str(current_cell).strip())) is not None:
                 match=re.match(r'(.*)(TIS1\d-SO\d{4})(.*)',str(current_cell).strip())
-                packing_list["style_no"]=str(match.group(1)).replace('/','').replace('\\','').strip()
+                packing_list["Style"]=str(match.group(1)).replace('/','').replace('\\','').strip()
                 packing_list["style_description"]=str(match.group(3)).strip()
-                packing_list["order_no"]=str(match.group(2)).strip()
+                packing_list["TISNo"]=str(match.group(2)).strip()
                 
             elif (re.match(r'(INVOICE NO.)(.*)',str(current_cell).strip())) is not None:
                 match=re.match(r'(INVOICE NO.)(.*)',str(current_cell).strip())
@@ -372,8 +372,8 @@ def parse_packing_list(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS16-SO34
                     packing_list["date"]=match.group(2).strip()
 
 #    print(packing_list)
-    print ('invoice_date=%s,order=%s,style=%s,qty=%s'%(packing_list.get('date'),packing_list.get('order_no')\
-                                                       ,packing_list.get('style_no'),packing_list.get('total_quantity')))
+    print ('invoice_date=%s,order=%s,style=%s,qty=%s'%(packing_list.get('date'),packing_list.get('TISNo')\
+                                                       ,packing_list.get('Style'),packing_list.get('total_quantity')))
     return packing_list
 
 """from detail to calculate the summary

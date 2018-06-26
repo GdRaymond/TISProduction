@@ -231,7 +231,7 @@ class TIS_Excel():
             if (progress % 50)==0:
                 logger.debug('processing to -{0} for new key {1}'.format(progress, new_key))
             #logger.debug('new_key={0}'.format(new_key))
-            if is_valid(new_key):
+            if is_valid is None or is_valid(new_key):
                 del item_dict[key]
                 new_dict[new_key].append(item_dict)
                 #logger.debug('new_dict={}'.format(new_dict.get(new_key,'Faile')))
@@ -255,7 +255,10 @@ class TIS_Excel():
         else:
             return True
 
-    def consolidate_order(self,origin_list):
+    #def consolidate_order(self,origin_list):
+    @staticmethod
+    def consolidate_order(origin_list):
+
         '''
         consolidate the order list of dict,
         step 1: consolidate by the TISNo, get a dict in which the value is list of dict.

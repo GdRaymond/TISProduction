@@ -14,8 +14,8 @@ The diction of packing_lis is as below:
                           }
                           ...
             }
- 'total_quantity':,'total_carton':,'total_gw':,'total_nw':,'total_volume':,'style_no':,'style_description':,
- 'invoice_no':,'date':,'order_no':
+ 'total_quantity':,'total_carton':,'total_gw':,'total_nw':,'total_volume':,'Style':,'style_description':,
+ 'invoice_no':,'date':,'TISNo':
 }
 """
 
@@ -319,7 +319,7 @@ def parse_packing_list(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS16-SO34
                 packing_list["total_gw"]=str(current_cell).strip().upper()[5:len(str(current_cell).strip())-3]
                 
             elif str(current_cell).strip().upper().startswith("STYLE"):
-                packing_list["style_no"]=str(current_cell).split(':')[1].strip()
+                packing_list["Style"]=str(current_cell).split(':')[1].strip()
                         
             elif str(current_cell).strip()=="Description":
                 packing_list["style_description"]=str(current_row[col]).strip()
@@ -336,11 +336,11 @@ def parse_packing_list(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS16-SO34
                         packing_list["date"]=xlrd.xldate.xldate_as_datetime(current_row[col],0)
                         break
             elif str(current_cell).strip().startswith("ORDER:"):
-                packing_list["order_no"]=str(current_cell).split(':')[1].strip()
+                packing_list["TISNo"]=str(current_cell).split(':')[1].strip()
 
     #print(packing_list)
-    print ('invoice_date=%s,order=%s,style=%s,qty=%s'%(packing_list.get('date'),packing_list.get('order_no')\
-                                                       ,packing_list.get('style_no'),packing_list.get('total_quantity')))
+    print ('invoice_date=%s,order=%s,style=%s,qty=%s'%(packing_list.get('date'),packing_list.get('TISNo')\
+                                                       ,packing_list.get('Style'),packing_list.get('total_quantity')))
     return packing_list
 
 """from detail to calculate the summary

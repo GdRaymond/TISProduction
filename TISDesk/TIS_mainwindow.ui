@@ -799,7 +799,7 @@
       <widget class="QPushButton" name="btn_shipmenttool_getshipmentorderinfo">
        <property name="geometry">
         <rect>
-         <x>40</x>
+         <x>20</x>
          <y>60</y>
          <width>81</width>
          <height>31</height>
@@ -809,7 +809,7 @@
         <string>Get the shipment order No. container and ETD , copy to clipboard for email paste</string>
        </property>
        <property name="text">
-        <string>GetOrderIno</string>
+        <string>Get OrderIno</string>
        </property>
       </widget>
       <widget class="QPushButton" name="btn_shipmenttool_checkbooking">
@@ -817,7 +817,7 @@
         <rect>
          <x>140</x>
          <y>60</y>
-         <width>121</width>
+         <width>131</width>
          <height>31</height>
         </rect>
        </property>
@@ -825,13 +825,13 @@
         <string>Compare the booking spreadsheet with shipment order, copy difference to clipboard for email</string>
        </property>
        <property name="text">
-        <string>CheckShipmentBooking</string>
+        <string>Check Shipment Booking</string>
        </property>
       </widget>
       <widget class="QPushButton" name="btn_shipmenttool_checktestreport">
        <property name="geometry">
         <rect>
-         <x>280</x>
+         <x>320</x>
          <y>60</y>
          <width>121</width>
          <height>31</height>
@@ -841,13 +841,13 @@
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check outstanding test report for selected shipment, including no report and rejected report&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="text">
-        <string>CheckTestReport</string>
+        <string>Check TestReport</string>
        </property>
       </widget>
       <widget class="QPushButton" name="btn_shipmenttool_checkdocument">
        <property name="geometry">
         <rect>
-         <x>40</x>
+         <x>320</x>
          <y>100</y>
          <width>121</width>
          <height>31</height>
@@ -857,7 +857,7 @@
         <string>Compare the booking spreadsheet with shipment order, copy difference to clipboard for email</string>
        </property>
        <property name="text">
-        <string>CheckShipDocument</string>
+        <string>Check ShipDocument</string>
        </property>
       </widget>
       <widget class="QPushButton" name="btn_shipmenttool_checkinvoice">
@@ -873,7 +873,23 @@
         <string>Compare the booking spreadsheet with shipment order, copy difference to clipboard for email</string>
        </property>
        <property name="text">
-        <string>CheckShipInvoice</string>
+        <string>Check Invoice Only</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btn_shipmenttool_checkpackinglist">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>100</y>
+         <width>121</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>Compare the booking spreadsheet with shipment order, copy difference to clipboard for email</string>
+       </property>
+       <property name="text">
+        <string>Check PackingList Only</string>
        </property>
       </widget>
      </widget>

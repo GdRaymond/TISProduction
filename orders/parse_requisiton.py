@@ -43,9 +43,14 @@ def read_eachline(cell_list=[], filename='', sheetname=''):
     nrows = len(cell_list)
     ncols = len(cell_list[0])
     for rownum in range(1, nrows):
+        if rownum==10:
+            logger.debug('parse row {0}'.format(rownum))
+            pass
         # read each cell required
         current_row = cell_list[rownum]
         code = current_row[0]
+        if not code:
+            continue #2018-06-26 upgrade to get requisition wholly, there will be blank line
         description = current_row[1]
         quantity = current_row[3]
         price = current_row[4]
@@ -105,7 +110,7 @@ def read_eachline(cell_list=[], filename='', sheetname=''):
                 colour_value[colour][size] = quantity
             style_value['colour'] = colour_value
         order[style] = style_value
-    #print(order)
+    logger.debug('parsed order:{0}'.format(order))
 
     return order
 
@@ -220,7 +225,7 @@ def save_to_csv(order_qty,etd_dict,file_path):
                 size_value=colour_value.get(size)
                 if size_value is not None:
                     size_content.append(size_value)
-                    total_qty+=size_value
+                    total_qty+=int(float(size_value))
                 else:
                     size_content.append('')
             logger.debug('size_content is {0}'.format(size_content))

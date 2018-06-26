@@ -1,5 +1,6 @@
 import os,re
 from TISProduction import tis_log
+from excelway.tis_excel import TIS_Excel
 logger=tis_log.get_tis_logger()
 
 
@@ -364,12 +365,12 @@ def search_field(cell_list,key_patterns,value_pattern):
     field_col=None
     for row in range(nrows):
         for col in range(ncols):
-            current_cell=str(cell_list[row][col])
+            current_cell=str(cell_list[row][col]).strip()
             for key_pattern in key_patterns: #there may be different key in suppliers, lie quantity, qty
                 match=re.search(key_pattern,current_cell,re.I)
                 if match: #if some cell contain key_pattern('order'), search under cell of same colume , if contain value_pattern('TIS18-' then regard as order column
                     for row_under in range(row,nrows):
-                        cell_under=str(cell_list[row_under][col])
+                        cell_under=str(cell_list[row_under][col]).strip()
                         match_under=re.search(value_pattern,cell_under,re.I)
                         if match_under:
                             field_col=col
@@ -461,13 +462,38 @@ def get_total(cell_list,key_patterns,value_pattern,start_row,field_col):
     logger.info('get result {0}'.format(result))
     return result
 
+def get_cell_range_content(cell_list,row,col,updown):
+    '''
+    try to get the cell in the range of row, row-1 , row+1
+    :param cell_list:
+    :param row:
+    :param col:
+    :param range:
+    :return:
+    '''
+    result=str(cell_list[row][col]).strip()
+    for i in range(1,updown+1):
+        if not result and row-i>=0:
+            result=str(cell_list[row-i][col]).strip()
+        if not result:
+            result=str(cell_list[row+1][col]).strip()
+    return result
+
+
 
 def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier=''):
     status='Finished'
-    result_validate={'status':status}
+    l_msg_success=[]
+    l_msg_error=[]
+    l_msg_recap=[]
+    result_validate={'status':status,'msg_success':l_msg_success,'msg_error':l_msg_error,'msg_recap':l_msg_recap}
+    msg_success='=============Start to verify invoice {0} sheet {1}================'.format(filename,sheetname)
+    l_msg_recap.append(msg_success)
     if not cell_list:
-        status = 'Regarding sheet: {0} ,Can not read this sheet or sheet is blank'.format(sheetname)
-        result_validate = {'status': status}
+        msg_error = 'Regarding sheet: {0} ,Can not read this sheet or sheet is blank'.format(sheetname)
+        l_msg_error.append(msg_error)
+        l_msg_recap.append(msg_error)
+        result_validate = {'status': 'Failed','msg_error':l_msg_error,'msg_recap':l_msg_recap}
         return result_validate
     nrows = len(cell_list)
     ncols = len(cell_list[0])
@@ -489,19 +515,22 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
     order_start_row = field_location.get('start_row')
     col_order_no=field_location.get('field_col')
     if not order_start_row or not col_order_no:
-        status = 'Can not locate the order NO., please check if the title contain wording "order"'
-        result_validate = {'status': status}
+        msg_error = 'Can not locate the order NO., please check if the title contain wording "order"'
+        l_msg_error.append(msg_error)
+        l_msg_recap.append(msg_error)
+        result_validate = {'status': 'Failed', 'msg_error': l_msg_error, 'msg_recap': l_msg_recap,
+                           'msg_success': l_msg_success}
         return result_validate
 
     #locate the coloumn and row Nnumber of style
-    key_patterns=[('style no\.?[^:]')]
+    key_patterns=[(r'style no\.?$')]
     value_pattern=('\w+')
     field_location=search_field(cell_list,key_patterns,value_pattern)
     col_style=field_location.get('field_col')
-    if not col_style:
-        status = 'Can not locate the style No., please check if the title contain wording "style no"'
-        result_validate = {'status': status}
-        return result_validate
+    #if not col_style:
+        #status = 'Can not locate the style No., please check if the title contain wording "style no"'
+        #result_validate = {'status': status}
+        #return result_validate
 
     #locate the coloumn and row Nnumber of clour, only Tanhoo has the colour
     key_patterns=[('color')]
@@ -512,50 +541,60 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
 
     #locate the column and row number of quantity
     key_patterns=[(r'\bqty'),(r'\bquantity'),(r'\bcount')]
-    value_pattern=('^((\d+)|(\d+\.\d+))$') #the cell will be read as float to str, like 410.0,so compatible with int and float
+    value_pattern_quantity=('^((\d+)|(\d+\.\d+))$') #the cell will be read as float to str, like 410.0,so compatible with int and float
     try:
         #pass
-        field_location=search_field(cell_list,key_patterns,value_pattern)
+        field_location=search_field(cell_list,key_patterns,value_pattern_quantity)
         col_qty=field_location.get('field_col')
     except Exception as e:
         logger.error('error when search field: {0}'.format(e))
     if not col_qty:
-        status = 'Can not locate the quantity, please check if the title contain wording "qty" or "quantity" or "count"'
-        result_validate = {'status': status}
+        msg_error = 'Can not locate the quantity, please check if the title contain wording "qty" or "quantity" or "count"'
+        l_msg_error.append(msg_error)
+        l_msg_recap.append(msg_error)
+        result_validate = {'status': 'Failed', 'msg_error': l_msg_error, 'msg_recap': l_msg_recap,
+                           'msg_success': l_msg_success}
         return result_validate
 
     #locate the column and row number of price
     key_patterns=[(r'(unit)?\bprice')]
-    value_pattern=('^(\$?(\d+)|(\d+\.\d+))$') #some with $ , some without
+    value_pattern_price=('^(\$?(\d+)|(\d+\.\d+))$') #some with $ , some without
     try:
-        pass
-        #field_location=search_field(cell_list,key_patterns,value_pattern)
+        #pass
+        field_location=search_field(cell_list,key_patterns,value_pattern_price)
         col_price=field_location.get('field_col')
     except Exception as e:
         logger.error('error when search field: {0}'.format(e))
     if not col_price:
-        status = 'Can not locate the price, please check if the title contain wording "price"'
-        result_validate = {'status': status}
+        msg_error = 'Can not locate the price, please check if the title contain wording "price"'
+        l_msg_error.append(msg_error)
+        l_msg_recap.append(msg_error)
+        result_validate = {'status': 'Failed', 'msg_error': l_msg_error, 'msg_recap': l_msg_recap,
+                           'msg_success': l_msg_success}
         return result_validate
 
 
     #locate the column and row number of amount
     key_patterns=[(r'\bamount'),(r'\btotal value')]
-    value_pattern=('^(\$?(\d+)|(\d+\.\d+))$') #some with $ , some without
+    value_pattern_amount=('^(\$?(\d+)|(\d+\.\d+))$') #some with $ , some without
     try:
         #pass
-        field_location=search_field(cell_list,key_patterns,value_pattern)
+        field_location=search_field(cell_list,key_patterns,value_pattern_amount)
         col_amount=field_location.get('field_col')
     except Exception as e:
         logger.error('error when search field: {0}'.format(e))
     if not col_amount:
-        status = 'Can not locate the amount of each order, please check if the title contain wording "amount" or "total value"'
-        result_validate = {'status': status}
+        msg_error = 'Can not locate the amount of each order, please check if the title contain wording "amount" or "total value"'
+        l_msg_error.append(msg_error)
+        l_msg_recap.append(msg_error)
+        result_validate = {'status': 'Failed', 'msg_error': l_msg_error, 'msg_recap': l_msg_recap,
+                           'msg_success': l_msg_success}
         return result_validate
 
 
     #below iterate the line of order to get order style colour
     l_detail=[] #[{'tis_no':,'style':,'colour':,'quantity':,'price':,'amount':},{}]
+    total_amount_from_detail = 0
     for row in range(order_start_row,nrows):
         #get order NO.
         content=str(cell_list[row][col_order_no])
@@ -564,20 +603,93 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
             continue
         detail_info={}
         tis_no=match.group(1)
-        detail_info['tis_no']=tis_no
+        detail_info['TISNo']=tis_no
 
         #get style No.
-        l_detail.append(detail_info)
         if not col_style: # For Auwin and Jinfeng , the style No. is following the tis no with / or , TIS18-SO1234/RM1004
-            pass
+            content=str(cell_list[row][col_order_no]).strip()
+            match=re.search(r'.*TIS\d{2}-SO\d{4}\w?\W(.*)$',content,re.I)
+            if match:
+                style=str(match.group(1)).strip().upper()
+        else: #For other supplier who has the style column
+            style=str(cell_list[row][col_style]).strip().upper()
+        if not style:
+            msg_error = 'Can not find the style No. for order {0}'.format(tis_no)
+            l_msg_error.append(msg_error)
+            l_msg_recap.append(msg_error)
+            result_validate = {'status': 'Failed', 'msg_error': l_msg_error, 'msg_recap': l_msg_recap,
+                               'msg_success': l_msg_success}
+            return result_validate
+        detail_info['Style']=style
+
+        #get colour
+        if not col_style: # For all supplier exept Tanhoo , there is no colour column, so set to 'ALL'
+            colour='ALL'
+        else: #For other supplier who has the style column
+            colour=str(cell_list[row][col_colour]).strip().upper()
+        detail_info['colour']=colour
+
+        #get quantity.
+        content=str(get_cell_range_content(cell_list,row,col_qty,1))
+        match=re.search(value_pattern_quantity,content,re.I)
+        if not match:
+            msg_error = 'Can not find the quantiy. for order {0}'.format(tis_no)
+            l_msg_error.append(msg_error)
+            l_msg_recap.append(msg_error)
+            result_validate = {'status': 'Failed', 'msg_error': l_msg_error, 'msg_recap': l_msg_recap,
+                               'msg_success': l_msg_success}
+            return result_validate
+        quantity=int(float(match.group(1)))
+        detail_info['quantity']=quantity
+
+        #get price.
+        content=str(get_cell_range_content(cell_list,row,col_price,1))
+        match=re.search(value_pattern_price,content,re.I)
+        if not match:
+            msg_error = 'Can not find the price. for order {0}'.format(tis_no)
+            l_msg_error.append(msg_error)
+            l_msg_recap.append(msg_error)
+            result_validate = {'status': 'Failed', 'msg_error': l_msg_error, 'msg_recap': l_msg_recap,
+                               'msg_success': l_msg_success}
+            return result_validate
+        price=float(match.group(1))
+        detail_info['price']=price
+
+        #get amount and accumulate
+        content=str(get_cell_range_content(cell_list,row,col_amount,1))
+        match=re.search(value_pattern_amount,content,re.I)
+        if not match:
+            msg_error = 'Can not find the amount. for order {0}'.format(tis_no)
+            l_msg_error.append(msg_error)
+            l_msg_recap.append(msg_error)
+            result_validate = {'status': 'Failed', 'msg_error': l_msg_error, 'msg_recap': l_msg_recap}
+            return result_validate
+        amount=round(float(match.group(1)),2) #100.00
+        total_amount_from_detail+=amount
+        detail_info['amount']=amount
+
+        #verify the amount, compare with quantity x price
+        if amount==round((quantity*price),2):
+            msg_success='verfy line successfully order {0} colour {1} amount={2} ={3} x {4}'.format(tis_no,colour,amount,price,quantity)
+            logger.info(msg_success)
+            l_msg_success.append(msg_success)
+            l_msg_recap.append(msg_success)
+        else:
+            msg_error='Veriry line error  , order {0} colour {1} amount={2} not={3} x {4}'.format(tis_no,colour,amount,price,quantity)
+            logger.error(msg_error)
+            l_msg_error.append(msg_error)
+            l_msg_recap.append(msg_error)
+
+        #add to list
+        l_detail.append(detail_info)
     logger.debug('get l_detail={0}'.format(l_detail))
 
     #fetch the invoice No.
     key_patterns=[(r'invoice no'),('inv no')]
     value_pattern=('\w+')
     try:
-        pass
-        #invoice_no=get_horizontal_field(cell_list,key_patterns,value_pattern)
+        #pass
+        invoice_no=get_horizontal_field(cell_list,key_patterns,value_pattern).get('content')
     except Exception as e:
         logger.error('error when search field: {0}'.format(e))
 
@@ -585,8 +697,8 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
     key_patterns=[(r'date'),]
     value_pattern=('\w+')
     try:
-        pass
-        #invoice_date=get_horizontal_field(cell_list,key_patterns,value_pattern)
+        #pass
+        invoice_date=get_horizontal_field(cell_list,key_patterns,value_pattern).get('content')
     except Exception as e:
         logger.error('error when search field: {0}'.format(e))
 
@@ -595,8 +707,10 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
     key_patterns=[(r'total')]
     value_pattern = ('^((\d+)|(\d+\.\d+))$')  # the cell will be read as float to str, like 410.0,so compatible with int and float
     try:
-        pass
-        #total_quantity=get_total(cell_list,key_patterns,value_pattern,order_start_row,col_qty)
+        #pass
+        total_quantity=get_total(cell_list,key_patterns,value_pattern,order_start_row,col_qty).get('content')
+        if total_quantity:
+            total_quantity=int(float(total_quantity))
     except Exception as e:
         logger.error('error when search field: {0}'.format(e))
 
@@ -605,8 +719,33 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
     value_pattern=('^\$?(USD)?((\d+)|(\d+\.\d+))$') #some with $ , some without
     try:
         #pass
-        total_amount=get_total(cell_list,key_patterns,value_pattern,order_start_row,col_amount)
+        total_amount=0 #initialize to 0, in case of exception
+        total_amount=get_total(cell_list,key_patterns,value_pattern,order_start_row,col_amount).get('content')
+        total_amount=round(float(total_amount),2)
+        if total_amount==round(total_amount_from_detail,2):
+            msg_success='Verify total amount comparing with sum of order amount successfully ={0}'.format(total_amount)
+            l_msg_success.append(msg_success)
+            l_msg_recap.append(msg_success)
+        else:
+            msg_error='Verify total amount error total={0}, sum of orders amount={1}'.format(total_amount,total_amount_from_detail)
+            l_msg_error.append(msg_error)
+            l_msg_recap.append(msg_error)
     except Exception as e:
         logger.error('error when search field: {0}'.format(e))
 
-    return
+    #assemble invoice ino
+    #consolidate the invoice detail list to dict 2 level by , TIS no, style, colour,
+    # {'TIS18-SO1234':{'RM1004':[{'colour':'Ora/Nav','price':,'quantity':}}]},}
+    logger.debug('before consolidate l_detaile={0}'.format(l_detail))
+    d_detail=TIS_Excel.consolidate_order(l_detail)
+    logger.debug('after consolidate d_detaile={0}'.format(d_detail))
+    invoice_info={'invoice_no':invoice_no,'total_amount':total_amount,'date':invoice_date,'total_quantity':total_quantity,'detail':d_detail}
+
+
+
+    msg_success = 'Finish Verify invoice {0} sheet {1}'.format(filename,sheetname)
+    l_msg_success.append(msg_success)
+    l_msg_recap.append(msg_success)
+    result_validate = {'status': 'Finished', 'msg_error': l_msg_error, 'msg_recap': l_msg_recap,'msg_success':l_msg_success}
+
+    return result_validate,invoice_info
