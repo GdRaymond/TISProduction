@@ -146,4 +146,7 @@ def check_shipment_invoice(shipment_code,doc_path,save_db=None):
               'msg_recap': l_msg_recap}
     return validate_result,d_invoice
 
+def check_shipment_compare_invoice_packing(shipment_code,invoice,packing_list):
+    pass
+
 

@@ -226,6 +226,15 @@ class Ui_MainWindow(object):
         self.btn_shipmenttool_checkpackinglist.setGeometry(QtCore.QRect(20, 100, 121, 31))
         self.btn_shipmenttool_checkpackinglist.setObjectName("btn_shipmenttool_checkpackinglist")
         self.tabShipment.addTab(self.tab_7, "")
+        self.tab_3 = QtWidgets.QWidget()
+        self.tab_3.setObjectName("tab_3")
+        self.groupBox_6 = QtWidgets.QGroupBox(self.tab_3)
+        self.groupBox_6.setGeometry(QtCore.QRect(70, 20, 241, 80))
+        self.groupBox_6.setObjectName("groupBox_6")
+        self.btn_new_order = QtWidgets.QPushButton(self.groupBox_6)
+        self.btn_new_order.setGeometry(QtCore.QRect(30, 30, 191, 23))
+        self.btn_new_order.setObjectName("btn_new_order")
+        self.tabShipment.addTab(self.tab_3, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1364, 21))
@@ -236,7 +245,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.tabShipment.setCurrentIndex(3)
+        self.tabShipment.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -298,4 +307,7 @@ class Ui_MainWindow(object):
         self.btn_shipmenttool_checkpackinglist.setToolTip(_translate("MainWindow", "Compare the booking spreadsheet with shipment order, copy difference to clipboard for email"))
         self.btn_shipmenttool_checkpackinglist.setText(_translate("MainWindow", "Check PackingList Only"))
         self.tabShipment.setTabText(self.tabShipment.indexOf(self.tab_7), _translate("MainWindow", "Shipment"))
+        self.groupBox_6.setTitle(_translate("MainWindow", "New Order"))
+        self.btn_new_order.setText(_translate("MainWindow", "CreateNewShipment-Manually"))
+        self.tabShipment.setTabText(self.tabShipment.indexOf(self.tab_3), _translate("MainWindow", "Order"))
 
