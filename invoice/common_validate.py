@@ -342,7 +342,7 @@ def validate_summary(packing_list={}, file='test.xlsx', by_name="RM500BT(TIS16-S
     else:
         l_msg_recap.extend(l_msg_error)
     try:
-        quantity_info='Order:{0} style:{1} {2:d} cartons total:{3:d}pcs'.format(packing_list.get('order_no'),packing_list.get('style_no'),
+        quantity_info='Order:{0} style:{1} {2:d} cartons total:{3:d}pcs'.format(packing_list.get('TISNo'),packing_list.get('Style'),
                                                                       int(packing_list.get('total_carton')),int(packing_list.get('total_quantity')))
         for colour_key,colour_value in packing_list.get('summary').items():
             colour_quantity=int(colour_value.get('Actual Qty').get('total'))
@@ -487,6 +487,7 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
     l_msg_error=[]
     l_msg_recap=[]
     result_validate={'status':status,'msg_success':l_msg_success,'msg_error':l_msg_error,'msg_recap':l_msg_recap}
+    l_msg_recap.append('')
     msg_success='=============Start to verify invoice {0} sheet {1}================'.format(filename,sheetname)
     l_msg_recap.append(msg_success)
     if not cell_list:

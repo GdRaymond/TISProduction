@@ -18,7 +18,7 @@ from PyQt5.QtSql import QSqlRelationalTableModel,QSqlRelation,QSqlRelationalDele
 from TISDesk.edit_dialog import Edit_dialog_shipment,Edit_Dialog_Order,Dialog_New_Shipment
 from core import fts_search
 from TISDesk import clipboard
-from invoice.inv_pack import check_shipment_invoice,check_shipment_packing_list
+from invoice.inv_pack import check_shipment_invoice,check_shipment_packing_list,check_shipment_compare_invoice_packing
 
 
 logger=tis_log.get_tis_logger()
@@ -1040,29 +1040,41 @@ class TISMainWindow(QMainWindow):
             logger.info('{0}:{1}'.format(i,msg))
 
     def check_shipment_document(self):
+        l_msg_recap=[]
+        l_msg_error=[]
+        l_msg_success=[]
         shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
         doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('C:\\Users\\rhe\\WebWork\\TISWork\\Invoice'))
         validate_result,d_packing_list=check_shipment_packing_list(shipment_code,doc_path)
-        if validate_result.get('status')=='Finished':
-            for msg in validate_result.get('msg_success'):
-                logger.info(msg)
+        l_msg_recap.extend(validate_result.get('msg_recap'))
+        l_msg_success.extend(validate_result.get('msg_success'))
+        l_msg_error.extend(validate_result.get('msg_error'))
 
-            l_msg_error=validate_result.get('msg_error')
-            logger.error('There are below {0} errors: {0}'.format(len(l_msg_error)))
-            email_msg = 'Regarding packing list, please check below mistake or discrepancy \n'
-            for i, msg in enumerate(l_msg_error):
-                logger.error('{0}:{1}'.format(i, msg))
-                email_msg = '{0}{1}:{2}\n'.format(email_msg, i, msg)
-            clipboard.write(email_msg)
-            qm =QMessageBox()
-            qm.question(self,'Checking shipping document','Below verify errors have been writen to clipboard, you can paste to your email\n{0}'.format(email_msg))
-        else:
-            qm =QMessageBox()
-            qm.question(self,'Checking shipping document',validate_result.get('status'))
-        l_msg_recap=validate_result.get('msg_recap')
-        logger.info('Recap as below:\n')
+        validate_result,d_invoice=check_shipment_invoice(shipment_code,doc_path)
+        l_msg_recap.extend(validate_result.get('msg_recap'))
+        l_msg_success.extend(validate_result.get('msg_success'))
+        l_msg_error.extend(validate_result.get('msg_error'))
+
+        try:
+            validate_result=check_shipment_compare_invoice_packing(shipment_code,d_invoice,d_packing_list)
+        except Exception as e:
+            logger.error('error when compare invoice with packing list: {0}'.format(e))
+        l_msg_recap.extend(validate_result.get('msg_recap'))
+        l_msg_success.extend(validate_result.get('msg_success'))
+        l_msg_error.extend(validate_result.get('msg_error'))
+        msg_error='\n'
+        for i,msg in enumerate(l_msg_error):
+            msg_error='{0}{1}:{2}\n'.format(msg_error,i,msg)
+        email_msg='\n**Below is the checking processing: \n{0}\n\n**Below is error information ' \
+                  'for email to supplier:\n{1}'\
+            .format('\n'.join(l_msg_recap),msg_error)
+        clipboard.write(email_msg)
+
         for i,msg in enumerate(l_msg_recap):
             logger.info('{0}:{1}'.format(i,msg))
+
+        qm=QMessageBox()
+        qm.question(self,'Check shipping document','Finish checking, please paste the result to your email')
 
 
 
