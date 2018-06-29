@@ -124,7 +124,7 @@ def check_shipment_invoice(shipment_code,doc_path,save_db=None):
     files=glob.glob(packing_path)
     #logger.debug('get files={0}'.format(files))
     if not files:
-        status='There is no packing list document containing "packing" wording in file name'
+        status='There is no invoice document containing "invoice" wording in file name'
         logger.warn(status)
         return({'status':status})
     l_msg_success = []
@@ -226,19 +226,19 @@ def check_shipment_compare_invoice_packing(shipment_code,d_invoice,d_packing_lis
         if not p_invoice_value:
             del(d_packing_list[i_invoice_no])
         #check if there is any item left in d_packing_list, that is the content not list in invoice
-        if d_packing_list:
-            for p_invoice_no,p_invoice_value in d_packing_list.items():
-                for p_tisno,p_tisno_value in p_invoice_value.items():
-                    for p_style_no,p_style_value in p_tisno_value.items():
-                        msg='The order -" {0} {1} {2} "-shown in packing list but not found in invoice'.format(p_invoice_no,p_tisno,p_style_no)
-                        msg_list.save_msg(msg,'E')
-        else:
-            msg='All items in Packing list matched with invoice as well, nothing left'
-            msg_list.save_msg(msg,'S')
-        msg='Finish comparing'
-        msg_list.save_msg(msg)
-        validate_result={'msg_error':msg_list.l_msg_error,'msg_success':msg_list.l_msg_success,'msg_recap':msg_list.l_msg_recap}
-        return validate_result
+    if d_packing_list:
+        for p_invoice_no,p_invoice_value in d_packing_list.items():
+            for p_tisno,p_tisno_value in p_invoice_value.items():
+                for p_style_no,p_style_value in p_tisno_value.items():
+                    msg='The order -" {0} {1} {2} "-shown in packing list but not found in invoice'.format(p_invoice_no,p_tisno,p_style_no)
+                    msg_list.save_msg(msg,'E')
+    else:
+        msg='All items in Packing list matched with invoice as well, nothing left'
+        msg_list.save_msg(msg,'S')
+    msg='Finish comparing'
+    msg_list.save_msg(msg)
+    validate_result={'msg_error':msg_list.l_msg_error,'msg_success':msg_list.l_msg_success,'msg_recap':msg_list.l_msg_recap}
+    return validate_result
 
 
 

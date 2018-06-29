@@ -755,7 +755,7 @@ def parse_packing_list(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS16-SO34
                             packing_list["style_description"]=str(current_row[col]).strip()
                             break
 
-            elif str_contain(str(current_cell),["INVOICE","NO."]):
+            elif str_contain(str(current_cell),["INVOICE","NO."]) or str_contain(str(current_cell),["INVOIVE","NO."]) or str_contain(str(current_cell),["INV","NO."]) or str_contain(str(current_cell),["INY","NO."]):
                 for col in range(colnum+1,ncols-1):
                     if str(current_row[col]).strip()!="":
                         packing_list["invoice_no"]=str(current_row[col]).strip()
@@ -774,12 +774,12 @@ def parse_packing_list(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS16-SO34
                 if str(cell_list[rownum-1][colnum]).strip()=='':#the value of style No. will be in merged cell with up cell
                     for col in range(colnum+1,colnum+5):
                         if str(cell_list[rownum-1][col]).strip()!="":
-                            packing_list["TISNo"]=str(cell_list[rownum-1][col]).strip()
+                            packing_list["TISNo"]=str(cell_list[rownum-1][col]).upper().strip()
                             break
                 if packing_list.get("TISNo") is None:
                     for col in range(colnum+1,colnum+5):
                         if str(current_row[col]).strip()!="":
-                            packing_list["TISNo"]=str(current_row[col]).strip()
+                            packing_list["TISNo"]=str(current_row[col]).upper().strip()
                             break
 
     #print(packing_list)

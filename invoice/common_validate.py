@@ -603,7 +603,7 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
         if not match:
             continue
         detail_info={}
-        tis_no=match.group(1)
+        tis_no=str(match.group(1)).upper().strip()
         detail_info['TISNo']=tis_no
 
         #get style No.
@@ -723,7 +723,8 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
         total_amount=0 #initialize to 0, in case of exception
         total_amount=get_total(cell_list,key_patterns,value_pattern,order_start_row,col_amount).get('content')
         total_amount=round(float(total_amount),2)
-        if total_amount==round(total_amount_from_detail,2):
+        total_amount_from_detail=round(float(total_amount_from_detail),2)
+        if total_amount==total_amount_from_detail:
             msg_success='Verify total amount comparing with sum of order amount successfully ={0}'.format(total_amount)
             l_msg_success.append(msg_success)
             l_msg_recap.append(msg_success)
