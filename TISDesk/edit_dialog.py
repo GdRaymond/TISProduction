@@ -2,13 +2,69 @@ from PyQt5.QtWidgets import QDialog,QTableWidgetItem,QTableWidget,QMessageBox
 from PyQt5.QtGui import QFont,QColor
 from TISDesk.TIS_edit_dialog import Ui_editDialogShipment
 from TISDesk.TIS_edit_order_dialog import Ui_editDialog_Order
+from TISDesk.TIS_new_order_dialog import Ui_Dialog_New_Order
 from shipments.models import Shipment
+from orders.models import Order,Product
 from products import size_chart
 from TISProduction import tis_log
 import datetime
 from dateutil import relativedelta
 
 logger=tis_log.get_tis_logger()
+
+
+class Dialog_New_Order(QDialog):
+    def __init__(self):
+        super(Dialog_New_Order,self).__init__()
+        self.ui=Ui_Dialog_New_Order()
+        self.ui.setupUi(self)
+        self.init_data()
+        self.ui.comb_supplier.currentTextChanged.connect(self.supplier_on_change)
+
+    def init_data(self):
+        #load supplier
+        suppliers=[supplier.get('supplier') for supplier in Shipment.objects.all().order_by('supplier').values('supplier').distinct()]
+        logger.debug('get supplier {0}'.format(suppliers))
+        self.ui.comb_supplier.addItems(suppliers)
+        self.ui.comb_supplier.addItem('--')
+        self.ui.comb_supplier.setCurrentText('--')
+
+        #load latest tisno
+        tis_no_l=Order.objects.all().values('tis_no').distinct()
+        if tis_no_l:
+            tis_no_max=sorted([item.get('tis_no')[8:12] for item in tis_no_l ])[-1]
+        else:
+            tis_no_max='4000'
+        tis_no='TIS{0}-SO{1}'.format(datetime.date.today().strftime('%y'),int(tis_no_max)+1)
+        logger.debug('max tis_no={0}, new tis_no={1}'.format(tis_no_max,tis_no))
+        self.ui.lin_tisno.setText(tis_no)
+
+        #load all style_no
+        styles=Product.objects.all().values('style_no').distinct()
+        if styles:
+            style_l=[item.get('style_no') for item in styles]
+            self.ui.comb_style.addItems(style_l)
+
+        #load client
+        clients=Order.objects.all().order_by('client').values('client').distinct()
+        if clients:
+            client_l=[item.get('client') for item in clients]
+            self.ui.comb_client.addItems(client_l)
+
+        #set order date
+        self.ui.dateE_orderdate.setDate(datetime.date.today())
+
+    def supplier_on_change(self):
+        self.ui.comb_shipment.clear()
+        supplier=self.ui.comb_supplier.currentText()
+        shipments=Shipment.objects.filter(supplier=supplier,etd__gt=datetime.date.today())
+        shipment_l=[]
+        if shipments:
+            for shipment in shipments:
+                shipment_l.append('{4} - {0} / ETD {1} / {2} / {3}'.format(shipment.code, shipment.etd.strftime('%d-%b'), \
+                                                                       shipment.mode, shipment.container, shipment.id))
+        self.ui.comb_shipment.addItems(shipment_l)
+
 
 class Edit_Dialog_Order(QDialog):
     def __init__(self,parent=None,**kwargs):
@@ -106,6 +162,7 @@ class Edit_Dialog_Order(QDialog):
                     tableW_size.setItem(1,index,QTableWidgetItem('0'))
                 except Exception as e:
                     logger.error(' error calculating quantity :{0}'.format(e))
+
 
 
 class Edit_dialog_shipment(QDialog):
@@ -226,5 +283,7 @@ class Dialog_New_Shipment(QDialog):
         shipment_dict={'supplier':supplier,'mode':mode,'etd':etd_date,'eta':eta_date,'instore':instore,'instore_abm':instore_abm\
                        ,'code':code,'etd_port':etd_port,'eta_port':eta_port}
         Shipment.objects.create(**shipment_dict)
+
+
 
 

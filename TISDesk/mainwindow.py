@@ -15,7 +15,7 @@ from orders.models import Order,FabricTrim,SampleCheck
 from shipments import views as shipment_view
 from shipments.models import Shipment
 from PyQt5.QtSql import QSqlRelationalTableModel,QSqlRelation,QSqlRelationalDelegate
-from TISDesk.edit_dialog import Edit_dialog_shipment,Edit_Dialog_Order,Dialog_New_Shipment
+from TISDesk.edit_dialog import Edit_dialog_shipment,Edit_Dialog_Order,Dialog_New_Shipment,Dialog_New_Order
 from core import fts_search
 from TISDesk import clipboard
 from invoice.inv_pack import check_shipment_invoice,check_shipment_packing_list,check_shipment_compare_invoice_packing
@@ -106,6 +106,7 @@ class TISMainWindow(QMainWindow):
         self.ui.btn_shipmenttool_checkpackinglist.clicked.connect(self.check_shipment_packing_list)
         self.ui.btn_shipmenttool_checkinvoice.clicked.connect(self.check_shipment_invoice)
         self.ui.btn_shipmenttool_checkdocument.clicked.connect(self.check_shipment_document)
+        self.ui.btn_new_order.clicked.connect(self.create_new_order)
 
 
     def load_initial_data(self):
@@ -843,6 +844,17 @@ class TISMainWindow(QMainWindow):
                 logger.debug(' cancel save new shipment')
         except Exception as e:
             logger.error(' error {0}'.format(e))
+
+    def create_new_order(self):
+        dialog=Dialog_New_Order()
+        try:
+            if dialog.exec_():
+                logger.debug(' saved new order')
+            else:
+                logger.debug(' cancel save new order')
+        except Exception as e:
+            logger.error(' error {0}'.format(e))
+
 
     def load_shipment_from_supplier(self):
         self.ui.comb_shipmenttool_shipment.clear()
