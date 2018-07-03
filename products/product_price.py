@@ -11,7 +11,7 @@ product_price={'3M TAPE': {'sell_price': 1.0, 'purchase': {'Silver': {'supplier'
 
 # below dict if for getting the formal colour name (used in product_price) from email alias, like C.BLUE is COBALTBLUE
 colour_alias = {'C.BLUE': 'CobaltBlue', 'F.NAVY': 'Fren Navy','H-PINK':'HotPink','CHAMBRAY':'ChamBlu','B-W':'BWStr','N-W':'NWStr',
-                'R-W':'RoyWhiStr','B-N':'Blu/Nav','O-N':'Ora/Nav','Y-N':'Yel/Nav','L.BLUE':'LightBlue'
+                'R-W':'RoyWhiStr','B-N':'Blu/Nav','O-N':'Ora/Nav','Y-N':'Yel/Nav','P-N':'Pink/Nav','B/N':'Blu/Nav','O/N':'Ora/Nav','Y/N':'Yel/Nav','P/N':'Pink/Nav','L.BLUE':'LightBlue'
                 }
 
 def get_formal_colourname_from_alias(colour):
@@ -30,6 +30,20 @@ def get_formal_colourname_from_alias(colour):
         return formal_name
     else:
         return found #return False
+
+def get_colour_list_from_style_supplier(style,supplier):
+    colour_l=[]
+    product=product_price.get(style)
+    if not product:
+        logger.error('Can not find the style {0} in product_price'.format(style))
+        return colour_l
+    purchase_d=product.get('purchase')
+    for colour,value in purchase_d.items():
+        if value.get('supplier').strip().upper()==supplier.strip().upper():
+            colour_l.append(colour)
+    return colour_l
+
+
 
 
 supplier_abbreviation={'AUWIN':'AW','TANHOO':'TH','ELIEL':'EL','JIN FENG':'JF','SMARTEX':'ST','GUANGZHOU':'GZ','LOYAL':'LY','SHANGYU LIANYA':'SY','SN LABEL':'SN'}

@@ -5,10 +5,11 @@ from TISDesk.TIS_edit_order_dialog import Ui_editDialog_Order
 from TISDesk.TIS_new_order_dialog import Ui_Dialog_New_Order
 from shipments.models import Shipment
 from orders.models import Order,Product
-from products import size_chart
+from products import size_chart,product_price
 from TISProduction import tis_log
 import datetime
 from dateutil import relativedelta
+from django.db.models import Count,Min
 
 logger=tis_log.get_tis_logger()
 
@@ -19,7 +20,8 @@ class Dialog_New_Order(QDialog):
         self.ui=Ui_Dialog_New_Order()
         self.ui.setupUi(self)
         self.init_data()
-        self.ui.comb_supplier.currentTextChanged.connect(self.supplier_on_change)
+        self.ui.comb_supplier.currentTextChanged.connect(self.supplier_on_change)#when connect currentTextChanged, trigger even enter in line_edit
+        self.ui.comb_style.currentIndexChanged.connect(self.style_on_change) #when connect currentIndexChanged,only trigger change index
 
     def init_data(self):
         #load supplier
@@ -43,7 +45,7 @@ class Dialog_New_Order(QDialog):
         styles=Product.objects.all().values('style_no').distinct()
         if styles:
             style_l=[item.get('style_no') for item in styles]
-            self.ui.comb_style.addItems(style_l)
+            #self.ui.comb_style.addItems(style_l)
 
         #load client
         clients=Order.objects.all().order_by('client').values('client').distinct()
@@ -55,6 +57,7 @@ class Dialog_New_Order(QDialog):
         self.ui.dateE_orderdate.setDate(datetime.date.today())
 
     def supplier_on_change(self):
+        #update shipment combobox
         self.ui.comb_shipment.clear()
         supplier=self.ui.comb_supplier.currentText()
         shipments=Shipment.objects.filter(supplier=supplier,etd__gt=datetime.date.today())
@@ -64,6 +67,108 @@ class Dialog_New_Order(QDialog):
                 shipment_l.append('{4} - {0} / ETD {1} / {2} / {3}'.format(shipment.code, shipment.etd.strftime('%d-%b'), \
                                                                        shipment.mode, shipment.container, shipment.id))
         self.ui.comb_shipment.addItems(shipment_l)
+
+        #update style combobox, sorted the style frequency
+        self.ui.comb_style.clear()
+        style_l=[]
+        product_in_supplier=Product.objects.filter(order__supplier__iexact=supplier).annotate(c1=Count('order')).order_by('-c1')
+        for item in product_in_supplier:
+            logger.debug('{0} - count: {1}'.format(item.style_no,item.c1))
+            style_l.append(item.style_no)
+        product_out_supplier=Product.objects.exclude(order__supplier__iexact=supplier).annotate(c1=Count('order')).order_by('-c1')
+        for item in product_out_supplier:
+            logger.debug('{0} - count: {1}'.format(item.style_no,item.c1))
+            style_l.append(item.style_no)
+        self.ui.comb_style.addItems(style_l)
+
+    def style_on_change(self):
+        self.ui.tableW_size_1.clear()
+        self.ui.tableW_size_2.clear()
+        self.ui.groupB_size_2.setEnabled(False)
+        self.ui.tableW_size_3.clear()
+        self.ui.groupB_size_3.setEnabled(False)
+        style=self.ui.comb_style.currentText()
+        supplier=self.ui.comb_supplier.currentText()
+        if not style or not supplier or supplier=='--':
+            return
+
+        #update client and sorted by frequency
+        client_l=[]
+        client_count=Order.objects.filter(product__style_no__iexact=style).order_by('client').values('client').annotate(count=Count('client')).order_by('-count')
+        logger.debug(client_count.query)
+        for item in client_count:
+            logger.debug(item)
+            client_l.append(item.get('client'))
+        client_count=Order.objects.exclude(product__style_no__iexact=style).order_by('client').values('client').annotate(count=Count('client')).order_by('-count')
+        logger.debug(client_count.query)
+        for item in client_count:
+            logger.debug(item)
+            if item.get('client') not in client_l:
+                client_l.append(item.get('client'))
+        self.ui.comb_client.clear()
+        self.ui.comb_client.addItems(client_l)
+
+        #get colour ever used in order before
+        colour_l=product_price.get_colour_list_from_style_supplier(style,supplier)
+        if not colour_l:
+            logger.error('Can not get the colour list for {0} in product_price'.format(style))
+            return
+
+        size_show_l=size_chart.get_size_show(style) #get the size show list according to style, it is 2-d list
+        if not size_show_l: #there is this sytle in the size _show_ need add
+            logger.warning(' No this style {} in size show, so not display the size breakup widget'.format(style))
+            self.ui.groupB_size_1.setTitle('No style {0} in size show ,please add to size_chart.py'.format(style))
+            self.ui.groupB_size_1.setEnabled(False)
+            return
+
+        logger.debug(' get size_show_l for {0}: {1}'.format(style,size_show_l))
+        size_index_whole=0 #to increase to indicate the size index in all size chart from 1-30, index 0 is total quantity
+        for group_no in range(len(size_show_l)): #iterate every group , for shirt only one, for trousers, 2 or 3
+            group_box=getattr(self.ui,'groupB_size_{0}'.format(group_no+1))
+            group_box.setEnabled(True) #by default the group box size No.2 ,3 are disable, need enable when size group exist
+            size_group=size_show_l[group_no]
+            logger.debug(' start showing size grou {0}'.format(size_group))
+            len_group=len(size_group)
+            tableW_group=getattr(self.ui,'tableW_size_{0}'.format(group_no+1)) #dynamicly get the tableWidget to show the group, 1-Regular 2-Stout 3-Long fit
+            tableW_group.setColumnCount(len_group+1)
+            tableW_group.setRowCount(len(colour_l))
+            tableW_group.horizontalHeader().setDefaultSectionSize(49)
+            tableW_group.setVerticalHeaderLabels([colour for colour in colour_l]) #colour name in vertical title
+            tableW_group.setRowHeight(0,34)
+            tableW_group.setEditTriggers(QTableWidget.CurrentChanged)
+            tableW_group.cellChanged.connect(self.size_quantity_on_change)
+            size_title=[]
+            for size_no in range(len_group):  #size_no - the index of size in this group
+                size_index_whole+=1
+                size_title.append(size_group[size_no])
+                if size_group[size_no]=='-':
+                    tableW_group.setColumnWidth(size_no,1)
+                #tableW_group.setItem(0,size_no,QTableWidgetItem(str(kwargs.get('size_breakup')[size_index_whole])))
+                #tableW_group.setItem(1,size_no,QTableWidgetItem('0'))
+            size_title.append('subtotal')
+            tableW_group.setHorizontalHeaderLabels(size_title)
+
+    def size_quantity_on_change(self,row,column):
+        logger.debug('sender={0},row={1},column={2}'.format(self.sender(),row,column))
+        col_sub_total=self.sender().columnCount()-1
+        sub_total=0
+        for col_i in range(self.sender().columnCount()-1):
+            if not self.sender().item(row,col_i):
+                continue
+            try:
+                cell_value = self.sender().item(row, col_i).text()
+                cell_quantity = int(cell_value)
+                sub_total += cell_quantity
+            except Exception as e:
+                logger.error('input is not valid integer')
+                continue
+        try:
+            self.sender().cellChanged.disconnect(self.size_quantity_on_change)
+        except Exception as e:
+            logger.error('error when disconnnect : {0}'.format(e))
+        self.sender().setItem(row,col_sub_total,QTableWidgetItem(str(sub_total)))
+        self.sender().cellChanged.connect(self.size_quantity_on_change)
+
 
 
 class Edit_Dialog_Order(QDialog):

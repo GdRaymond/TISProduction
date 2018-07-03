@@ -790,6 +790,8 @@ class TISMainWindow(QMainWindow):
             #check if the order is in the same origin shipment
             if order.shipment.code!=self.ui.comb_shipment_auwin_origin.currentText():
                 logger.error(' the order is not in the origin shipment')
+            else:
+                logger.debug(' the order {0} is correct in origin shipment'.format(order.tis_no))
             #check if all orders in db belonging original shipment are included in email
             #update shipment
 
