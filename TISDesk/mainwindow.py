@@ -23,7 +23,6 @@ from invoice.inv_pack import check_shipment_invoice,check_shipment_packing_list,
 
 logger=tis_log.get_tis_logger()
 
-
 class WorkThread(QThread):
     signal_display=pyqtSignal(dict)
 
@@ -731,8 +730,10 @@ class TISMainWindow(QMainWindow):
         self.ui.comb_fabric.setCurrentText('--')
 
     def split_shipment_aw(self):
+        msg_list=tis_log.MessageList()
         file_name=QFileDialog.getOpenFileName(self,'Open file',os.path.join(os.path.abspath('..'),'media'))[0]
         logger.debug('start to read file {0}'.format(file_name))
+        origin_shipment=self.ui.comb_shipment_auwin_origin.currentText()
         shipment_no=0
         target_l=[]
         pre_tis_no=''
@@ -742,7 +743,7 @@ class TISMainWindow(QMainWindow):
                 if line.startswith('Container'):
                     con_no=line.split(' ')[1][0] #from Container 1: ETD: June 12th   1 X 40'HQ , get '1:' , get '1'
                     continue
-                target_items=line.strip().split('\t')
+                target_items=line.strip().split('\t') #['SO4436','RM107V2','O/N','660','33','1.35']
                 if len(target_items)<=1:
                     continue #skip blank line
                 target_items.append(con_no)
@@ -771,29 +772,80 @@ class TISMainWindow(QMainWindow):
             volumes[target_l[i][6]]+=float(target_l[i][5])
         logger.debug(' volumes is :{0}'.format(volumes))
 
+        #before compare, copy the target_l for later use in split operation
+        import copy
+        bak_target_l=copy.copy(target_l)
+
+        #below check every order of orighinal shipment in db with email, once matched , delete email target_l. If item left at the end, then it is the order not in db.
+        orders=Order.objects.filter(shipment__code__iexact=origin_shipment)
+        if orders:
+            for order in orders:
+                msg_list.save_msg('Start to match order {0} in db to email list'.format(order))
+                for index,line in enumerate(target_l):
+                    if order.tis_no[6:12]==line[0][:6]:
+                        if line[0] in ['SO4434']:
+                            logger.debug('debug so4434')
+                        if order.product.style_no==line[1]:
+                            # get formal colour name and check
+                            colour = product_price.get_formal_colourname_from_alias(line[2])  # 'CobaltBlue'
+                            if colour==order.colour:
+                                if order.quantity==int(float(line[3])):
+                                    msg_list.save_msg('--Match and quantity correct','S')
+                                else:
+                                    msg_list.save_msg('--In DB, Order {0} match but quantity wrong, in db {1}, in email {2}'\
+                                                      .format(order,order.quantity,line[3]),'E')
+                                #del(target_l[index])  #when match , del in target_l
+                                target_l[index].append(order) #['SO4442','RM109VXR','ORANGE','600','30 ','1.23','1',order] #when match, add order to last
+                                break
+                else: # finish iterate, but not break, means , not match
+                    msg_list.save_msg('--In DB, order {0} Not found in email'.format(order),'E')
+        else:
+            msg_list.save_msg('Can not get the list of order for  origin shipment','E')
+            return
+
         #below check each order in db according to the order in email list
-        for line in target_l:
+        msg_list.save_msg('\nBelow order in email not match in db')
+        for index,line in enumerate(target_l):
+            if len(line)==8: #means added with order at last element, matched
+                continue
             tis_no=line[0] #'SO4378'
             colour=line[2] #'C.BLUE'
             #get formal colour name and check
-            colour=product_price.get_formal_colourname_from_alias(colour) #'CobaltBlue'
-            if not colour:
-                logger.error(' Can not find this colour alias : {0}, please add to product_price.colour_alias'.foramt(colour))
-                return
-            #get order in db
-            try:
-                order=Order.objects.get(tis_no__iendswith=tis_no,colour__iexact=colour)
-            except Exception as e:
-                logger.error(' error when get order for {0}/{1}: {2}'.format(tis_no,colour,e))
-                return
-            #check style name and quantity for this order in db comparing with email
-            #check if the order is in the same origin shipment
-            if order.shipment.code!=self.ui.comb_shipment_auwin_origin.currentText():
-                logger.error(' the order is not in the origin shipment')
-            else:
-                logger.debug(' the order {0} is correct in origin shipment'.format(order.tis_no))
-            #check if all orders in db belonging original shipment are included in email
-            #update shipment
+            msg_list.save_msg('{0}: In email, order {1} {2} not match in database'.format(index,tis_no,colour),'E')
+            colour_formal=product_price.get_formal_colourname_from_alias(colour) #'CobaltBlue'
+            if not colour_formal:
+                msg_list.save_msg('  -- because not find this colour alias : {0}, please add to product_price.colour_alias'.format(colour),'E')
+
+        email_msg='=========Recap as below==========\n{0}\n\n===========Error as below==========\n{1}'\
+            .format('\n'.join(msg_list.l_msg_recap),'\n'.join(msg_list.l_msg_error))
+        clipboard.write(email_msg)
+        qm=QMessageBox()
+        reply=qm.question(self,'Split result','Finish check, the recap and error info has been written clipboard, please paste,want to split?\n{0} '.format('\n'.join(msg_list.l_msg_error)),QMessageBox.Yes|QMessageBox.No)
+
+        #update shipment
+        if reply==QMessageBox.Yes:
+            logger.info('Start to split')
+            target_shipment_l=[]
+            for i in range(self.ui.listW_targetshipment_au.count()):
+                shipment=Shipment.objects.get(code=self.ui.listW_targetshipment_au.item(i))
+                if shipment:
+                    target_shipment_l.append(shipment)
+                else:
+                    logger.error('Can not find the shipment {0}'.format(self.ui.listW_targetshipment_au.item(i)))
+                    return
+            for line in bak_target_l:
+                container_no=int(line[6])-1 #['SO4436', 'RM107V2', 'O/N', '660', '33 ', '1.35', '1']
+                shipment=target_shipment_l[container_no]
+                if len(line)==8:
+                    order=line[7]
+                    order.shipment=shipment
+                    order.save()
+                    logger.info('--Order {0}-{1}-{2} splitted to shipment {3}'.format(order.tis_no,order.product.style_no
+                                                                                      ,order.colour,shipment.code))
+
+        elif reply==QMessageBox.No:
+            logger.debug('Cancel split')
+
 
 
     def refresh_shipment_au_split(self):
