@@ -21,3 +21,22 @@ def init_tis_logger():
 
 def get_tis_logger():
     return logging.getLogger('tislogger')
+
+logger=get_tis_logger()
+
+class MessageList():
+    def __init__(self):
+        self.l_msg_error=[]
+        self.l_msg_success=[]
+        self.l_msg_recap=[]
+
+    def save_msg(self,msg,type='R'):
+        self.l_msg_recap.append(msg)
+        if type=='E':
+            self.l_msg_error.append(msg)
+            logger.error(msg)
+        elif type=='S':
+            self.l_msg_success.append(msg)
+            logger.info(msg)
+        else:
+            logger.info(msg)

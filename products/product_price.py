@@ -42,7 +42,8 @@ def get_colour_list_from_style_supplier(style,supplier):
     for colour,value in purchase_d.items():
         if value.get('supplier').strip().upper()==supplier.strip().upper():
             colour_l.append(colour)
-    return colour_l
+
+    return sorted(colour_l)
 
 
 

@@ -25,7 +25,7 @@ class Dialog_New_Order(QDialog):
 
     def init_data(self):
         #load supplier
-        suppliers=[supplier.get('supplier') for supplier in Shipment.objects.all().order_by('supplier').values('supplier').distinct()]
+        suppliers = [supplier.get('supplier') for supplier in Order.objects.order_by().values('supplier').distinct()]
         logger.debug('get supplier {0}'.format(suppliers))
         self.ui.comb_supplier.addItems(suppliers)
         self.ui.comb_supplier.addItem('--')
@@ -161,12 +161,29 @@ class Dialog_New_Order(QDialog):
                 sub_total += cell_quantity
             except Exception as e:
                 logger.error('input is not valid integer')
+                self.sender().cellChanged.disconnect(self.size_quantity_on_change)
+                self.sender().setItem(row,col_i,QTableWidgetItem(''))
+                self.sender().cellChanged.connect(self.size_quantity_on_change)
                 continue
         try:
             self.sender().cellChanged.disconnect(self.size_quantity_on_change)
         except Exception as e:
             logger.error('error when disconnnect : {0}'.format(e))
         self.sender().setItem(row,col_sub_total,QTableWidgetItem(str(sub_total)))
+        #below update total quantity
+        total_quantity=0
+        for i in range(1,4):
+            group_box=getattr(self.ui,'groupB_size_{0}'.format(i))
+            if group_box.isEnabled():
+                tableW_size=getattr(self.ui,'tableW_size_{0}'.format(i))
+                row_count=tableW_size.rowCount()
+                col_count=tableW_size.columnCount()
+                for row in range(row_count):
+                    if tableW_size.item(row,col_count-1):
+                        logger.debug('row0{0} sub-total={1}'.format(row,tableW_size.item(row,col_count-1).text()))
+                        total_quantity+=int(tableW_size.item(row,col_count-1).text())
+        self.ui.lin_total.setText(str(total_quantity))
+
         self.sender().cellChanged.connect(self.size_quantity_on_change)
 
 
@@ -267,7 +284,6 @@ class Edit_Dialog_Order(QDialog):
                     tableW_size.setItem(1,index,QTableWidgetItem('0'))
                 except Exception as e:
                     logger.error(' error calculating quantity :{0}'.format(e))
-
 
 
 class Edit_dialog_shipment(QDialog):

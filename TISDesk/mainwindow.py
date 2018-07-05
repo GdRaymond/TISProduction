@@ -474,8 +474,6 @@ class TISMainWindow(QMainWindow):
             self.append_one_shipment(shipment,'I')
         shipment_view.write_inspection_shipment(shipments)
 
-
-
     def cal_allshipment_volumes(self):
         logger.info('start to cal all order cartons volumes')
         try:
@@ -483,8 +481,6 @@ class TISMainWindow(QMainWindow):
             shipment_view.cal_all_shipment_volume()
         except Exception as e:
             logger.error('error when cal all shipment vol {0}'.format(e))
-
-
 
     def show_shipment_view(self):
         try:
@@ -639,7 +635,6 @@ class TISMainWindow(QMainWindow):
                 logger.error(' error {0}'.format(e))
         return colour_checkbox_status
 
-
     def check_orders(self):
         #orders=Order.objects.filter(tis_no__contains='TIS18-SO47')
         self.ui.tableW_samplecheck_order.setRowCount(0)
@@ -781,14 +776,25 @@ class TISMainWindow(QMainWindow):
         if orders:
             for order in orders:
                 msg_list.save_msg('Start to match order {0} in db to email list'.format(order))
+                #deb='start'
                 for index,line in enumerate(target_l):
+                    #if order.tis_no[6:12] in ['SO4434', 'SO4445']:
+                        #logger.debug('debug db TIS:{0} email TIS {1}'.format(order.tis_no[6:12], line[0]))
+                        #deb='tis'
                     if order.tis_no[6:12]==line[0][:6]:
-                        if line[0] in ['SO4434']:
-                            logger.debug('debug so4434')
+                        #if line[1] in ['RM200CF','RM100CFS']:
+                            #logger.debug('debug db style:{0} email style {1}'.format(order.product.style_no, line[1]))
+                            #deb='style'
                         if order.product.style_no==line[1]:
                             # get formal colour name and check
+                            #if deb=='style':
+                                #logger.debug('debug style matched, start get colour db=-{0}-, emmail=-{1}-'.format(order.colour,line[2]))
                             colour = product_price.get_formal_colourname_from_alias(line[2])  # 'CobaltBlue'
-                            if colour==order.colour:
+                            #if colour==False:
+                                #logger.debug('debug False db colour-{0}- email formal colour-{1}-'.format(order.colour, colour))
+                            #if order.colour in ['Black','Khaki']:
+                                #logger.debug('debug Selected db colour-{0}- email formal colour-{1}-'.format(order.colour,colour))
+                            if colour.strip().upper()==order.colour.strip().upper():
                                 if order.quantity==int(float(line[3])):
                                     msg_list.save_msg('--Match and quantity correct','S')
                                 else:
@@ -798,7 +804,8 @@ class TISMainWindow(QMainWindow):
                                 target_l[index].append(order) #['SO4442','RM109VXR','ORANGE','600','30 ','1.23','1',order] #when match, add order to last
                                 break
                 else: # finish iterate, but not break, means , not match
-                    msg_list.save_msg('--In DB, order {0} Not found in email'.format(order),'E')
+                    msg_list.save_msg('--In DB, order {0}-{1}-{2} Not found in email {3}'\
+                                      .format(order.tis_no[6:12],order.product.style_no,order.colour,target_l),'E')
         else:
             msg_list.save_msg('Can not get the list of order for  origin shipment','E')
             return
@@ -827,7 +834,12 @@ class TISMainWindow(QMainWindow):
             logger.info('Start to split')
             target_shipment_l=[]
             for i in range(self.ui.listW_targetshipment_au.count()):
-                shipment=Shipment.objects.get(code=self.ui.listW_targetshipment_au.item(i))
+                try:
+                    logger.debug('selected shipment : {0}'.format(self.ui.listW_targetshipment_au.item(i).text()))
+                    shipment=Shipment.objects.get(code=self.ui.listW_targetshipment_au.item(i).text())
+                except Exception as e:
+                    logger.error('error when get shipment : {0}'.format(e))
+                    return
                 if shipment:
                     target_shipment_l.append(shipment)
                 else:
@@ -845,8 +857,6 @@ class TISMainWindow(QMainWindow):
 
         elif reply==QMessageBox.No:
             logger.debug('Cancel split')
-
-
 
     def refresh_shipment_au_split(self):
         self.ui.comb_shipment_auwin_origin.clear()
@@ -904,11 +914,22 @@ class TISMainWindow(QMainWindow):
         try:
             if dialog.exec_():
                 logger.debug(' saved new order')
+                colours=[dialog.ui.tableW_size_1.verticalHeaderItem(i).text() for i in range(dialog.ui.tableW_size_1.rowCount())]
+                logger.debug('colours={0}'.format(colours))
+                order=Order()
+                order.tis_no=dialog.ui.lin_tisno.text()
+                order.internal_no=dialog.ui.lin_abmno.text()
+                order.ctm_no=dialog.ui.lin_ctmno.text()
+                order.supplier=dialog.ui.comb_supplier.currentText()
+                order.client=dialog.ui.comb_client.currentText()
+                product=Product.objects.get(style_no__iexact=dialog.ui.comb_style.currentText())
+                order.product=product
+                logger.debug('order info={0}'.format(order))
+
             else:
                 logger.debug(' cancel save new order')
         except Exception as e:
             logger.error(' error {0}'.format(e))
-
 
     def load_shipment_from_supplier(self):
         self.ui.comb_shipmenttool_shipment.clear()
@@ -1141,11 +1162,3 @@ class TISMainWindow(QMainWindow):
 
         qm=QMessageBox()
         qm.question(self,'Check shipping document','Finish checking, please paste the result to your email')
-
-
-
-
-
-
-
-

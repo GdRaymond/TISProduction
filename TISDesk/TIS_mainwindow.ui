@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -901,10 +901,10 @@
      <widget class="QGroupBox" name="groupBox_6">
       <property name="geometry">
        <rect>
-        <x>70</x>
+        <x>20</x>
         <y>20</y>
-        <width>241</width>
-        <height>80</height>
+        <width>251</width>
+        <height>161</height>
        </rect>
       </property>
       <property name="title">
@@ -920,7 +920,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>CreateNewShipment-Manually</string>
+        <string>CreateNewOrder-Manually</string>
        </property>
       </widget>
      </widget>
