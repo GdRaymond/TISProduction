@@ -913,18 +913,55 @@ class TISMainWindow(QMainWindow):
         dialog=Dialog_New_Order()
         try:
             if dialog.exec_():
-                logger.debug(' saved new order')
+                dialog.save_new_order()
+                logger.info('orders saved')
+                '''
+                logger.debug('Start to save new order')
+                shipment=Shipment.objects.get(id=int(dialog.ui.comb_shipment.currentText().split('-')[0].strip()))
+                product = Product.objects.get(style_no__iexact=dialog.ui.comb_style.currentText())
+                size_show_l = size_chart.get_size_show(product.style_no)
+                if not size_show_l:  # below get each size
+                    logger.warn(' No this style in size show, please add to size_chart.py')
+                    return
                 colours=[dialog.ui.tableW_size_1.verticalHeaderItem(i).text() for i in range(dialog.ui.tableW_size_1.rowCount())]
                 logger.debug('colours={0}'.format(colours))
-                order=Order()
-                order.tis_no=dialog.ui.lin_tisno.text()
-                order.internal_no=dialog.ui.lin_abmno.text()
-                order.ctm_no=dialog.ui.lin_ctmno.text()
-                order.supplier=dialog.ui.comb_supplier.currentText()
-                order.client=dialog.ui.comb_client.currentText()
-                product=Product.objects.get(style_no__iexact=dialog.ui.comb_style.currentText())
-                order.product=product
-                logger.debug('order info={0}'.format(order))
+                for row,colour in enumerate(colours):
+                    logger.info('--checking colour {0}'.format(colour))
+                    order = Order()
+                    #below get size quantity and change from group size to size breakup size 1-size 31
+                    size_no_whole = 0
+                    total_quantity = 0
+                    for group_no in range(len(size_show_l)):
+                        size_group = size_show_l[group_no]
+                        table_w = getattr(dialog.ui, 'tableW_size_{0}'.format(group_no + 1))
+                        logger.debug('----saving data {0} to size {1} '.format(table_w, size_group))
+                        for size_no in range(len(size_group)):
+                            size_no_whole += 1
+                            if table_w.item(row, size_no) and table_w.item(row,size_no).text():
+                                logger.debug('cell text={0}'.format(table_w.item(row,size_no).text()))
+                                quantity = int(table_w.item(row, size_no).text())
+                                setattr(order, 'size{0}'.format(size_no_whole), quantity)
+                        if table_w.item(row, len(size_group)) and table_w.item(row, len(size_group)).text():
+                            total_quantity += int(table_w.item(row, len(size_group)).text())  # sum for this colour
+                    #do not save the colour order for 0 quantity
+                    if total_quantity==0:
+                        logger.info('--the colour has no quantity, skip')
+                        continue
+                    order.quantity=total_quantity
+                    order.tis_no = dialog.ui.lin_tisno.text()
+                    order.internal_no = dialog.ui.lin_abmno.text()
+                    order.ctm_no = dialog.ui.lin_ctmno.text()
+                    order.supplier = dialog.ui.comb_supplier.currentText()
+                    order.client = dialog.ui.comb_client.currentText()
+                    order.product = product
+                    order.shipment=shipment
+                    order.colour=colour
+                    order.order_date=dialog.ui.dateE_orderdate.date().toPyDate()
+
+                    logger.debug('order info={0}, quantity={1}'.format(order,order.quantity))
+                    order.save()
+                    '''
+
 
             else:
                 logger.debug(' cancel save new order')

@@ -245,6 +245,7 @@ def calculate_volumes(sender,created,instance,**kwargs):
     if created:
         return None
     shipment=instance.shipment
+    logger.info('After order saved, calculating volume for coreponding shipment {0}, carton:{1},volume:{2}m3'.format(shipment,shipment.cartons,shipment.volume))
     if shipment:
         orders=Order.objects.filter(shipment=shipment)
         cartons=0
@@ -272,6 +273,7 @@ def calculate_volumes(sender,created,instance,**kwargs):
             else:
                 shipment.container='LCL'
         shipment.save()
+        logger.info('New shipment volume: {0}, carton:{1},volume:{2}m3'.format(shipment,shipment.cartons,shipment.volume))
 
 
 def create_test_report_check(order_id, test_report_group):

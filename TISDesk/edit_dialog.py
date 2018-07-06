@@ -60,7 +60,7 @@ class Dialog_New_Order(QDialog):
         #update shipment combobox
         self.ui.comb_shipment.clear()
         supplier=self.ui.comb_supplier.currentText()
-        shipments=Shipment.objects.filter(supplier=supplier,etd__gt=datetime.date.today())
+        shipments=Shipment.objects.filter(supplier__iexact=supplier,etd__gt=datetime.date.today())
         shipment_l=[]
         if shipments:
             for shipment in shipments:
@@ -186,6 +186,53 @@ class Dialog_New_Order(QDialog):
 
         self.sender().cellChanged.connect(self.size_quantity_on_change)
 
+    def save_new_order(self):
+        logger.debug('Start to save new order')
+        shipment = Shipment.objects.get(id=int(self.ui.comb_shipment.currentText().split('-')[0].strip()))
+        product = Product.objects.get(style_no__iexact=self.ui.comb_style.currentText())
+        size_show_l = size_chart.get_size_show(product.style_no)
+        if not size_show_l:  # below get each size
+            logger.warn(' No this style in size show, please add to size_chart.py')
+            return
+        colours = [self.ui.tableW_size_1.verticalHeaderItem(i).text() for i in
+                   range(self.ui.tableW_size_1.rowCount())]
+        logger.debug('colours={0}'.format(colours))
+        for row, colour in enumerate(colours):
+            logger.info('--checking colour {0}'.format(colour))
+            order = Order()
+            # below get size quantity and change from group size to size breakup size 1-size 31
+            size_no_whole = 0
+            total_quantity = 0
+            for group_no in range(len(size_show_l)):
+                size_group = size_show_l[group_no]
+                table_w = getattr(self.ui, 'tableW_size_{0}'.format(group_no + 1))
+                logger.debug('----saving data {0} to size {1} '.format(table_w, size_group))
+                for size_no in range(len(size_group)):
+                    size_no_whole += 1
+                    if table_w.item(row, size_no) and table_w.item(row, size_no).text():
+                        logger.debug('cell text={0}'.format(table_w.item(row, size_no).text()))
+                        quantity = int(table_w.item(row, size_no).text())
+                        setattr(order, 'size{0}'.format(size_no_whole), quantity)
+                if table_w.item(row, len(size_group)) and table_w.item(row, len(size_group)).text():
+                    total_quantity += int(table_w.item(row, len(size_group)).text())  # sum for this colour
+            # do not save the colour order for 0 quantity
+            if total_quantity == 0:
+                logger.info('--the colour has no quantity, skip')
+                continue
+            order.quantity = total_quantity
+            order.tis_no = self.ui.lin_tisno.text()
+            order.internal_no = self.ui.lin_abmno.text()
+            order.ctm_no = self.ui.lin_ctmno.text()
+            order.supplier = self.ui.comb_supplier.currentText()
+            order.client = self.ui.comb_client.currentText()
+            order.product = product
+            order.shipment = shipment
+            order.colour = colour
+            order.order_date = self.ui.dateE_orderdate.date().toPyDate()
+            logger.debug('--order info info={0}, quantity={1}'.format(order, order.quantity))
+            order.save()
+            order.calculate_cartons_volumes()
+            logger.debug('--order saved ')
 
 
 class Edit_Dialog_Order(QDialog):
@@ -360,9 +407,6 @@ class Dialog_New_Shipment(QDialog):
         self.ui.comb_etdport.currentTextChanged.connect(self.update_widget)
         self.ui.comb_mode.currentTextChanged.connect(self.update_widget)
         self.ui.dateE_etd.dateChanged.connect(self.update_widget)
-
-
-
 
     def update_widget(self):
         logger.debug(' start to update widget')
