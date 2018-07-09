@@ -18,7 +18,8 @@ from PyQt5.QtSql import QSqlRelationalTableModel,QSqlRelation,QSqlRelationalDele
 from TISDesk.edit_dialog import Edit_dialog_shipment,Edit_Dialog_Order,Dialog_New_Shipment,Dialog_New_Order
 from core import fts_search
 from TISDesk import clipboard
-from invoice.inv_pack import check_shipment_invoice,check_shipment_packing_list,check_shipment_compare_invoice_packing
+from invoice.inv_pack import check_shipment_invoice,check_shipment_packing_list\
+    ,check_shipment_compare_invoice_packing,load_packing_db_back
 
 
 logger=tis_log.get_tis_logger()
@@ -106,6 +107,7 @@ class TISMainWindow(QMainWindow):
         self.ui.btn_shipmenttool_checkinvoice.clicked.connect(self.check_shipment_invoice)
         self.ui.btn_shipmenttool_checkdocument.clicked.connect(self.check_shipment_document)
         self.ui.btn_new_order.clicked.connect(self.create_new_order)
+        self.ui.btn_load_bak_packinglist.clicked.connect(self.load_bak_packing_list)
 
 
     def load_initial_data(self):
@@ -1199,3 +1201,8 @@ class TISMainWindow(QMainWindow):
 
         qm=QMessageBox()
         qm.question(self,'Check shipping document','Finish checking, please paste the result to your email')
+
+    def load_bak_packing_list(self):
+        doc_path=QFileDialog.getExistingDirectory(self,'Select folder of bak packing list db',os.path.abspath('C:\\Users\\rhe\\PyCharm\\TISProduction\\media\\invoice'))
+        load_packing_db_back(doc_path)
+

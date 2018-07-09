@@ -1,4 +1,4 @@
-import os
+import os,datetime
 import glob
 from functools import reduce
 from excelway.read_excel_by_xlrd import read_excel_file
@@ -6,6 +6,7 @@ from invoice import gz_packing,th_packing,st_packing,jf_packing,lt_packing
 from invoice.common_validate import validate_summary,parse_invoice
 from excelway.tis_excel import TIS_Excel
 from TISProduction import tis_log
+from invoice.models import Packing
 logger=tis_log.get_tis_logger()
 
 class MessageList():
@@ -239,6 +240,56 @@ def check_shipment_compare_invoice_packing(shipment_code,d_invoice,d_packing_lis
     msg_list.save_msg(msg)
     validate_result={'msg_error':msg_list.l_msg_error,'msg_success':msg_list.l_msg_success,'msg_recap':msg_list.l_msg_recap}
     return validate_result
+
+def load_packing_db_back(doc_path):
+    '''
+    #load invoice_packing
+    file_name=os.path.join(doc_path,'packings.csv')
+    logger.info('Start to load packing from file: '.format(file_name))
+    with open(file_name) as f:
+        for i,line in enumerate(f):
+            if i==0: #skip title row
+                continue
+            logger.info('row={0},value={1}'.format(i,line))
+            packing_l=line.split('|')
+            if packing_l[12]:
+                invoice_date=datetime.datetime.strptime(packing_l[12], '%Y-%m-%d')
+            else:
+                invoice_date=None
+            packing_d={'id':int(packing_l[0]),'tis_no':packing_l[1],'internal_no':packing_l[2],'supplier':packing_l[3]\
+                ,'style':packing_l[4],'commodity':packing_l[5],'price':float(packing_l[6]),'invoice_no':packing_l[7]\
+                ,'total_quantity':int(packing_l[8]),'total_carton':int(packing_l[9]),'total_weight':float(packing_l[10])\
+                ,'total_volume':float(packing_l[11]),'invoice_date':invoice_date\
+                ,'source':packing_l[13]}
+            logger.info('packing_d={0}'.format(packing_d))
+            try:
+                Packing.objects.create(**packing_d)
+            except Exception as e:
+                logger.error('error when save packing row{0}: {1}'.format(i,e))
+    '''
+    #load invoice_packing
+    file_name=os.path.join(doc_path,'packings.csv')
+    logger.info('Start to load packing from file: '.format(file_name))
+    with open(file_name) as f:
+        for i,line in enumerate(f):
+            if i==0: #skip title row
+                continue
+            logger.info('row={0},value={1}'.format(i,line))
+            packing_l=line.split('|')
+            if packing_l[12]:
+                invoice_date=datetime.datetime.strptime(packing_l[12], '%Y-%m-%d')
+            else:
+                invoice_date=None
+            packing_d={'id':int(packing_l[0]),'tis_no':packing_l[1],'internal_no':packing_l[2],'supplier':packing_l[3]\
+                ,'style':packing_l[4],'commodity':packing_l[5],'price':float(packing_l[6]),'invoice_no':packing_l[7]\
+                ,'total_quantity':int(packing_l[8]),'total_carton':int(packing_l[9]),'total_weight':float(packing_l[10])\
+                ,'total_volume':float(packing_l[11]),'invoice_date':invoice_date\
+                ,'source':packing_l[13]}
+            logger.info('packing_d={0}'.format(packing_d))
+            try:
+                Packing.objects.create(**packing_d)
+            except Exception as e:
+                logger.error('error when save packing row{0}: {1}'.format(i,e))
 
 
 
