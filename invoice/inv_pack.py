@@ -57,13 +57,30 @@ def check_shipment_packing_list(shipment_code,doc_path,save_db=None):
     packing_path=os.path.join(doc_path,'*packing*.xls*')
     files=glob.glob(packing_path)
     logger.debug('get files={0}'.format(files))
+    for i,file in enumerate(files):
+        if file.startswith('~',len(doc_path)+1):
+            d=files.pop(files.index(file))
+            logger.debug('pop {0}'.format(i))
+    logger.debug('After pop, files={0}'.format(d))
+
+    for i,file in enumerate(files):
+        if file.startswith('~',len(doc_path)+1):
+            files.pop(i)
+            logger.debug('pop {0}'.format(i))
+    logger.debug('After pop, files={0}'.format(files))
+
+    for i,file in enumerate(files):
+        if file.startswith('~',len(doc_path)+1):
+            files.pop(i)
+            logger.debug('pop {0}'.format(i))
+    logger.debug('After pop, files={0}'.format(files))
+
+
     if not files:
         status='There is no packing list document containing "packing" wording in file name'
         logger.warn(status)
-        return({'status':status})
+        return {'status':status},None
     for file in files:
-        if file.startswith('~',len(doc_path)+1):
-            continue
         logger.debug('Start reading file {0}'.format(file))
         if not shipment_code:
             logger.warn('please choose shipment code first')
@@ -101,21 +118,24 @@ def check_shipment_packing_list(shipment_code,doc_path,save_db=None):
             else:
                 status='No parsing module for this supplier {0} yet, please develop'.format(supplier)
                 logger.warn(status)
-                return {'status':status}
+                return {'status':status},None
 
-        logger.info('-Finish file, below success')
-        validate_result={'status':status,'total_cartons':total_cartons,'msg_success':l_msg_success,'msg_error':l_msg_error,'msg_recap':l_msg_recap}
-        #below consolidate by invoice_no, TISNo, Style
-        d_packing_list_tmp=TIS_Excel.consolidate_list_to_dict(l_packing_list,'invoice_no',None) #{'AW18F206':[{},{}],'AW18F205':[]}
-        d_packing_list={}
-        for invoice_no,l_pk in d_packing_list_tmp.items():
-            d_pk=TIS_Excel.consolidate_order(l_pk) #{'TIS17-SO4369':{'RM1050R': [{'price': 9.5, 'amount': 8189.0, 'colour': 'ALL', 'quantity': 862}]},'TIS17-SO4370':{}}
-            d_packing_list[invoice_no]=d_pk
-        logger.debug('after consolidate packing list d_packing_list={0}'.format(d_packing_list))
+        logger.info('-Finish file')
+    validate_result = {'status': status, 'total_cartons': total_cartons, 'msg_success': l_msg_success,
+                       'msg_error': l_msg_error, 'msg_recap': l_msg_recap}
+    # below consolidate by invoice_no, TISNo, Style
+    d_packing_list_tmp = TIS_Excel.consolidate_list_to_dict(l_packing_list, 'invoice_no',
+                                                            None)  # {'AW18F206':[{},{}],'AW18F205':[]}
+    d_packing_list = {}
+    for invoice_no, l_pk in d_packing_list_tmp.items():
+        d_pk = TIS_Excel.consolidate_order(
+            l_pk)  # {'TIS17-SO4369':{'RM1050R': [{'price': 9.5, 'amount': 8189.0, 'colour': 'ALL', 'quantity': 862}]},'TIS17-SO4370':{}}
+        d_packing_list[invoice_no] = d_pk
+    logger.debug('after consolidate packing list d_packing_list={0}'.format(d_packing_list))
 
-        if total_cartons:
-            logger.info('--Correct, total carton={0}'.format(total_cartons))
-        return validate_result,d_packing_list
+    if total_cartons:
+        logger.info('--Correct, total carton={0}'.format(total_cartons))
+    return validate_result, d_packing_list
 
 def check_shipment_invoice(shipment_code,doc_path,save_db=None):
     status='Finished'

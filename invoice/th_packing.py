@@ -771,10 +771,18 @@ def parse_packing_list(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS16-SO34
                             packing_list["date"]=current_row[col]
                         break
             elif str_contain(str(current_cell),["ORDER","NO."]):
+                if packing_list.get('Style')=='QPSTO':
+                    logger.debug('start debug QPSTO')
                 if str(cell_list[rownum-1][colnum]).strip()=='':#the value of style No. will be in merged cell with up cell
                     for col in range(colnum+1,colnum+5):
                         if str(cell_list[rownum-1][col]).strip()!="":
-                            packing_list["TISNo"]=str(cell_list[rownum-1][col]).upper().strip()
+                            tmp_str=str(cell_list[rownum-1][col]).upper().strip()
+                            import re
+                            match=re.search('.*(TIS\d{2}-SO\d{4}\w?).*',tmp_str,re.I)
+                            if match:
+                                packing_list["TISNo"]=match.group(1)
+                            else:
+                                packing_list["TISNo"] =tmp_str
                             break
                 if packing_list.get("TISNo") is None:
                     for col in range(colnum+1,colnum+5):

@@ -1172,6 +1172,11 @@ class TISMainWindow(QMainWindow):
         shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
         doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('C:\\Users\\rhe\\WebWork\\TISWork\\Invoice'))
         validate_result,d_packing_list=check_shipment_packing_list(shipment_code,doc_path)
+        if validate_result.get('status') != 'Finished':
+            msg=validate_result.get('status')
+            qm=QMessageBox()
+            qm.question(self,'packing list check error',msg)
+            return
         l_msg_recap.extend(validate_result.get('msg_recap'))
         l_msg_success.extend(validate_result.get('msg_success'))
         l_msg_error.extend(validate_result.get('msg_error'))
