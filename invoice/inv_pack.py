@@ -1,12 +1,14 @@
 import os,datetime
-import glob
+import glob,re
 from functools import reduce
 from excelway.read_excel_by_xlrd import read_excel_file
 from invoice import gz_packing,th_packing,st_packing,jf_packing,lt_packing
 from invoice.common_validate import validate_summary,parse_invoice
 from excelway.tis_excel import TIS_Excel
 from TISProduction import tis_log
-from invoice.models import Packing
+from invoice.models import Packing,Actual_quantity
+from products.size_chart import get_size_list
+
 logger=tis_log.get_tis_logger()
 
 class MessageList():
@@ -57,29 +59,29 @@ def check_shipment_packing_list(shipment_code,doc_path,save_db=None):
     packing_path=os.path.join(doc_path,'*packing*.xls*')
     files=glob.glob(packing_path)
     logger.debug('get files={0}'.format(files))
-    for i,file in enumerate(files):
-        if file.startswith('~',len(doc_path)+1):
-            d=files.pop(files.index(file))
-            logger.debug('pop {0}'.format(i))
-    logger.debug('After pop, files={0}'.format(d))
 
-    for i,file in enumerate(files):
+    item_no=0
+    for i in range(len(files)):#because we need pop, i is only for controlling iterate times
+        file=files[item_no]
         if file.startswith('~',len(doc_path)+1):
-            files.pop(i)
-            logger.debug('pop {0}'.format(i))
+            pop_file=files.pop(item_no)
+            logger.debug('iterate i={0} pop [{1}]={2}'.format(i,item_no,pop_file))
+        else:
+            item_no+=1 #if no pop, then do next item
     logger.debug('After pop, files={0}'.format(files))
 
-    for i,file in enumerate(files):
-        if file.startswith('~',len(doc_path)+1):
-            files.pop(i)
-            logger.debug('pop {0}'.format(i))
-    logger.debug('After pop, files={0}'.format(files))
+
 
 
     if not files:
         status='There is no packing list document containing "packing" wording in file name'
         logger.warn(status)
         return {'status':status},None
+
+    l_msg_success = []
+    l_msg_error = []
+    l_packing_list = []
+    l_msg_recap = []
     for file in files:
         logger.debug('Start reading file {0}'.format(file))
         if not shipment_code:
@@ -96,10 +98,10 @@ def check_shipment_packing_list(shipment_code,doc_path,save_db=None):
         msg = '=============Start to verify packing list file {0} , has {1} sheets ================'.format(file,len(excel_content.get('sheets')))
         logger.info(msg)
         total_cartons=0
-        l_msg_success=[]
-        l_msg_error=[]
-        l_packing_list=[]
-        l_msg_recap=[]
+        #l_msg_success=[]
+        #l_msg_error=[]
+        #l_packing_list=[]
+        #l_msg_recap=[]
         l_msg_recap.append('')
         l_msg_recap.append(msg)
         for sheetname in sorted([each for each in excel_content.get('sheets')]):
@@ -120,7 +122,7 @@ def check_shipment_packing_list(shipment_code,doc_path,save_db=None):
                 logger.warn(status)
                 return {'status':status},None
 
-        logger.info('-Finish file')
+        logger.info('-Finish file:{0}'.format(file))
     validate_result = {'status': status, 'total_cartons': total_cartons, 'msg_success': l_msg_success,
                        'msg_error': l_msg_error, 'msg_recap': l_msg_recap}
     # below consolidate by invoice_no, TISNo, Style
@@ -136,6 +138,8 @@ def check_shipment_packing_list(shipment_code,doc_path,save_db=None):
     if total_cartons:
         logger.info('--Correct, total carton={0}'.format(total_cartons))
     return validate_result, d_packing_list
+
+
 
 def check_shipment_invoice(shipment_code,doc_path,save_db=None):
     status='Finished'
@@ -286,30 +290,178 @@ def load_packing_db_back(doc_path):
                 Packing.objects.create(**packing_d)
             except Exception as e:
                 logger.error('error when save packing row{0}: {1}'.format(i,e))
-    '''
+
     #load invoice_packing
-    file_name=os.path.join(doc_path,'packings.csv')
-    logger.info('Start to load packing from file: '.format(file_name))
+    file_name=os.path.join(doc_path,'actual_qty.csv')
+    logger.info('Start to load actual quantity from file: '.format(file_name))
     with open(file_name) as f:
         for i,line in enumerate(f):
             if i==0: #skip title row
                 continue
             logger.info('row={0},value={1}'.format(i,line))
-            packing_l=line.split('|')
-            if packing_l[12]:
-                invoice_date=datetime.datetime.strptime(packing_l[12], '%Y-%m-%d')
-            else:
-                invoice_date=None
-            packing_d={'id':int(packing_l[0]),'tis_no':packing_l[1],'internal_no':packing_l[2],'supplier':packing_l[3]\
-                ,'style':packing_l[4],'commodity':packing_l[5],'price':float(packing_l[6]),'invoice_no':packing_l[7]\
-                ,'total_quantity':int(packing_l[8]),'total_carton':int(packing_l[9]),'total_weight':float(packing_l[10])\
-                ,'total_volume':float(packing_l[11]),'invoice_date':invoice_date\
-                ,'source':packing_l[13]}
-            logger.info('packing_d={0}'.format(packing_d))
+            actual_l=line.split('|')
+            actual_d={'id':int(actual_l[0]),'packing_id':int(actual_l[1]),'colour':actual_l[2],'total_quantity':int(actual_l[3])\
+                ,'size1':int(actual_l[4]),'size2':int(actual_l[5]),'size3':int(actual_l[6]),'size4':int(actual_l[7])\
+                ,'size5':int(actual_l[8]),'size6':int(actual_l[9]),'size7':int(actual_l[10]),'size8':int(actual_l[11])\
+                ,'size9':int(actual_l[12]),'size10':int(actual_l[13]),'size11':int(actual_l[14]),'size12':int(actual_l[15])\
+                ,'size13':int(actual_l[16]),'size14':int(actual_l[17]),'size15':int(actual_l[18]),'size16':int(actual_l[19])\
+                ,'size17':int(actual_l[20]),'size18':int(actual_l[21]),'size19':int(actual_l[22]),'size20':int(actual_l[23])\
+                ,'size21':int(actual_l[24]),'size22':int(actual_l[25]),'size23':int(actual_l[26]),'size24':int(actual_l[27])\
+                ,'size25':int(actual_l[28]),'size26':int(actual_l[29]),'size27':int(actual_l[30]),'size28':int(actual_l[31])\
+                ,'size29':int(actual_l[32]),'size30':int(actual_l[33])}
+            logger.info('actual_d={0}'.format(actual_d))
             try:
-                Packing.objects.create(**packing_d)
+                Actual_quantity.objects.create(**actual_d)
             except Exception as e:
-                logger.error('error when save packing row{0}: {1}'.format(i,e))
+                logger.error('error when save Actual_quantity row{0}: {1}'.format(i,e))
+    '''
+    #load invoice_packing
+    file_name=os.path.join(doc_path,'actual_qty.csv')
+    logger.info('Start to load actual quantity from file: '.format(file_name))
+    with open(file_name) as f:
+        for i,line in enumerate(f):
+            if i==0: #skip title row
+                continue
+            logger.info('row={0},value={1}'.format(i,line))
+            actual_l=line.split('|')
+            actual_d={'id':int(actual_l[0]),'packing_id':int(actual_l[1]),'colour':actual_l[2],'total_quantity':int(actual_l[3])\
+                ,'size1':int(actual_l[4]),'size2':int(actual_l[5]),'size3':int(actual_l[6]),'size4':int(actual_l[7])\
+                ,'size5':int(actual_l[8]),'size6':int(actual_l[9]),'size7':int(actual_l[10]),'size8':int(actual_l[11])\
+                ,'size9':int(actual_l[12]),'size10':int(actual_l[13]),'size11':int(actual_l[14]),'size12':int(actual_l[15])\
+                ,'size13':int(actual_l[16]),'size14':int(actual_l[17]),'size15':int(actual_l[18]),'size16':int(actual_l[19])\
+                ,'size17':int(actual_l[20]),'size18':int(actual_l[21]),'size19':int(actual_l[22]),'size20':int(actual_l[23])\
+                ,'size21':int(actual_l[24]),'size22':int(actual_l[25]),'size23':int(actual_l[26]),'size24':int(actual_l[27])\
+                ,'size25':int(actual_l[28]),'size26':int(actual_l[29]),'size27':int(actual_l[30]),'size28':int(actual_l[31])\
+                ,'size29':int(actual_l[32]),'size30':int(actual_l[33])}
+            logger.info('actual_d={0}'.format(actual_d))
+            try:
+                Actual_quantity.objects.create(**actual_d)
+            except Exception as e:
+                logger.error('error when save Actual_quantity row{0}: {1}'.format(i,e))
+
+'''
+There are different type of invoice date in packing list from different supplier
+'''
+def parse_date(s):
+    if s is None:
+        logger.info(' not found date info in packing sheet')
+        return None
+    if type(s) is datetime.date or type(s) is datetime.datetime:
+        return s
+    if type(s) is str:
+        match=re.match(r'([a-zA-Z]+)\s*(\d+)\s*[,.]?(\d+)',s)
+        if match is not None:
+            month_dict={'JAN':1,'FEB':2,'MAR':3,'APR':4,'MAY':5,'JUN':6,'JUL':7,'AUG':8,'SEP':9,'OCT':10,'NOV':11,'DEC':12}
+            month=month_dict.get(match.group(1).strip().upper()[0:3])
+            day=int(match.group(2))
+            year=int(match.group(3))
+            if year<100:
+                year=2000+year
+            result=datetime.date(year,month,day)
+            logger.debug('-get the invoice date is %s'%result)
+            return result
+
+        match=re.match(r'(\d+)\s*([a-zA-Z]+)\s*[,.]?(\d+)',s)
+        if match is not None:
+            month_dict={'JAN':1,'FEB':2,'MAR':3,'APR':4,'MAY':5,'JUN':6,'JUL':7,'AUG':8,'SEP':9,'OCT':10,'NOV':11,'DEC':12}
+            month=month_dict.get(match.group(2).strip().upper()[0:3])
+            day=int(match.group(1))
+            year=int(match.group(3))
+            if year<100:
+                year=2000+year
+            result=datetime.date(year,month,day)
+            logger.debug('-get the invoice date is %s'%result)
+            return result
+
+        match=re.match(r'(\d{4})\s*[,.-]\s*(\d+)\s*[,.-]\s*(\d+)',s)  #yyyy.mm.dd
+        if match is not None:
+            month=int(match.group(2))
+            day=int(match.group(3))
+            year=int(match.group(1))
+            if year<100:
+                year=2000+year
+            logger.debug('-get the invoice date yyyy-%s,mm-%s,dd-%s'%(year,month,day))
+            result=datetime.date(year,month,day)
+            logger.debug('-get the invoice date is %s'%result)
+            return result
+
+        match=re.match(r'(\d+)\s*[,.-]\s*(\d+)\s*[,.-]\s*(\d{4})',s)  #dd.mm.yyyy
+        if match is not None:
+            month=int(match.group(2))
+            day=int(match.group(1))
+            year=int(match.group(3))
+            if year<100:
+                year=2000+year
+            logger.debug('-get the invoice date yyyy-%s,mm-%s,dd-%s'%(year,month,day))
+            result=datetime.date(year,month,day)
+            logger.debug('-get the invoice date is %s'%result)
+            return result
+
+        match=re.match(r'(\d+)\s*[,.-]\s*(\d+)\s*[,.-]\s*(\d{2})',s)  #dd.mm.yy
+        if match is not None:
+            month=int(match.group(2))
+            day=int(match.group(1))
+            year=int(match.group(3))
+            if year<100:
+                year=2000+year
+            logger.debug('-get the invoice date yyyy-%s,mm-%s,dd-%s'%(year,month,day))
+            result=datetime.date(year,month,day)
+            logger.debug('-get the invoice date is %s'%result)
+            return result
+
+        logger.error('- can not match format May 20,2012 or 20 May,2012 or 2012.5.20 or 2012-5-20')
+        return None
+    logger.error(' - the type of parameter-s is %s,can not parse'%type(s))
+    return None
+
+
+def save_packing_list(d_packing_list):
+    if not d_packing_list:
+        return
+    logger.info('Start to save bundles of packing lists')
+    for invoice,in_value in d_packing_list.items(): #'AW17F204L': OrderedDict([('TIS16-SO3576',
+        logger.info('')
+        logger.info('===Invoice No.= {0}'.format(invoice))
+        for tis_no,tis_value in in_value.items(): #'TIS16-SO3576', OrderedDict([('RMPC014',
+            logger.info('****TIS_NO={0}'.format(tis_no))
+            for style,sty_value in tis_value.items(): #'RMPC014':[{'total_volume': 6.6144,'total_quantity': 2155.0,'date': datetime.datetime(2017, 4, 25, 0, 0), 'summary': {
+                logger.info('------Style={0}'.format(style))
+                size_list = get_size_list(style)
+                if not size_list:
+                    logger.error('!!!!!!!Can not find size list for style {0}'.format(style))
+                    continue
+
+                for d_style in sty_value: #style_value is a list, d_style={'total_volume': 6.6144,'total_quantity': 2155.0,'date': datetime.datetime(2017, 4, 25, 0, 0), 'summary': {
+                    invoice_date=d_style.get('date')
+                    if invoice_date:
+                        invoice_date=parse_date(invoice_date)
+                    else:
+                        logger.error('!!!!!!!! no invoice date for style: {0}}'.format(style))
+                    description=d_style.get('style_description')
+                    total_quantity=d_style.get('total_quantity')
+                    if total_quantity:
+                        try:
+                            total_quantity=int(float(total_quantity))
+                        except Exception as e:
+                            logger.error('error when convert total_quantity:{0} to int: {1}'.format(total_quantity,e))
+                            total_quantity=0
+                    logger.info('........Total_quantity={0},invoice_date={1},description={2}'.format(total_quantity,invoice_date,description))
+                    d_summary=d_style.get('summary') #'summary': {'BLACK': {Actual Qty': {
+                    for colour,colo_value in d_summary.items():
+                        d_actual_qty=colo_value.get('Actual Qty')# {Actual Qty': {'size_qty': {'102R': 60.0, '92R': 100.0, '82R':...}'total': 1076.0},
+                        colour_total_quantity=d_actual_qty.get('total')
+                        logger.info('        colour={0}, total={1}'.format(colour,colour_total_quantity))
+                        size_quantity=d_actual_qty.get('size_qty')
+                        for size_no in range(len(size_list)):
+                            size_name=size_list[size_no]
+                            quantity=size_quantity.get(size_name)
+                            if not quantity:
+                                logger.info('         packing list does no contain size {0}'.format(size_name))
+                                continue
+                            logger.info('         size{0} / {1} = {2} pcs'.format(size_no,size_name,quantity))
+
+
+
 
 
 

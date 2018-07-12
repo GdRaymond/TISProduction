@@ -143,7 +143,7 @@ class TIS_Excel():
                 quantity_cell_value = ws.Range(quantity_cell_name).Value
                 if quantity_cell_value:
                     logger.debug(' parsing quantity content:{0}'.format(quantity_cell_value.strip()))
-                    match=re.search(r'^(?P<qty>\d+)PCS.*/\s*(?P<carton>\d+)CTNS.*',quantity_cell_value.strip())
+                    match=re.search(r'^(?P<qty>\d+)PCS.*/\s*(?P<carton>\d+)\s?CTNS.*',quantity_cell_value.strip())
                     if match:
                         quantity=int(match.group('qty'))
                         cartons=int(match.group('carton'))

@@ -19,7 +19,7 @@ from TISDesk.edit_dialog import Edit_dialog_shipment,Edit_Dialog_Order,Dialog_Ne
 from core import fts_search
 from TISDesk import clipboard
 from invoice.inv_pack import check_shipment_invoice,check_shipment_packing_list\
-    ,check_shipment_compare_invoice_packing,load_packing_db_back
+    ,check_shipment_compare_invoice_packing,load_packing_db_back,save_packing_list
 
 
 logger=tis_log.get_tis_logger()
@@ -993,6 +993,8 @@ class TISMainWindow(QMainWindow):
 
     def check_shipment_booking(self):
         filename=QFileDialog.getOpenFileName(self,'Please select shipment booking spreadsheet',os.path.join(os.path.abspath('..'),'media'))[0]
+        if not filename:
+            return
         tis_app=TIS_Excel()
         try:
             #get orders in spread sheet
@@ -1134,11 +1136,12 @@ class TISMainWindow(QMainWindow):
     def check_shipment_packing_list(self):
         shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
         doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('C:\\Users\\rhe\\WebWork\\TISWork\\Invoice'))
+        if not doc_path:
+            return
         validate_result,d_packing_list=check_shipment_packing_list(shipment_code,doc_path)
         if validate_result.get('status')=='Finished':
             for msg in validate_result.get('msg_success'):
                 logger.info(msg)
-
             l_msg_error=validate_result.get('msg_error')
             logger.error('There are below {0} errors: {0}'.format(len(l_msg_error)))
             email_msg = 'Regarding packing list, please check below mistake or discrepancy \n'
@@ -1147,7 +1150,9 @@ class TISMainWindow(QMainWindow):
                 email_msg = '{0}{1}:{2}\n'.format(email_msg, i, msg)
             clipboard.write(email_msg)
             qm =QMessageBox()
-            qm.question(self,'Checking shipping document','Below verify errors have been writen to clipboard, you can paste to your email\n{0}'.format(email_msg))
+            reply=qm.question(self,'Checking Packing List','Below verify errors have been writen to clipboard, you can paste to your email\n Do you want to save to database? \n{0},'.format(email_msg),qm.Yes|qm.No)
+            if reply==qm.Yes:
+                save_packing_list(d_packing_list)
         else:
             qm =QMessageBox()
             qm.question(self,'Checking shipping document',validate_result.get('status'))
@@ -1159,6 +1164,8 @@ class TISMainWindow(QMainWindow):
     def check_shipment_invoice(self):
         shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
         doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('C:\\Users\\rhe\\WebWork\\TISWork\\Invoice'))
+        if not doc_path:
+            return
         validate_result,d_invoice=check_shipment_invoice(shipment_code,doc_path)
         l_msg_recap=validate_result.get('msg_recap')
         logger.info('\nRecap as below:\n')
@@ -1171,6 +1178,8 @@ class TISMainWindow(QMainWindow):
         l_msg_success=[]
         shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
         doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('C:\\Users\\rhe\\WebWork\\TISWork\\Invoice'))
+        if not doc_path:
+            return
         validate_result,d_packing_list=check_shipment_packing_list(shipment_code,doc_path)
         if validate_result.get('status') != 'Finished':
             msg=validate_result.get('status')
