@@ -14,9 +14,10 @@ style_type={'RM1000':'male_shirt','RM1000S':'male_shirt','RM100CF':'male_shirt',
             'RMPC008':'male_shirt','RMPC009':'male_shirt','RMPC010':'male_shirt','RMPC011':'male_shirt','RMPC012':'male_shirt',
             'RMPC008S':'male_shirt','RMPC009S':'male_shirt','RMPC010S':'male_shirt','RMPC011S':'male_shirt','RMPC012S':'male_shirt',
             'RMPC017':'male_shirt','RMPC019':'male_shirt','RMPC021':'male_shirt','RMPC023':'male_shirt','RMPC024':'male_shirt',
+            'RMPC017S':'male_shirt',
                 
             'RM208V2R':'female_shirt','RM208V3R':'female_shirt','RM300CF':'female_shirt','RMPC013':'female_shirt',
-            'RMPC020':'female_shirt','RMPC022':'female_shirt','RMPC025':'female_shirt','RMPC006':'female_shirt',
+            'RMPC020':'female_shirt','RMPC022':'female_shirt','RMPC025':'female_shirt','RMPC006':'female_shirt','RMPC018':'female_shirt',
             'RM4050R':'kids_shirt','RM400CF':'kids_shirt',
             
             'RM1004':'male_trousers','RM1004R':'male_trousers','RM1002':'male_trousers','RM1002R':'male_trousers',
@@ -33,8 +34,9 @@ style_type={'RM1000':'male_shirt','RM1000S':'male_shirt','RM100CF':'male_shirt',
             #QPS Style
             'QPSPL':'male_shirt','QPS polar fleece':'male_shirt','QPS PL':'male_shirt','CYDC PL':'male_shirt',
             'SESPL':'male_shirt','RFSPL-SS':'male_shirt','CRPL-SS':'male_shirt',
-            'QPSTO':'QPS_operation_trousers','QPSSO':'QPS_operation_trousers',
-            'QPSFO':'female_slacks',
+            'QPSTO':'QPS_operation_trousers','QPSSO':'QPS_operation_trousers','QPSDTM':'QPS_operation_trousers',
+            'QFESDTM':'QPS_operation_trousers',
+            'QPSFO':'female_slacks','QPSDSF':'female_slacks','QFESDSF':'female_slacks',
             'QPSFT':'QPS_field','QPSFS':'QPS_field',
 
              #ABF Style
@@ -79,7 +81,7 @@ type_size={
 
         'shorts':['67','72','77','82','87','92','97','102','107','112','117','122','127','132',
                     '-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'],
-        'QPS_operation_trousers':['2','3','4','5','6','7','8','9','10','-','3.25','4.25','5.25','6.25',
+        'QPS_operation_trousers':['2R','3R','4R','5R','6R','7R','8R','9R','10R','-','3.25','4.25','5.25','6.25',
                                   '7.25','8.25','9.25','10.25','-','-','4.5','5.5','6.5','7.5','8.5','9.5','10.5','-','-'],
         'QPS_field':['70R','75R','80R','85R','90R','95R','100R','105R','110R','115R','120R','125R','130R','70S','75S','80S',
                               '85S','90S','95S','100S','105S','70L','75L','80L','85L','90L','95L','100L','105L','110L','115L','120L'],
@@ -111,7 +113,7 @@ type_size_for_show = {
 
     'shorts': [['67', '72', '77', '82', '87', '92', '97', '102', '107', '112', '117', '122', '127', '132',
                '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']],
-    'QPS_operation_trousers': [['2', '3', '4', '5', '6', '7', '8', '9', '10', '-'], ['3.25', '4.25', '5.25', '6.25',
+    'QPS_operation_trousers': [['2R', '3R', '4R', '5R', '6R', '7R', '8R', '9R', '10R', '-'], ['3.25', '4.25', '5.25', '6.25',
                                '7.25', '8.25', '9.25', '10.25', '-', '-'], ['4.5', '5.5', '6.5', '7.5', '8.5', '9.5',
                                '10.5', '-', '-']],
     'QPS_field': [['70R', '75R', '80R', '85R', '90R', '95R', '100R', '105R', '110R', '115R', '120R', '125R', '130R'],

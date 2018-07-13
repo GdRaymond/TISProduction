@@ -386,8 +386,16 @@ def parse_packing_list_by_TIS(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS
             elif str(current_cell).strip()=="Order No.":
                 for col in range(colnum+1,ncols-1):
                     if str(current_row[col]).strip()!="":
-                        packing_list["TISNo"]=str(current_row[col]).strip()
+                        tmp_str = str(current_row[col]).strip()
+                        import re
+                        match = re.search('.*(TIS\d{2}-SO\d{4}\w?).*', tmp_str, re.I)
+                        if match:
+                            packing_list["TISNo"] = match.group(1)
+                        else:
+                            packing_list["TISNo"] = tmp_str
                         break
+                        #packing_list["TISNo"]=str(current_row[col]).strip()
+                        #break
 
     print ('invoice_date=%s,order=%s,style=%s,qty=%s'%(packing_list.get('date'),packing_list.get('TISNo')\
                                                        ,packing_list.get('Style'),packing_list.get('total_quantity')))
@@ -491,7 +499,9 @@ def parse_packing_list(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS16-SO34
                            #get this value and accumulate to the summary_actual_total and also write back to summary
     for rownum in range(nrows):
         current_row=cell_list[rownum]
-      #  print("==Current row No."+str(rownum)+" : "+str(current_row))
+        #logger.debug("==Current row No."+str(rownum)+" : "+str(current_row))
+        #if by_name=='MU52' and current_row==16:
+            #logger.debug('debug mu52')
 
         #find row_size_head to enter the detial_seg
         if rownum==row_size_head:
@@ -764,12 +774,17 @@ def parse_packing_list(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS16-SO34
                 for col in range(colnum+1,ncols-1):
                     logger.debug('-%s-%s-read invoice date, type-%s,col-%s,value-%s'\
                                  %(file,by_name,type(current_row[col]),col,current_row[col]))
-                    if str(current_row[col]).strip()!="":
-                        if type(current_row[col])is float:
-                            packing_list["date"]=xlrd.xldate.xldate_as_datetime(current_row[col],0)
-                        else:
-                            packing_list["date"]=current_row[col]
-                        break
+                    try:
+                        if str(current_row[col]).strip() != "":
+                            if type(current_row[col]) is float:
+                                packing_list["date"] = xlrd.xldate.xldate_as_datetime(current_row[col], 0)
+                            else:
+                                packing_list["date"] = current_row[col]
+                            break
+                    except Exception as e:
+                        logger.error('error when checking invoice_date col={0}: {1}'.format(col,e))
+                        continue
+
             elif str_contain(str(current_cell),["ORDER","NO."]):
                 if packing_list.get('Style')=='QPSTO':
                     logger.debug('start debug QPSTO')
@@ -787,7 +802,13 @@ def parse_packing_list(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS16-SO34
                 if packing_list.get("TISNo") is None:
                     for col in range(colnum+1,colnum+5):
                         if str(current_row[col]).strip()!="":
-                            packing_list["TISNo"]=str(current_row[col]).upper().strip()
+                            tmp_str=str(current_row[col]).upper().strip()
+                            import re
+                            match = re.search('.*(TIS\d{2}-SO\d{4}\w?).*', tmp_str, re.I)
+                            if match:
+                                packing_list["TISNo"] = match.group(1)
+                            else:
+                                packing_list["TISNo"] = tmp_str
                             break
 
     #print(packing_list)

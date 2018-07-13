@@ -43,8 +43,13 @@ def validate_packinglist_by_sheet(cell_list=[],filename='',sheetname='',save_db=
         #packing_list = TH_parse_packing_list(cell_list=cell_list, file=filename, by_name=sheetname)
     except Exception as e:
         logger.error('error when invoke th parsing:{0}'.format(e))
-    packing_list=parse_packing_list(cell_list=cell_list,file=filename,by_name=sheetname)
+    try:
+        packing_list=parse_packing_list(cell_list=cell_list,file=filename,by_name=sheetname)
+    except Exception as e:
+        logger.error('error when parsing packing list : {0}'.format(e))
+    logger.debug('Before validate, packing_list={0}'.format(packing_list))
     validate_result=validate_summary(packing_list=packing_list,file=filename,by_name=sheetname)
+    logger.debug('After validate, packing_list={0}'.format(packing_list))
     #if save_db==True:
         #count=save(packing_list=packing_list,fty='TH',file=filename,by_name=sheetname)
     #result={'verify':verify_result,'packing_list':packing_list}
@@ -69,9 +74,6 @@ def check_shipment_packing_list(shipment_code,doc_path,save_db=None):
         else:
             item_no+=1 #if no pop, then do next item
     logger.debug('After pop, files={0}'.format(files))
-
-
-
 
     if not files:
         status='There is no packing list document containing "packing" wording in file name'
@@ -98,10 +100,6 @@ def check_shipment_packing_list(shipment_code,doc_path,save_db=None):
         msg = '=============Start to verify packing list file {0} , has {1} sheets ================'.format(file,len(excel_content.get('sheets')))
         logger.info(msg)
         total_cartons=0
-        #l_msg_success=[]
-        #l_msg_error=[]
-        #l_packing_list=[]
-        #l_msg_recap=[]
         l_msg_recap.append('')
         l_msg_recap.append(msg)
         for sheetname in sorted([each for each in excel_content.get('sheets')]):
@@ -414,21 +412,27 @@ def parse_date(s):
     logger.error(' - the type of parameter-s is %s,can not parse'%type(s))
     return None
 
-
-def save_packing_list(d_packing_list):
+def save_packing_list(d_packing_list,supplier):
+    msg_list=MessageList()
     if not d_packing_list:
         return
-    logger.info('Start to save bundles of packing lists')
+    msg='Start to save bundles of packing lists'
+    msg_list.save_msg(msg)
+    #logger.info('{0}'.format(d_packing_list))
     for invoice,in_value in d_packing_list.items(): #'AW17F204L': OrderedDict([('TIS16-SO3576',
         logger.info('')
-        logger.info('===Invoice No.= {0}'.format(invoice))
+        msg='===Invoice No.= {0}'.format(invoice)
+        msg_list.save_msg(msg)
         for tis_no,tis_value in in_value.items(): #'TIS16-SO3576', OrderedDict([('RMPC014',
-            logger.info('****TIS_NO={0}'.format(tis_no))
+            msg='****TIS_NO={0}'.format(tis_no)
+            msg_list.save_msg(msg)
             for style,sty_value in tis_value.items(): #'RMPC014':[{'total_volume': 6.6144,'total_quantity': 2155.0,'date': datetime.datetime(2017, 4, 25, 0, 0), 'summary': {
-                logger.info('------Style={0}'.format(style))
+                msg='------Style={0}'.format(style)
+                msg_list.save_msg(msg)
                 size_list = get_size_list(style)
                 if not size_list:
-                    logger.error('!!!!!!!Can not find size list for style {0}'.format(style))
+                    msg='!!!!!!!Can not find size list for style {0}'.format(style)
+                    msg_list.save_msg(msg,'E')
                     continue
 
                 for d_style in sty_value: #style_value is a list, d_style={'total_volume': 6.6144,'total_quantity': 2155.0,'date': datetime.datetime(2017, 4, 25, 0, 0), 'summary': {
@@ -436,21 +440,51 @@ def save_packing_list(d_packing_list):
                     if invoice_date:
                         invoice_date=parse_date(invoice_date)
                     else:
-                        logger.error('!!!!!!!! no invoice date for style: {0}}'.format(style))
-                    description=d_style.get('style_description')
+                        msg='!!!!!!!! no invoice date for style: {0}}'.format(style)
+                        msg_list.save_msg(msg,'E')
+                    commodity=d_style.get('style_description')
                     total_quantity=d_style.get('total_quantity')
                     if total_quantity:
                         try:
                             total_quantity=int(float(total_quantity))
                         except Exception as e:
-                            logger.error('error when convert total_quantity:{0} to int: {1}'.format(total_quantity,e))
+                            msg='error when convert total_quantity:{0} to int: {1}'.format(total_quantity,e)
+                            msg_list.save_msg(msg,'E')
                             total_quantity=0
-                    logger.info('........Total_quantity={0},invoice_date={1},description={2}'.format(total_quantity,invoice_date,description))
+                    total_carton=d_style.get('total_carton')
+                    if total_carton:
+                        try:
+                            total_carton=int(float(total_carton))
+                        except Exception as e:
+                            logger.error('!!!!!!!!!! error when convert total_carton  {0} to interger : {1}'.format(total_carton,e))
+                            total_carton=0
+                    total_volume=d_style.get('total_volume')
+                    total_gw=d_style.get('total_gw')
+
+                    logger.info('........Total_quantity={0},invoice_date={1},description={2}'.format(total_quantity,invoice_date,commodity))
+                    #below save Packing
+                    packing_d = {'tis_no': tis_no, 'supplier': supplier, 'style': style, 'commodity': commodity\
+                        ,'invoice_no': invoice, 'total_quantity': total_quantity, 'total_carton': total_carton\
+                        ,'total_weight': total_gw , 'total_volume': total_volume, 'invoice_date': invoice_date }
+                    msg='       total_quantity={0} invoice_date={1}'.format(packing_d.get('total_quantity'),packing_d.get('invoice_date'))
+                    msg_list.save_msg(msg)
+                    try:
+                        #packing=Packing.objects.create(**packing_d)
+                        msg='       saved to db'
+                        msg_list.save_msg(msg)
+                    except Exception as e:
+                        msg='error when save packing : {0}'.format(e)
+                        msg_list.save_msg(msg,'E')
+                        continue
+
                     d_summary=d_style.get('summary') #'summary': {'BLACK': {Actual Qty': {
                     for colour,colo_value in d_summary.items():
                         d_actual_qty=colo_value.get('Actual Qty')# {Actual Qty': {'size_qty': {'102R': 60.0, '92R': 100.0, '82R':...}'total': 1076.0},
                         colour_total_quantity=d_actual_qty.get('total')
-                        logger.info('        colour={0}, total={1}'.format(colour,colour_total_quantity))
+                        msg='        colour={0}, quantity={1}'.format(colour,colour_total_quantity)
+                        msg_list.save_msg(msg)
+                        #actual_d = {'packing_id': packing.id, 'colour': colour,'total_quantity':colour_total_quantity}
+                        actual_d = {'packing_id': 1, 'colour': colour,'total_quantity':colour_total_quantity}
                         size_quantity=d_actual_qty.get('size_qty')
                         for size_no in range(len(size_list)):
                             size_name=size_list[size_no]
@@ -458,8 +492,28 @@ def save_packing_list(d_packing_list):
                             if not quantity:
                                 logger.info('         packing list does no contain size {0}'.format(size_name))
                                 continue
-                            logger.info('         size{0} / {1} = {2} pcs'.format(size_no,size_name,quantity))
-
+                            try:
+                                quantity=int(float(quantity))
+                            except Exception as e:
+                                logger.error('error when coverting size {0} quantity : {1}'.format(size_name,e))
+                                continue
+                            logger.info('         size{0} / {1} = {2} pcs'.format(size_no+1,size_name,quantity))
+                            actual_d['size{0}'.format(size_no+1)]=quantity
+                        #below save actual
+                        msg='         actual_d={0}'.format(actual_d)
+                        msg_list.save_msg(msg)
+                        try:
+                            #Actual_quantity.objects.create(**actual_d)
+                            msg='         saved to db'
+                            msg_list.save_msg(msg)
+                        except Exception as e:
+                            msg='error when save Actual_quantity row{0}: {1}'.format(e)
+                            msg_list.save_msg(msg,'E')
+    msg = 'Finish saving'
+    msg_list.save_msg(msg)
+    validate_result = {'msg_error': msg_list.l_msg_error, 'msg_success': msg_list.l_msg_success,
+                       'msg_recap': msg_list.l_msg_recap}
+    return validate_result
 
 
 

@@ -1135,10 +1135,15 @@ class TISMainWindow(QMainWindow):
 
     def check_shipment_packing_list(self):
         shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
+        supplier=self.ui.comb_shipmenttool_supplier.currentText()
         doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('C:\\Users\\rhe\\WebWork\\TISWork\\Invoice'))
         if not doc_path:
             return
-        validate_result,d_packing_list=check_shipment_packing_list(shipment_code,doc_path)
+        try:
+            validate_result,d_packing_list=check_shipment_packing_list(shipment_code,doc_path)
+        except Exception as e:
+            logger.error('error when check_shipment_Packing list: {0}'.format(e))
+            return
         if validate_result.get('status')=='Finished':
             for msg in validate_result.get('msg_success'):
                 logger.info(msg)
@@ -1146,13 +1151,27 @@ class TISMainWindow(QMainWindow):
             logger.error('There are below {0} errors: {0}'.format(len(l_msg_error)))
             email_msg = 'Regarding packing list, please check below mistake or discrepancy \n'
             for i, msg in enumerate(l_msg_error):
-                logger.error('{0}:{1}'.format(i, msg))
-                email_msg = '{0}{1}:{2}\n'.format(email_msg, i, msg)
+                try:
+                    logger.error('{0}:{1}'.format(i, msg))
+                    email_msg = '{0}{1}:{2}\n'.format(email_msg, i, msg)
+                except Exception as e:
+                    logger.error('error when showing error msg {0} : {1}'.format(i,e))
             clipboard.write(email_msg)
             qm =QMessageBox()
             reply=qm.question(self,'Checking Packing List','Below verify errors have been writen to clipboard, you can paste to your email\n Do you want to save to database? \n{0},'.format(email_msg),qm.Yes|qm.No)
             if reply==qm.Yes:
-                save_packing_list(d_packing_list)
+                save_result=save_packing_list(d_packing_list,supplier)
+                l_msg_recap = save_result.get('msg_recap')
+                logger.info('Please see below saving recap')
+                email_msg = 'Please see below saving recap \n'
+                for i, msg in enumerate(l_msg_recap):
+                    logger.info('{0}:{1}'.format(i, msg))
+                    email_msg = '{0}{1}:{2}\n'.format(email_msg, i, msg)
+                clipboard.write(email_msg)
+                qm = QMessageBox()
+                qm.question(self, 'Packing list saving',
+                                    'Finish Saving. Please see below  recap \n {0},'.format(
+                                        email_msg), qm.Yes | qm.No)
         else:
             qm =QMessageBox()
             qm.question(self,'Checking shipping document',validate_result.get('status'))

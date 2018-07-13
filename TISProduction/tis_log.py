@@ -4,7 +4,7 @@ def init_tis_logger():
     f_formater=logging.Formatter('%(asctime)s - %(levelname)s - %(funcName)s - %(message)s')
     c_formater=logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
-    f_handler=logging.FileHandler('tis.log')
+    f_handler=logging.FileHandler('tis.log',encoding = "UTF-8")
     f_handler.setLevel(logging.DEBUG)
     f_handler.setFormatter(f_formater)
 
