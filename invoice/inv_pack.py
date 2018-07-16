@@ -440,7 +440,7 @@ def save_packing_list(d_packing_list,supplier):
                     if invoice_date:
                         invoice_date=parse_date(invoice_date)
                     else:
-                        msg='!!!!!!!! no invoice date for style: {0}}'.format(style)
+                        msg='!!!!!!!! no invoice date for style: {0}'.format(style)
                         msg_list.save_msg(msg,'E')
                     commodity=d_style.get('style_description')
                     total_quantity=d_style.get('total_quantity')
@@ -469,7 +469,7 @@ def save_packing_list(d_packing_list,supplier):
                     msg='       total_quantity={0} invoice_date={1}'.format(packing_d.get('total_quantity'),packing_d.get('invoice_date'))
                     msg_list.save_msg(msg)
                     try:
-                        #packing=Packing.objects.create(**packing_d)
+                        packing=Packing.objects.create(**packing_d)
                         msg='       saved to db'
                         msg_list.save_msg(msg)
                     except Exception as e:
@@ -483,8 +483,8 @@ def save_packing_list(d_packing_list,supplier):
                         colour_total_quantity=d_actual_qty.get('total')
                         msg='        colour={0}, quantity={1}'.format(colour,colour_total_quantity)
                         msg_list.save_msg(msg)
-                        #actual_d = {'packing_id': packing.id, 'colour': colour,'total_quantity':colour_total_quantity}
-                        actual_d = {'packing_id': 1, 'colour': colour,'total_quantity':colour_total_quantity}
+                        actual_d = {'packing_id': packing.id, 'colour': colour,'total_quantity':colour_total_quantity}
+                        #actual_d = {'packing_id': 1, 'colour': colour,'total_quantity':colour_total_quantity}
                         size_quantity=d_actual_qty.get('size_qty')
                         for size_no in range(len(size_list)):
                             size_name=size_list[size_no]
@@ -503,11 +503,11 @@ def save_packing_list(d_packing_list,supplier):
                         msg='         actual_d={0}'.format(actual_d)
                         msg_list.save_msg(msg)
                         try:
-                            #Actual_quantity.objects.create(**actual_d)
+                            Actual_quantity.objects.create(**actual_d)
                             msg='         saved to db'
                             msg_list.save_msg(msg)
                         except Exception as e:
-                            msg='error when save Actual_quantity row{0}: {1}'.format(e)
+                            msg='error when save Actual_quantity row{0}'.format(e)
                             msg_list.save_msg(msg,'E')
     msg = 'Finish saving'
     msg_list.save_msg(msg)

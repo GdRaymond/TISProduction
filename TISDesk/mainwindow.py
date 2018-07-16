@@ -103,7 +103,7 @@ class TISMainWindow(QMainWindow):
         self.ui.btn_shipmenttool_getshipmentorderinfo.clicked.connect(self.shipment_tool_getorderinfo)
         self.ui.btn_shipmenttool_checkbooking.clicked.connect(self.check_shipment_booking)
         self.ui.btn_shipmenttool_checktestreport.clicked.connect(self.check_shipment_testreport)
-        self.ui.btn_shipmenttool_checkpackinglist.clicked.connect(self.check_shipment_packing_list)
+        self.ui.btn_shipmenttool_checkpackinglist.clicked.connect(self.check_shipment_packing_list_only)
         self.ui.btn_shipmenttool_checkinvoice.clicked.connect(self.check_shipment_invoice)
         self.ui.btn_shipmenttool_checkdocument.clicked.connect(self.check_shipment_document)
         self.ui.btn_new_order.clicked.connect(self.create_new_order)
@@ -383,7 +383,6 @@ class TISMainWindow(QMainWindow):
         self.ui.tableW_samplecheck_order.setItem(row_pos,13,QTableWidgetItem(str(order.tape_no)) )
         self.ui.tableW_samplecheck_order.setItem(row_pos,14,QTableWidgetItem(str(order.id)) )
 
-
     def append_one_shipment(self,shipment,flag_all_order='F'):
         row_pos=self.ui.tableWOrder.rowCount()
         logger.debug('Row Position is {0}'.format(row_pos))
@@ -429,7 +428,6 @@ class TISMainWindow(QMainWindow):
         except Exception as e:
             logger.error('  error when get orders from shipment {0}'.format(e))
 
-
     def show_orders(self,orders):
         for index in range(len(orders)):
             order=orders[index]
@@ -445,7 +443,6 @@ class TISMainWindow(QMainWindow):
         logger.debug(' Get orders {0}'.format(len(orders)))
         #self.ui.tableWOrder.setRowCount(len(orders))
         self.show_orders(orders)
-
 
     def show_shipments(self,shipments):
         for shipment in shipments:
@@ -1133,7 +1130,7 @@ class TISMainWindow(QMainWindow):
         else:
             logger.warn('please select shipment')
 
-    def check_shipment_packing_list(self):
+    def check_shipment_packing_list_only(self):
         shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
         supplier=self.ui.comb_shipmenttool_supplier.currentText()
         doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('C:\\Users\\rhe\\WebWork\\TISWork\\Invoice'))

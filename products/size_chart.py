@@ -48,6 +48,10 @@ style_type={'RM1000':'male_shirt','RM1000S':'male_shirt','RM100CF':'male_shirt',
             'UU53':'male_shirt','UU73':'male_shirt','UU61-V':'ABF_unisex_shirt','UU61V':'ABF_unisex_shirt',
             'FL13':'female_slacks','FL21':'female_slacks','FL24':'female_slacks','FL24-DDU':'female_slacks',
 
+            #QFES SES RFS
+            'SESSPM':'male_shirt','SESSPF':'male_shirt','SESTPM':'male_shirt','SESTPF':'male_shirt',
+            'SESOU':'male_trousers',
+
              #VP Style
             'VPSSM01':'VP_male_shirt','VPLSM01':'VP_male_shirt',
             'VPSSF01':'female_shirt','VPLSF01':'female_shirt',
@@ -86,7 +90,7 @@ type_size={
         'QPS_field':['70R','75R','80R','85R','90R','95R','100R','105R','110R','115R','120R','125R','130R','70S','75S','80S',
                               '85S','90S','95S','100S','105S','70L','75L','80L','85L','90L','95L','100L','105L','110L','115L','120L'],
         'ABF_trousers':['67R','72R','77R','82R','87R','92R','97R','102R','107R','112R','117R','122R','127R','82S','87S',
-                    '92S','97S','102S','107S','112S','117S','122S','127S','132S','74L','79L','84L','89L','94L','99L','104L'],
+                    '92S','97S','102S','107S','112S','117S','122S','127S','132S','74L','79L','84L','89L','94L','99L'],
         'ABF_unisex_shirt':['4XS','3XS','2XS','XS','S','M','L','XL','2XL','3XL','4XL','5XL','6XL','7XL'],
         'VP_male_shirt':['36','37','38','39','40','41','42','44','46','48','50','51','52'],
         
@@ -123,7 +127,7 @@ type_size_for_show = {
     'ABF_trousers': [['67R', '72R', '77R', '82R', '87R', '92R', '97R', '102R', '107R', '112R', '117R', '122R', '127R'],
                      ['82S', '87S',
                      '92S', '97S', '102S', '107S', '112S', '117S', '122S', '127S', '132S'], ['74L', '79L', '84L', '89L',
-                     '94L', '99L', '104L']],
+                     '94L', '99L']],
     'ABF_unisex_shirt': [['4XS', '3XS', '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', '6XL', '7XL']],
     'VP_male_shirt': [['36', '37', '38', '39', '40', '41', '42', '44', '46', '48', '50', '51', '52']],
 
