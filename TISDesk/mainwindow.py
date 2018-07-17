@@ -1157,7 +1157,10 @@ class TISMainWindow(QMainWindow):
             qm =QMessageBox()
             reply=qm.question(self,'Checking Packing List','Below verify errors have been writen to clipboard, you can paste to your email\n Do you want to save to database? \n{0},'.format(email_msg),qm.Yes|qm.No)
             if reply==qm.Yes:
-                save_result=save_packing_list(d_packing_list,supplier)
+                try:
+                    save_result=save_packing_list(d_packing_list,supplier)
+                except Exception as e:
+                    logger.error('error when save_packing list: {0}'.format(e))
                 l_msg_recap = save_result.get('msg_recap')
                 logger.info('Please see below saving recap')
                 email_msg = 'Please see below saving recap \n'

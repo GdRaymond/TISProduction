@@ -500,8 +500,8 @@ def parse_packing_list(cell_list=[],file='test.xlsx',by_name="RM500BT(TIS16-SO34
     for rownum in range(nrows):
         current_row=cell_list[rownum]
         logger.debug("==Current row No."+str(rownum)+" : "+str(current_row))
-        if by_name=='SESOU' and current_row==5:
-            logger.debug('debug mu52')
+        #if by_name=='SESOU' and current_row==5:
+            #logger.debug('debug mu52')
 
         #find row_size_head to enter the detial_seg
         if rownum==row_size_head:

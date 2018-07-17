@@ -412,13 +412,45 @@ def parse_date(s):
     logger.error(' - the type of parameter-s is %s,can not parse'%type(s))
     return None
 
+
 def save_packing_list(d_packing_list,supplier):
+    '''
+    :param d_packing_list:
+    d_packing_list:{
+  '2015TN-K30008':{...}
+  '2015TN-K30031':{
+	 'TIS15-SO2807':{...}
+     'TIS15-SO2806':{
+	    'QPSTO':[...],
+		'RM105CF':[
+		   {'summary':{...},...},
+		   {'summary':{'O-N':{...},
+					   'Y-N':{'Ratio':{...},
+							  'Balance': {...},
+							  'Order Qty':{...},
+							  'Actual Qty':{...}
+							 }
+			'total_quantity': 624.0, 'total_carton': 34.0,
+			'style_description': "MEN'S Shirt",
+			'total_volume': 1.4,
+			'total_gw': 442.0,
+			'total_nw': 408.0,
+			'date':datetime.datetime(2015, 8, 13, 0, 0)
+			'detail': [{...},{...}]
+		   }
+		]
+	 },
+  },
+
+    :param supplier:
+    :return:
+    '''
     msg_list=MessageList()
     if not d_packing_list:
         return
     msg='Start to save bundles of packing lists'
     msg_list.save_msg(msg)
-    #logger.info('{0}'.format(d_packing_list))
+    logger.info('{0}'.format(d_packing_list))
     for invoice,in_value in d_packing_list.items(): #'AW17F204L': OrderedDict([('TIS16-SO3576',
         logger.info('')
         msg='===Invoice No.= {0}'.format(invoice)
@@ -435,7 +467,21 @@ def save_packing_list(d_packing_list,supplier):
                     msg_list.save_msg(msg,'E')
                     continue
 
-                for d_style in sty_value: #style_value is a list, d_style={'total_volume': 6.6144,'total_quantity': 2155.0,'date': datetime.datetime(2017, 4, 25, 0, 0), 'summary': {
+                # below save Packing but without total_quantity
+                packing_d = {'tis_no': tis_no, 'supplier': supplier, 'invoice_no': invoice,'style': style,'invoice_date':datetime.date(1900,1,1)}
+                try:
+                    packing=Packing.objects.create(**packing_d)
+                    msg = '       saved Packing to db'
+                    msg_list.save_msg(msg)
+                except Exception as e:
+                    msg = 'error when save packing : {0}'.format(e)
+                    msg_list.save_msg(msg, 'E')
+                    continue
+
+                sum_quantity,sum_carton,sum_gw,sum_volume=0,0,0,0
+
+
+                for d_style in sty_value: #style_value is a list, d_style={'total_volume': 6.6144,'total_quantity': 2155.0,'date': datetime.datetime(2017, 4, 25, 0, 0), 'summary': {}, Tanhoo will split colours into different sheet, so there will be several summary in list
                     invoice_date=d_style.get('date')
                     if invoice_date:
                         invoice_date=parse_date(invoice_date)
@@ -446,36 +492,33 @@ def save_packing_list(d_packing_list,supplier):
                     total_quantity=d_style.get('total_quantity')
                     if total_quantity:
                         try:
-                            total_quantity=int(float(total_quantity))
+                            sum_quantity+=int(float(total_quantity))
                         except Exception as e:
                             msg='error when convert total_quantity:{0} to int: {1}'.format(total_quantity,e)
                             msg_list.save_msg(msg,'E')
-                            total_quantity=0
                     total_carton=d_style.get('total_carton')
                     if total_carton:
                         try:
-                            total_carton=int(float(total_carton))
+                            sum_carton+=int(float(total_carton))
                         except Exception as e:
                             logger.error('!!!!!!!!!! error when convert total_carton  {0} to interger : {1}'.format(total_carton,e))
-                            total_carton=0
-                    total_volume=d_style.get('total_volume')
-                    total_gw=d_style.get('total_gw')
 
-                    logger.info('........Total_quantity={0},invoice_date={1},description={2}'.format(total_quantity,invoice_date,commodity))
-                    #below save Packing
-                    packing_d = {'tis_no': tis_no, 'supplier': supplier, 'style': style, 'commodity': commodity\
-                        ,'invoice_no': invoice, 'total_quantity': total_quantity, 'total_carton': total_carton\
-                        ,'total_weight': total_gw , 'total_volume': total_volume, 'invoice_date': invoice_date }
-                    msg='       total_quantity={0} invoice_date={1}'.format(packing_d.get('total_quantity'),packing_d.get('invoice_date'))
-                    msg_list.save_msg(msg)
-                    try:
-                        packing=Packing.objects.create(**packing_d)
-                        msg='       saved to db'
-                        msg_list.save_msg(msg)
-                    except Exception as e:
-                        msg='error when save packing : {0}'.format(e)
-                        msg_list.save_msg(msg,'E')
-                        continue
+                    total_volume = d_style.get('total_volume')
+                    if total_volume:
+                        try:
+                            sum_volume+=float(total_volume)
+                        except Exception as e:
+                            msg = 'error when convert total_volume:{0} to float: {1}'.format(total_volume, e)
+                            msg_list.save_msg(msg, 'E')
+                    total_weight=d_style.get('total_gw')
+                    if total_weight:
+                        try:
+                            sum_gw+=float(total_weight)
+                        except Exception as e:
+                            msg = 'error when convert total_weight:{0} to float: {1}'.format(total_weight, e)
+                            msg_list.save_msg(msg, 'E')
+
+
 
                     d_summary=d_style.get('summary') #'summary': {'BLACK': {Actual Qty': {
                     for colour,colo_value in d_summary.items():
@@ -504,11 +547,20 @@ def save_packing_list(d_packing_list,supplier):
                         msg_list.save_msg(msg)
                         try:
                             Actual_quantity.objects.create(**actual_d)
-                            msg='         saved to db'
+                            msg='         saved actual_d to db'
                             msg_list.save_msg(msg)
                         except Exception as e:
                             msg='error when save Actual_quantity row{0}'.format(e)
                             msg_list.save_msg(msg,'E')
+
+                #below update packing with quantity
+                packing.total_quantity,packing.total_carton,packing.total_volume=sum_quantity,sum_carton,sum_volume
+                packing.total_weight,packing.commodity,packing.invoice_date=sum_gw,commodity,invoice_date
+                packing.save()
+                msg='........Update packing with Total_quantity={0},invoice_date={1},description={2}'.format(packing.total_quantity, packing.invoice_date,packing.commodity)
+                msg_list.save_msg(msg)
+
+
     msg = 'Finish saving'
     msg_list.save_msg(msg)
     validate_result = {'msg_error': msg_list.l_msg_error, 'msg_success': msg_list.l_msg_success,
