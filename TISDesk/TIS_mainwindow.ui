@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -936,6 +936,126 @@
         <string>CreateNewOrder-Manually</string>
        </property>
       </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Statistic</string>
+     </attribute>
+     <widget class="QPushButton" name="btn_statistic_style">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>80</y>
+        <width>191</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Statistic Style Colour</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comb_style_statistic">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>30</y>
+        <width>101</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lb_style_statistic">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>30</y>
+        <width>47</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Style</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comb_supplier_statistic">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>30</y>
+        <width>81</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lb_supplier_statistic">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>47</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Supplier</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comb_colour_statistic">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>30</y>
+        <width>101</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lb_colour_statistic">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>30</y>
+        <width>47</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Colour</string>
+      </property>
      </widget>
     </widget>
    </widget>

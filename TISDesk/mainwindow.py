@@ -20,6 +20,8 @@ from core import fts_search
 from TISDesk import clipboard
 from invoice.inv_pack import check_shipment_invoice,check_shipment_packing_list\
     ,check_shipment_compare_invoice_packing,load_packing_db_back,save_packing_list
+from invoice.statistic import get_style_size_quantity
+from invoice.models import Actual_quantity
 
 
 logger=tis_log.get_tis_logger()
@@ -108,6 +110,8 @@ class TISMainWindow(QMainWindow):
         self.ui.btn_shipmenttool_checkdocument.clicked.connect(self.check_shipment_document)
         self.ui.btn_new_order.clicked.connect(self.create_new_order)
         self.ui.btn_load_bak_packinglist.clicked.connect(self.load_bak_packing_list)
+        self.ui.btn_statistic_style.clicked.connect(self.statistic_style)
+        self.ui.comb_style_statistic.currentTextChanged.connect(self.update_statistic_colour)
 
 
     def load_initial_data(self):
@@ -119,6 +123,15 @@ class TISMainWindow(QMainWindow):
         self.ui.comb_shipmenttool_supplier.addItem('--')
         self.ui.comb_supplier.setCurrentText('--')
         self.ui.comb_shipmenttool_supplier.setCurrentText('--')
+
+        self.ui.comb_supplier_statistic.addItems(suppliers)
+        self.ui.comb_supplier_statistic.addItem('--')
+        self.ui.comb_supplier_statistic.setCurrentText('--')
+        statistic_product_list=['RM1050R','QPSTO']
+        self.ui.comb_style_statistic.addItems(statistic_product_list)
+
+        self.ui.comb_colour_statistic.addItem('ALL')
+
 
     def load_comb_fabric(self):
         self.ui.comb_fabric.clear()
@@ -174,6 +187,17 @@ class TISMainWindow(QMainWindow):
             logger.error(' error when get colour :{0}'.format(e))
         self.ui.tableW_colour.resizeColumnsToContents()
 
+    def update_statistic_colour(self):
+        self.ui.comb_colour_statistic.clear()
+        style=self.ui.comb_style_statistic.currentText()
+        try:
+            q_colours=Actual_quantity.objects.filter(packing__style__iexact=style).order_by('colour').values('colour').distinct()
+            colours=[colour.get('colour') for colour in q_colours ]
+        except Exception as e:
+            logger.error('error when get q_colours :{0}'.format(e))
+        self.ui.comb_colour_statistic.addItems(colours)
+        self.ui.comb_colour_statistic.addItem('ALL')
+        self.ui.comb_colour_statistic.setCurrentText('ALL')
 
     def openfile(self):
         files=QFileDialog.getOpenFileName(self,'Open file','C:\\Users\\rhe\\PyCharm\\TISOrder\\media')
@@ -1238,4 +1262,19 @@ class TISMainWindow(QMainWindow):
     def load_bak_packing_list(self):
         doc_path=QFileDialog.getExistingDirectory(self,'Select folder of bak packing list db',os.path.abspath('C:\\Users\\rhe\\PyCharm\\TISProduction\\media\\invoice'))
         load_packing_db_back(doc_path)
+
+    def statistic_style(self):
+        style=self.ui.comb_style_statistic.currentText()
+        colour=self.ui.comb_colour_statistic.currentText()
+        try:
+            l_invoice_size_quantity,msg_list=get_style_size_quantity(style,colour)
+        except Exception as e:
+            logger.error('error when get_style_size_quantity: {0}'.format(e))
+        email_msg=''
+        for msg in msg_list.l_msg_recap:
+            email_msg='{0}\n{1}'.format(email_msg,msg)
+        clipboard.write(email_msg)
+        qm=QMessageBox()
+        qm.question(self,'Statistic by Style','Finish statistic, please see below recap or paste to email:\n{0}'.format(email_msg))
+
 
