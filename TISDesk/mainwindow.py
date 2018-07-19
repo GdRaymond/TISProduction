@@ -20,7 +20,7 @@ from core import fts_search
 from TISDesk import clipboard
 from invoice.inv_pack import check_shipment_invoice,check_shipment_packing_list\
     ,check_shipment_compare_invoice_packing,load_packing_db_back,save_packing_list
-from invoice.statistic import get_style_size_quantity
+from invoice.statistic import get_style_size_quantity,plot_size_quantity_change,change_to_season
 from invoice.models import Actual_quantity
 
 
@@ -127,7 +127,7 @@ class TISMainWindow(QMainWindow):
         self.ui.comb_supplier_statistic.addItems(suppliers)
         self.ui.comb_supplier_statistic.addItem('--')
         self.ui.comb_supplier_statistic.setCurrentText('--')
-        statistic_product_list=['RM1050R','QPSTO']
+        statistic_product_list=['--','RM1050R','QPSTO','RM1002','RM1004','RM200CF','UL40','FU36']
         self.ui.comb_style_statistic.addItems(statistic_product_list)
 
         self.ui.comb_colour_statistic.addItem('ALL')
@@ -1276,5 +1276,17 @@ class TISMainWindow(QMainWindow):
         clipboard.write(email_msg)
         qm=QMessageBox()
         qm.question(self,'Statistic by Style','Finish statistic, please see below recap or paste to email:\n{0}'.format(email_msg))
+        #below plot according to the radio button by invoice or by season
+        if self.ui.radioB_season_statistic.isChecked():
+            plot_way=' -By season'
+            l_invoice_size_quantity=change_to_season(l_invoice_size_quantity)
+            return
+        else:
+            plot_way=' -By each invoice'
+        try:
+            plot_size_quantity_change(l_invoice_size_quantity,style,colour,plot_way)
+        except Exception as e:
+            logger.error('error when plot : {0}'.format(e))
+
 
 
