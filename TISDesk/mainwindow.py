@@ -1278,11 +1278,10 @@ class TISMainWindow(QMainWindow):
         qm.question(self,'Statistic by Style','Finish statistic, please see below recap or paste to email:\n{0}'.format(email_msg))
         #below plot according to the radio button by invoice or by season
         if self.ui.radioB_season_statistic.isChecked():
-            plot_way=' -By season'
+            plot_way='S'
             l_invoice_size_quantity=change_to_season(l_invoice_size_quantity)
-            return
         else:
-            plot_way=' -By each invoice'
+            plot_way='I'
         try:
             plot_size_quantity_change(l_invoice_size_quantity,style,colour,plot_way)
         except Exception as e:
