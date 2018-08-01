@@ -801,9 +801,9 @@ class TISMainWindow(QMainWindow):
                 msg_list.save_msg('Start to match order {0} in db to email list'.format(order))
                 #deb='start'
                 for index,line in enumerate(target_l):
-                    #if order.tis_no[6:12] in ['SO4434', 'SO4445']:
-                        #logger.debug('debug db TIS:{0} email TIS {1}'.format(order.tis_no[6:12], line[0]))
-                        #deb='tis'
+                    if order.tis_no[6:12] in ['SO4492', 'SO4493']:
+                        logger.debug('debug db TIS:{0} email TIS {1}'.format(order.tis_no[6:12], line[0]))
+                        deb='tis'
                     if order.tis_no[6:12]==line[0][:6]:
                         #if line[1] in ['RM200CF','RM100CFS']:
                             #logger.debug('debug db style:{0} email style {1}'.format(order.product.style_no, line[1]))
@@ -813,8 +813,13 @@ class TISMainWindow(QMainWindow):
                             #if deb=='style':
                                 #logger.debug('debug style matched, start get colour db=-{0}-, emmail=-{1}-'.format(order.colour,line[2]))
                             colour = product_price.get_formal_colourname_from_alias(line[2])  # 'CobaltBlue'
-                            #if colour==False:
-                                #logger.debug('debug False db colour-{0}- email formal colour-{1}-'.format(order.colour, colour))
+                            if colour==False:
+                                msg='False colour name in email:{0}, we only find in database colour: {1}'.format(line[2],order.colour, colour)
+                                logger.error(msg)
+                                qm=QMessageBox()
+                                qm.question(self,'Error Message of colour','{0}\n{1}'.format(msg,'Please correct and try again. '))
+                                return
+
                             #if order.colour in ['Black','Khaki']:
                                 #logger.debug('debug Selected db colour-{0}- email formal colour-{1}-'.format(order.colour,colour))
                             if colour.strip().upper()==order.colour.strip().upper():
