@@ -336,17 +336,17 @@ class TISMainWindow(QMainWindow):
         pp_checks=order.samplecheck_set.filter(type__iexact='p')
         if pp_checks:
             logger.debug('get pp_checks quantity {0}'.format(len(pp_checks)))
-            pp_comments=pp_checks[0].comment
-            for pp_check in range(1,len(pp_checks)):
-                pp_comments='{0}\n{1}'.format(pp_comments,pp_check.comment)
+            pp_comments=pp_checks[0].comment #get 1st comment , No.=0
+            for pp_check_no in range(1,len(pp_checks)): #get comments after 1st
+                pp_comments='{0}\n{1}'.format(pp_comments,pp_checks[pp_check_no].comment)
         self.ui.tableWOrder.setItem(row_pos,7,QTableWidgetItem(pp_comments))
         ss_comments = ''
         ss_checks=order.samplecheck_set.filter(type__iexact='s')
         if ss_checks:
             logger.debug('get ss_checks quantity {0}'.format(len(ss_checks)))
             ss_comments=ss_checks[0].comment
-            for ss_check in range(1,len(ss_checks)):
-                ss_comments='{0}\n{1}'.format(ss_comments,ss_check.comment)
+            for ss_check_no in range(1,len(ss_checks)):
+                ss_comments='{0}\n{1}'.format(ss_comments,ss_checks[ss_check_no].comment)
         self.ui.tableWOrder.setItem(row_pos,8,QTableWidgetItem(ss_comments) )
         test_comments = ''
         test_checks=order.samplecheck_set.filter(type__iexact='t')
@@ -446,7 +446,7 @@ class TISMainWindow(QMainWindow):
 
             logger.debug(' get orders from shipment {0}'.format(len(orders)))
             for order in orders:
-                if order.tis_no=='TIS18-SO4548':
+                if order.tis_no=='TIS18-SO4658':
                     logger.debug('  check this point')
                 self.append_one_order(order)
         except Exception as e:
