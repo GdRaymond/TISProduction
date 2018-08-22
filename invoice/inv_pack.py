@@ -84,6 +84,7 @@ def check_shipment_packing_list(shipment_code,doc_path,save_db=None):
     l_msg_error = []
     l_packing_list = []
     l_msg_recap = []
+    total_cartons=0 #carton number for all files
     for file in files:
         logger.debug('Start reading file {0}'.format(file))
         if not shipment_code:
@@ -99,7 +100,7 @@ def check_shipment_packing_list(shipment_code,doc_path,save_db=None):
             continue
         msg = '=============Start to verify packing list file {0} , has {1} sheets ================'.format(file,len(excel_content.get('sheets')))
         logger.info(msg)
-        total_cartons=0
+        sub_cartons=0 #carton number for this file
         l_msg_recap.append('')
         l_msg_recap.append(msg)
         for sheetname in sorted([each for each in excel_content.get('sheets')]):
@@ -109,7 +110,7 @@ def check_shipment_packing_list(shipment_code,doc_path,save_db=None):
                                                     filename=excel_content.get('filename'), \
                                                     sheetname=sheetname,save_db=save_db,supplier=supplier)
                 if validate_result.get('total_carton'):
-                    total_cartons+=validate_result.get('total_carton')
+                    sub_cartons+=validate_result.get('total_carton')
                 l_msg_success.extend(validate_result.get('msg_success'))
                 l_msg_error.extend(validate_result.get('msg_error'))
                 l_msg_recap.extend(validate_result.get('msg_recap'))
@@ -120,7 +121,8 @@ def check_shipment_packing_list(shipment_code,doc_path,save_db=None):
                 logger.warn(status)
                 return {'status':status},None
 
-        logger.info('-Finish file:{0}'.format(file))
+        logger.info('-Finish file:{0},sub_cartons={1} '.format(file,sub_cartons))
+        total_cartons+=sub_cartons
     validate_result = {'status': status, 'total_cartons': total_cartons, 'msg_success': l_msg_success,
                        'msg_error': l_msg_error, 'msg_recap': l_msg_recap}
     # below consolidate by invoice_no, TISNo, Style

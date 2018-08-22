@@ -1234,6 +1234,7 @@ class TISMainWindow(QMainWindow):
             qm=QMessageBox()
             qm.question(self,'packing list check error',msg)
             return
+        l_msg_recap.append('Total cartons={0}'.format(validate_result.get('total_cartons')))
         l_msg_recap.extend(validate_result.get('msg_recap'))
         l_msg_success.extend(validate_result.get('msg_success'))
         l_msg_error.extend(validate_result.get('msg_error'))
