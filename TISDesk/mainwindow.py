@@ -270,16 +270,20 @@ class TISMainWindow(QMainWindow):
         self.ui.textBrowser.append(str(product_price))
 
     def generate_order_from_requisition(self):
-        etd_tanhoo=datetime.datetime(year=2018,month=9,day=20)
-        etd_auwin=datetime.datetime(year=2018,month=9,day=18)
-        etd_eliel=datetime.datetime(year=2018,month=9,day=17)
+        etd_tanhoo=datetime.datetime(year=1900,month=1,day=1)
+        etd_auwin=datetime.datetime(year=1900,month=1,day=1)
+        etd_eliel=datetime.datetime(year=1900,month=1,day=1)
         etd_dict={'TANHOO':etd_tanhoo,'AUWIN':etd_auwin,'ELIEL':etd_eliel}
         requisition_path = QFileDialog.getExistingDirectory(self)
         print(requisition_path)
+        qm=QMessageBox()
         try:
             TIS_Excel.generate_from_requisition(requisition_path,etd_dict)
+            qm.question(self,'Finish','Finish parsing the requisition file. Please copy the shirt and trousers csv file to Ritemate size breakup spreadsheet.',qm.Ok)
         except Exception as e:
             logger.error('error parse: {0}'.format(e))
+            qm.question(self,'Error','System wrong, some new size name created in ABM can not be identified',qm.Ok)
+
 
     def create_order_trace(self):
         order_file=QFileDialog.getOpenFileName(self,'Please select latest Order Trace spreadsheet',os.path.join(os.path.abspath('..'),'media'))[0]
