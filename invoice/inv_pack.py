@@ -126,6 +126,8 @@ def check_shipment_packing_list(shipment_code,doc_path,save_db=None):
     validate_result = {'status': status, 'total_cartons': total_cartons, 'msg_success': l_msg_success,
                        'msg_error': l_msg_error, 'msg_recap': l_msg_recap}
     # below consolidate by invoice_no, TISNo, Style
+    #logger.debug('Before consolidate packing list d_packing_list={0}'.format(l_packing_list))
+
     d_packing_list_tmp = TIS_Excel.consolidate_list_to_dict(l_packing_list, 'invoice_no',
                                                             None)  # {'AW18F206':[{},{}],'AW18F205':[]}
     d_packing_list = {}

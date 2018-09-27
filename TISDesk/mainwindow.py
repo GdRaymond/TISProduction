@@ -386,16 +386,16 @@ class TISMainWindow(QMainWindow):
         if pp_checks:
             logger.debug('get pp_checks quantity {0}'.format(len(pp_checks)))
             pp_comments=pp_checks[0].comment
-            for pp_check in range(1,len(pp_checks)):
-                pp_comments='{0}\n{1}'.format(pp_comments,pp_check.comment)
+            for pp_check_no in range(1,len(pp_checks)):
+                pp_comments='{0}\n{1}'.format(pp_comments,pp_checks[pp_check_no].comment)
         self.ui.tableW_samplecheck_order.setItem(row_pos,8,QTableWidgetItem(pp_comments))
         ss_comments = ''
         ss_checks=order.samplecheck_set.filter(type__iexact='s')
         if ss_checks:
             logger.debug('get ss_checks quantity {0}'.format(len(ss_checks)))
             ss_comments=ss_checks[0].comment
-            for ss_check in range(1,len(ss_checks)):
-                ss_comments='{0}\n{1}'.format(ss_comments,ss_check.comment)
+            for ss_check_no in range(1,len(ss_checks)):
+                ss_comments='{0}\n{1}'.format(ss_comments,ss_checks[ss_check_no].comment)
         self.ui.tableW_samplecheck_order.setItem(row_pos,9,QTableWidgetItem(ss_comments) )
         test_comments = ''
         test_checks=order.samplecheck_set.filter(type__iexact='t')
@@ -836,8 +836,8 @@ class TISMainWindow(QMainWindow):
                                 target_l[index].append(order) #['SO4442','RM109VXR','ORANGE','600','30 ','1.23','1',order] #when match, add order to last
                                 break
                 else: # finish iterate, but not break, means , not match
-                    msg_list.save_msg('--In DB, order {0}-{1}-{2} Not found in email {3}'\
-                                      .format(order.tis_no[6:12],order.product.style_no,order.colour,target_l),'E')
+                    msg_list.save_msg('--In DB, order {0}-{1}-{2} Not found in email'\
+                                      .format(order.tis_no[6:12],order.product.style_no,order.colour),'E')
         else:
             msg_list.save_msg('Can not get the list of order for  origin shipment','E')
             return
@@ -886,14 +886,23 @@ class TISMainWindow(QMainWindow):
                     order.save()
                     logger.info('--Order {0}-{1}-{2} splitted to shipment {3}'.format(order.tis_no,order.product.style_no
                                                                                       ,order.colour,shipment.code))
+            logger.debug('Finished split')
+            qm = QMessageBox()
+            qm.question(self, 'Split result','Finish Split', QMessageBox.OK)
 
         elif reply==QMessageBox.No:
             logger.debug('Cancel split')
 
     def refresh_shipment_au_split(self):
-        self.ui.comb_shipment_auwin_origin.clear()
-        self.ui.listW_allshipment_au.clear()
-        self.ui.listW_targetshipment_au.clear()
+        try:
+            self.ui.listW_allshipment_au.clear()
+            self.ui.comb_shipment_auwin_origin.currentTextChanged.disconnect(self.reload_shipment_au_split)
+            self.ui.comb_shipment_auwin_origin.clear()
+            self.ui.comb_shipment_auwin_origin.currentTextChanged.connect(self.reload_shipment_au_split)
+            self.ui.listW_targetshipment_au.clear()
+        except Exception as e:
+            logger.error('error when clear AW shipment list {0}'.format(e))
+            return
         shipments=Shipment.objects.filter(supplier__iexact='AUWIN',mode__iexact='Sea',etd__gt=datetime.date.today()).order_by('etd')
         logger.debug('get Auwin undeparture shipment number {0}'.format(len(shipments)))
 
@@ -1173,7 +1182,10 @@ class TISMainWindow(QMainWindow):
             validate_result,d_packing_list=check_shipment_packing_list(shipment_code,doc_path)
         except Exception as e:
             logger.error('error when check_shipment_Packing list: {0}'.format(e))
-            return
+            qm = QMessageBox()
+            reply = qm.question(self, 'Checking Packing List',
+                                'Error coour:\n{0},'.format(e), qm.Ok)
+            #return
         if validate_result.get('status')=='Finished':
             for msg in validate_result.get('msg_success'):
                 logger.info(msg)

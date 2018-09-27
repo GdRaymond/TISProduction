@@ -232,7 +232,11 @@ class TIS_Excel():
                 logger.debug('processing to -{0} for new key {1}'.format(progress, new_key))
             #logger.debug('new_key={0}'.format(new_key))
             if is_valid is None or is_valid(new_key):
-                del item_dict[key]
+                if not new_key: #non exist no need to delete from old dict
+                    logger.error('Can not get the {0} in item {1}'.format(key, item_dict))
+                    new_key = 'Unavailable'
+                else:
+                    del item_dict[key]
                 new_dict[new_key].append(item_dict)
                 #logger.debug('new_dict={}'.format(new_dict.get(new_key,'Faile')))
             else:
