@@ -624,7 +624,7 @@ def parse_invoice(cell_list=[],filename='',sheetname='',save_db=False,supplier='
         detail_info['Style']=style
 
         #get colour
-        if not col_style: # For all supplier exept Tanhoo , there is no colour column, so set to 'ALL'
+        if not col_colour: # For all supplier exept Tanhoo , there is no colour column, so set to 'ALL'
             colour='ALL'
         else: #For other supplier who has the style column
             colour=str(cell_list[row][col_colour]).strip().upper()

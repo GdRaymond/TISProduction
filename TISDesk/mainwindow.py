@@ -1,6 +1,6 @@
 
 from PyQt5.QtWidgets import QMainWindow,QFileDialog,QTableWidgetItem,QAbstractItemView,QDialog,QApplication,\
-    QMessageBox,QButtonGroup,QCheckBox,QRadioButton,QAbstractScrollArea,QListWidgetItem
+    QMessageBox,QButtonGroup,QCheckBox,QRadioButton,QAbstractScrollArea,QListWidgetItem,QWidget
 from PyQt5.QtGui import QColor,QIcon,QFont
 from TISDesk.TIS_mainwindow import Ui_MainWindow
 from excelway.tis_excel import TIS_Excel
@@ -67,6 +67,7 @@ class TISMainWindow(QMainWindow):
         super(TISMainWindow,self).__init__(**kwargs)
         self.ui=Ui_MainWindow()
         self.ui.setupUi(self)
+        self.adjust_size()
         self.ui.btn_open.clicked.connect(self.openfile)
         self.ui.btnTest.clicked.connect(self.test_Excelfuntion)
         self.ui.btnCopy.clicked.connect(self.copy_finance)
@@ -113,6 +114,21 @@ class TISMainWindow(QMainWindow):
         self.ui.btn_statistic_style.clicked.connect(self.statistic_style)
         self.ui.comb_style_statistic.currentTextChanged.connect(self.update_statistic_colour)
 
+    def adjust_size(self):
+        self.ui.app=QApplication.instance()
+        screen_resolution=self.ui.app.desktop().screenGeometry()
+        logger.debug('screen_resolution ={0} x {1}'.format(screen_resolution.width(),screen_resolution.height()))
+        self.ui.hw_ratio=768/1366 #height / width
+        self.ui.ratio_wid=screen_resolution.width()/1366
+        if self.ui.ratio_wid<1:
+            self.ui.ratio_wid=1
+        self.ui.ratio_height=screen_resolution.height()/768
+        if self.ui.ratio_height<1:
+            self.ui.ration_height=1
+        self.ui.centralwidget.resize(self.ui.centralwidget.width()*self.ui.ratio_wid,self.ui.centralwidget.height()*self.ui.ratio_height)
+        for q_widget in self.ui.centralwidget.findChildren(QWidget):
+            q_widget.resize(q_widget.width()*self.ui.ratio_wid,q_widget.height()*self.ui.ratio_height)
+            q_widget.move(q_widget.x()*self.ui.ratio_wid,q_widget.y()*self.ui.ratio_height)
 
     def load_initial_data(self):
         suppliers=[supplier.get('supplier') for supplier in Order.objects.order_by().values('supplier').distinct()]
@@ -830,27 +846,27 @@ class TISMainWindow(QMainWindow):
                                 if order.quantity==int(float(line[3])):
                                     msg_list.save_msg('--Match and quantity correct','S')
                                 else:
-                                    msg_list.save_msg('--In DB, Order {0} match but quantity wrong, in db {1}, in email {2}'\
+                                    msg_list.save_msg('--In database, Order {0} match but quantity wrong, in db {1}, in booking {2}'\
                                                       .format(order,order.quantity,line[3]),'E')
                                 #del(target_l[index])  #when match , del in target_l
                                 target_l[index].append(order) #['SO4442','RM109VXR','ORANGE','600','30 ','1.23','1',order] #when match, add order to last
                                 break
                 else: # finish iterate, but not break, means , not match
-                    msg_list.save_msg('--In DB, order {0}-{1}-{2} Not found in email'\
+                    msg_list.save_msg('--In database, order {0}-{1}-{2} Not found in booking'\
                                       .format(order.tis_no[6:12],order.product.style_no,order.colour),'E')
         else:
             msg_list.save_msg('Can not get the list of order for  origin shipment','E')
             return
 
         #below check each order in db according to the order in email list
-        msg_list.save_msg('\nBelow order in email not match in db')
+        msg_list.save_msg('\nBelow order in booking not match in database')
         for index,line in enumerate(target_l):
             if len(line)==8: #means added with order at last element, matched
                 continue
             tis_no=line[0] #'SO4378'
             colour=line[2] #'C.BLUE'
             #get formal colour name and check
-            msg_list.save_msg('{0}: In email, order {1} {2} not match in database'.format(index,tis_no,colour),'E')
+            msg_list.save_msg('{0}: In booking, order {1} {2} not match in database'.format(index,tis_no,colour),'E')
             colour_formal=product_price.get_formal_colourname_from_alias(colour) #'CobaltBlue'
             if not colour_formal:
                 msg_list.save_msg('  -- because not find this colour alias : {0}, please add to product_price.colour_alias'.format(colour),'E')
@@ -1175,7 +1191,7 @@ class TISMainWindow(QMainWindow):
     def check_shipment_packing_list_only(self):
         shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
         supplier=self.ui.comb_shipmenttool_supplier.currentText()
-        doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('C:\\Users\\rhe\\WebWork\\TISWork\\Invoice'))
+        doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('..'))
         if not doc_path:
             return
         try:
@@ -1227,7 +1243,7 @@ class TISMainWindow(QMainWindow):
 
     def check_shipment_invoice(self):
         shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
-        doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('C:\\Users\\rhe\\WebWork\\TISWork\\Invoice'))
+        doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('..'))
         if not doc_path:
             return
         validate_result,d_invoice=check_shipment_invoice(shipment_code,doc_path)
@@ -1241,7 +1257,7 @@ class TISMainWindow(QMainWindow):
         l_msg_error=[]
         l_msg_success=[]
         shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
-        doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('C:\\Users\\rhe\\WebWork\\TISWork\\Invoice'))
+        doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('..'))
         if not doc_path:
             return
         validate_result,d_packing_list=check_shipment_packing_list(shipment_code,doc_path)
@@ -1282,7 +1298,7 @@ class TISMainWindow(QMainWindow):
         qm.question(self,'Check shipping document','Finish checking, please paste the result to your email')
 
     def load_bak_packing_list(self):
-        doc_path=QFileDialog.getExistingDirectory(self,'Select folder of bak packing list db',os.path.abspath('C:\\Users\\rhe\\PyCharm\\TISProduction\\media\\invoice'))
+        doc_path=QFileDialog.getExistingDirectory(self,'Select folder of bak packing list db',os.path.abspath('..'))
         load_packing_db_back(doc_path)
 
     def statistic_style(self):
