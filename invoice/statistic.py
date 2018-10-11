@@ -5,7 +5,7 @@ from TISProduction.tis_log import get_tis_logger
 from matplotlib import pyplot as plt
 from products.size_chart import get_size_list
 import pandas as pd
-from pandas import DataFrame
+from pandas import DataFrame as pandasDataFrame
 
 logger=get_tis_logger()
 
@@ -198,7 +198,7 @@ def change_to_season(l_invoice_size_quantity):
     titles.extend(size_name)
     titles.append('invoice_no')
     indexes=np.arange(0,len(l_invoice_size_quantity),1)
-    df=DataFrame(data=l_invoice_size_quantity,index=indexes,columns=titles)
+    df=pandasDataFrame(data=l_invoice_size_quantity,index=indexes,columns=titles)
     combine_season=df.groupby('season').sum() #sum by same season via Pandas.Datafram
     logger.debug('After combine season , get the dataframe={0}'.format(combine_season))
     tmp_l_invoice_size_quantity=np.array(combine_season,dtype=object) #DataFrame after grouby by, the grouby by column will change to index, so need to add the index to array

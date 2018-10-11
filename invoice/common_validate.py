@@ -27,8 +27,9 @@ def calculate_detail(packing_list={}, file='test.xlsx', by_name="RM500BT(TIS16-S
     all_correct = True
     for line in packing_list.get('detail'):
         # validate the carton No. and quantity
-        carton_no_from = line.get('from')
-        carton_no_to = line.get('to')
+        logger.debug('line={0}'.format(line))
+        carton_no_from = float(str(line.get('from')).strip())
+        carton_no_to = float(str(line.get('to')))
         carton_line_total = line.get('carton_qty')
         if carton_line_total != (carton_no_to - carton_no_from + 1):
             logger.error('--%s - %s - Carton No. wrong at line from:%s to:%s total:%s ' % (

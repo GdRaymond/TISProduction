@@ -276,6 +276,14 @@ def calculate_volumes(sender,created,instance,**kwargs):
         logger.info('New shipment volume: {0}, carton:{1},volume:{2}m3'.format(shipment,shipment.cartons,shipment.volume))
 
 
+def clear_sample_check():
+    try:
+        result=SampleCheck.objects.all().delete()
+        logger.debug('  finished delete all garment check {0}'.format(len(result)))
+    except Exception as e:
+        logger.debug('  error when saveing garment check {0}'.format(e))
+    return len(result)
+
 def create_test_report_check(order_id, test_report_group):
     '''
     from trace excel parse the test report record to databas

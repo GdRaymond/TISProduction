@@ -23,6 +23,7 @@ from products import views as product_views
 from orders import views as order_views
 
 urlpatterns = [
+    '''
     url(r'^admin/', admin.site.urls),
     url(r'^$',coreviews.home,name='home'),
     url(r'^login$',django_authen_views.login,{'template_name':'core/cover.html'},name='login'),
@@ -37,6 +38,7 @@ urlpatterns = [
     url(r'^product/get_list_ajax/',product_views.get_product_list,name='get_product_list'),
     url(r'^order/add/',order_views.OrderCreat.as_view(),name='create_order'),
     url(r'^order/list/',order_views.OrderList.as_view(),name='order_list'),
+    '''
 
 
 ]

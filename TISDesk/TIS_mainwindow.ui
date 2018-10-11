@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -96,19 +96,6 @@
        <string>Requisition</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnGenerateOrderTrace">
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>10</y>
-        <width>101</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>2-GenOrderTrace</string>
-      </property>
-     </widget>
      <widget class="QPushButton" name="btnInitProducts">
       <property name="geometry">
        <rect>
@@ -120,19 +107,6 @@
       </property>
       <property name="text">
        <string>1-InitProduct</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="btnCalVol">
-      <property name="geometry">
-       <rect>
-        <x>190</x>
-        <y>10</y>
-        <width>81</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>3-CalAllVolum</string>
       </property>
      </widget>
      <widget class="QPushButton" name="btn_load_bak_packinglist">
@@ -757,7 +731,7 @@
         <x>620</x>
         <y>20</y>
         <width>451</width>
-        <height>291</height>
+        <height>191</height>
        </rect>
       </property>
       <property name="title">
@@ -815,7 +789,7 @@
          <x>20</x>
          <y>60</y>
          <width>81</width>
-         <height>31</height>
+         <height>41</height>
         </rect>
        </property>
        <property name="toolTip">
@@ -831,7 +805,7 @@
          <x>140</x>
          <y>60</y>
          <width>131</width>
-         <height>31</height>
+         <height>41</height>
         </rect>
        </property>
        <property name="toolTip">
@@ -847,7 +821,7 @@
          <x>320</x>
          <y>60</y>
          <width>121</width>
-         <height>31</height>
+         <height>41</height>
         </rect>
        </property>
        <property name="toolTip">
@@ -860,51 +834,51 @@
       <widget class="QPushButton" name="btn_shipmenttool_checkdocument">
        <property name="geometry">
         <rect>
-         <x>320</x>
-         <y>100</y>
-         <width>121</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="toolTip">
-        <string>Compare the booking spreadsheet with shipment order, copy difference to clipboard for email</string>
-       </property>
-       <property name="text">
-        <string>Check ShipDocument</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="btn_shipmenttool_checkinvoice">
-       <property name="geometry">
-        <rect>
-         <x>170</x>
-         <y>100</y>
-         <width>121</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="toolTip">
-        <string>Compare the booking spreadsheet with shipment order, copy difference to clipboard for email</string>
-       </property>
-       <property name="text">
-        <string>Check Invoice Only</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="btn_shipmenttool_checkpackinglist">
-       <property name="geometry">
-        <rect>
          <x>20</x>
-         <y>100</y>
-         <width>121</width>
-         <height>31</height>
+         <y>120</y>
+         <width>241</width>
+         <height>51</height>
         </rect>
        </property>
        <property name="toolTip">
         <string>Compare the booking spreadsheet with shipment order, copy difference to clipboard for email</string>
        </property>
        <property name="text">
-        <string>Check PackingList Only</string>
+        <string>Check Invoice and Packing list</string>
        </property>
       </widget>
+     </widget>
+     <widget class="QPushButton" name="btn_shipmenttool_checkpackinglist">
+      <property name="geometry">
+       <rect>
+        <x>640</x>
+        <y>270</y>
+        <width>201</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Compare the booking spreadsheet with shipment order, copy difference to clipboard for email</string>
+      </property>
+      <property name="text">
+       <string>Check PackingList Only and save</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_shipmenttool_checkinvoice">
+      <property name="geometry">
+       <rect>
+        <x>850</x>
+        <y>270</y>
+        <width>201</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Compare the booking spreadsheet with shipment order, copy difference to clipboard for email</string>
+      </property>
+      <property name="text">
+       <string>Check Invoice Only</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_3">
@@ -917,7 +891,7 @@
         <x>20</x>
         <y>20</y>
         <width>251</width>
-        <height>161</height>
+        <height>81</height>
        </rect>
       </property>
       <property name="title">
@@ -934,6 +908,71 @@
        </property>
        <property name="text">
         <string>CreateNewOrder-Manually</string>
+       </property>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_8">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>160</y>
+         <width>251</width>
+         <height>161</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>New Order</string>
+       </property>
+       <widget class="QPushButton" name="btn_new_order_2">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>30</y>
+          <width>191</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>CreateNewOrder-Manually</string>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_9">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>120</y>
+        <width>251</width>
+        <height>221</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Update Order</string>
+      </property>
+      <widget class="QPushButton" name="btnGenerateOrderTrace">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>30</y>
+         <width>201</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>1-Update Order from Trace Sheet</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnCalVol">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>80</y>
+         <width>201</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>2 - Update Shipment volume</string>
        </property>
       </widget>
      </widget>

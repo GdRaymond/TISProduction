@@ -7,7 +7,7 @@ from dateutil.relativedelta import relativedelta
 import glob
 from orders import parse_requisiton
 from excelway.read_excel_by_xlrd import read_excel_file
-from orders.models import Order,create_test_report_check,create_garment_sample_check
+from orders.models import Order,create_test_report_check,create_garment_sample_check,clear_sample_check
 from shipments.models import Shipment
 from products.models import Product
 from products.product_price import seek_colour
@@ -648,6 +648,9 @@ class TIS_Excel():
         logger.info('  get order_list, total {0} rows'.format(len(order_list)))
         if signal_display:
             signal_display.emit({'msg':'  get order_list, total {0} rows'.format(len(order_list)),'level':'INFO'})
+        #Before update or add order, clear the sample_check_table
+        clear_sample_check()
+
         for order_line in order_list:
             logger.info('   start parse order_line {0}'.format(order_line))
             if signal_display:
@@ -750,40 +753,58 @@ class TIS_Excel():
             for the fabric. If there is already test report in the excel, it means we can create a check of approve and 
             put the test report No. to reference field.
             '''
-
-            if order_line.get('TestReport'):
-                current_test_reports=TIS_Excel.parse_testreport(order_line.get('TestReport'))
-                if current_test_reports:
-                    #logger.debug('   get current_test_report is {0}'.format(current_test_reports))
-                    qauntity_sample_check=create_test_report_check(order_id=order.id,test_report_group=current_test_reports)
-                    logger.debug('   saved {0} test sample check records'.format(qauntity_sample_check))
-                    if signal_display:
-                        signal_display.emit({'msg':'   saved  test sample check records', 'level': 'INFO'})
+            try:
+                if order_line.get('TestReport'):
+                    current_test_reports = TIS_Excel.parse_testreport(order_line.get('TestReport'))
+                    if current_test_reports:
+                        # logger.debug('   get current_test_report is {0}'.format(current_test_reports))
+                        qauntity_sample_check = create_test_report_check(order_id=order.id,
+                                                                         test_report_group=current_test_reports)
+                        logger.debug('   saved {0} test sample check records'.format(qauntity_sample_check))
+                        if signal_display:
+                            signal_display.emit({'msg': '   saved  test sample check records', 'level': 'INFO'})
+                    else:
+                        logger.debug('   the test report field  does not match')
+                        if signal_display:
+                            signal_display.emit({'msg': '   the test report field  does not match', 'level': 'INFO'})
                 else:
-                    logger.debug('   the test report field  does not match')
+                    logger.debug('   the test report field  is None')
                     if signal_display:
-                        signal_display.emit({'msg':'   the test report field  does not match', 'level': 'INFO'})
-            else:
-                logger.debug('   the test report field  is None')
+                        signal_display.emit({'msg': '   the test report field  is None', 'level': 'INFO'})
+
+            except Exception as e:
+                logger.debug('  error when save test report: {0}'.format(e))
                 if signal_display:
-                    signal_display.emit({'msg':'   the test report field  is None', 'level': 'INFO'})
+                    signal_display.emit({'msg':'  error when save test report: {0}'.format(e), 'level': 'ERROR'})
 
                 '''
             Save PP sample check
             '''
-            if order_line.get('PPSample'):
-                quantity_garment_ppcheck=create_garment_sample_check('P',order.id,order_line.get('PPSample'))
-                logger.debug('  saved {0} pp sample check records'.format(quantity_garment_ppcheck))
-            else:
-                logger.debug('  the PP sample field is None')
+            try:
+                if order_line.get('PPSample'):
+                    quantity_garment_ppcheck = create_garment_sample_check('P', order.id, order_line.get('PPSample'))
+                    logger.debug('  saved {0} pp sample check records'.format(quantity_garment_ppcheck))
+                else:
+                    logger.debug('  the PP sample field is None')
+
+            except Exception as e:
+                logger.debug('  error when save test report: {0}'.format(e))
+                if signal_display:
+                    signal_display.emit({'msg':'  error when save test report: {0}'.format(e), 'level': 'ERROR'})
             '''
             Save shipping sample check
             '''
-            if order_line.get('SSSample'):
-                quantity_garment_sscheck=create_garment_sample_check('S',order.id,order_line.get('SSSample'))
-                logger.debug('  saved {0} ss sample check records'.format(quantity_garment_sscheck))
-            else:
-                logger.debug('  the shipping sample field is None')
+            try:
+                if order_line.get('SSSample'):
+                    quantity_garment_sscheck = create_garment_sample_check('S', order.id, order_line.get('SSSample'))
+                    logger.debug('  saved {0} ss sample check records'.format(quantity_garment_sscheck))
+                else:
+                    logger.debug('  the shipping sample field is None')
+
+            except Exception as e:
+                logger.debug('  error when save test report: {0}'.format(e))
+                if signal_display:
+                    signal_display.emit({'msg':'  error when save test report: {0}'.format(e), 'level': 'ERROR'})
 
         logger.info('Finish all orders {0}'.format(result))
         if signal_display:
@@ -792,10 +813,18 @@ class TIS_Excel():
         logger.info('Start to create virtual table my_search')
         if signal_display:
             signal_display.emit({'msg':'Start to create virtual table my_search','level':'INFO'})
-        fts_search.create_my_search()
+        #fts_search.create_my_search() #2018.10.10 disable
         logger.info('Finish to create virtual table my_search')
         if signal_display:
             signal_display.emit({'msg':'Finish to create virtual table my_search','level':'INFO'})
+
+        logger.info('Start to clear virtual table my_search')
+        if signal_display:
+            signal_display.emit({'msg':'Start to clear virtual table my_search','level':'INFO'})
+        fts_search.clear_my_search() #before write index, delete all old index
+        logger.info('Finish to clear virtual table my_search')
+        if signal_display:
+            signal_display.emit({'msg':'Finish to clear virtual table my_search','level':'INFO'})
 
 
         logger.info('Start to write the index')

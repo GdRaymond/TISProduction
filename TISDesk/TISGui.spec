@@ -3,12 +3,12 @@
 block_cipher = None
 
 
-a = Analysis(['TISGui.py'],
+a = Analysis(['tisgui.py'],
              pathex=['C:\\Users\\rhe\\PyCharm\\TISProduction\\TISDesk'],
              binaries=[],
              datas=[],
              hiddenimports=[],
-             hookspath=[],
+             hookspath=['hooks'],
              runtime_hooks=[],
              excludes=[],
              win_no_prefer_redirects=False,
@@ -18,12 +18,16 @@ pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
-          a.binaries,
-          a.zipfiles,
-          a.datas,
-          name='TISGui',
+          exclude_binaries=True,
+          name='tisgui',
           debug=False,
           strip=False,
           upx=True,
-          runtime_tmpdir=None,
-          console=False )
+          console=True )
+coll = COLLECT(exe,
+               a.binaries,
+               a.zipfiles,
+               a.datas,
+               strip=False,
+               upx=True,
+               name='tisgui')

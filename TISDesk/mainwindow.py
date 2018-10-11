@@ -271,8 +271,10 @@ class TISMainWindow(QMainWindow):
             self.ui.textBrowser.append(count_range)
 
     def copy_finance(self):
-        order_file=QFileDialog.getOpenFileName(self,'Please select latest Order Trace spreadsheet',os.path.join(os.path.abspath('..'),'media'))[0]
-        finance_file=QFileDialog.getOpenFileName(self,'Please select latest Finance spreadsheet',os.path.join(os.path.abspath('..'),'media'))[0]
+        #order_file=QFileDialog.getOpenFileName(self,'Please select latest Order Trace spreadsheet',os.path.join(os.path.abspath('..'),'media'))[0]
+        order_file = QFileDialog.getOpenFileName(self, 'Please select latest Order Trace spreadsheet')[0]
+        #finance_file=QFileDialog.getOpenFileName(self,'Please select latest Finance spreadsheet',os.path.join(os.path.abspath('..'),'media'))[0]
+        finance_file = QFileDialog.getOpenFileName(self, 'Please select latest Finance spreadsheet')[0]
         excel=TIS_Excel()
         excel.copy_order_to_finance(order_file,finance_file)
         self.ui.textBrowser.append('finish copy')
@@ -302,7 +304,8 @@ class TISMainWindow(QMainWindow):
 
 
     def create_order_trace(self):
-        order_file=QFileDialog.getOpenFileName(self,'Please select latest Order Trace spreadsheet',os.path.join(os.path.abspath('..'),'media'))[0]
+        #order_file=QFileDialog.getOpenFileName(self,'Please select latest Order Trace spreadsheet',os.path.join(os.path.abspath('..'),'media'))[0]
+        order_file=QFileDialog.getOpenFileName(self,'Please select latest Order Trace spreadsheet')[0]
         excel=TIS_Excel()
         order_list=excel.read_order(order_file)
         #result=excel.create_from_trace(order_file)
@@ -769,7 +772,8 @@ class TISMainWindow(QMainWindow):
 
     def split_shipment_aw(self):
         msg_list=tis_log.MessageList()
-        file_name=QFileDialog.getOpenFileName(self,'Open file',os.path.join(os.path.abspath('..'),'media'))[0]
+        #file_name=QFileDialog.getOpenFileName(self,'Open file',os.path.join(os.path.abspath('..'),'media'))[0]
+        file_name=QFileDialog.getOpenFileName(self,'Please select the split shipment file copying from email')[0]
         logger.debug('start to read file {0}'.format(file_name))
         origin_shipment=self.ui.comb_shipment_auwin_origin.currentText()
         shipment_no=0
@@ -928,7 +932,7 @@ class TISMainWindow(QMainWindow):
     def reload_shipment_au_split(self):
         self.ui.listW_targetshipment_au.clear()
         self.ui.listW_allshipment_au.clear()
-        shipments=Shipment.objects.filter(supplier__iexact='AUWIN',mode='Sea',etd__gt=datetime.date.today()).order_by('etd')
+        shipments=Shipment.objects.filter(supplier__iexact='AUWIN',mode__iexact='Sea',etd__gt=datetime.date.today()).order_by('etd')
         logger.debug('get Auwin undeparture shipment number {0}'.format(len(shipments)))
         for shipment in shipments:
             self.ui.listW_allshipment_au.addItem(shipment.code)
@@ -1047,7 +1051,8 @@ class TISMainWindow(QMainWindow):
         qm.question(self,'Copy shipment order info','Below shipment info alread write to clipboard, you can paste to your email \n{0}'.format(msg))
 
     def check_shipment_booking(self):
-        filename=QFileDialog.getOpenFileName(self,'Please select shipment booking spreadsheet',os.path.join(os.path.abspath('..'),'media'))[0]
+        #filename=QFileDialog.getOpenFileName(self,'Please select shipment booking spreadsheet',os.path.join(os.path.abspath('..'),'media'))[0]
+        filename = QFileDialog.getOpenFileName(self, 'Please select shipment booking spreadsheet')[0]
         if not filename:
             return
         tis_app=TIS_Excel()
@@ -1191,7 +1196,8 @@ class TISMainWindow(QMainWindow):
     def check_shipment_packing_list_only(self):
         shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
         supplier=self.ui.comb_shipmenttool_supplier.currentText()
-        doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('..'))
+        #doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('..'))
+        doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder')
         if not doc_path:
             return
         try:
@@ -1243,7 +1249,8 @@ class TISMainWindow(QMainWindow):
 
     def check_shipment_invoice(self):
         shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
-        doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('..'))
+        #doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('..'))
+        doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder')
         if not doc_path:
             return
         validate_result,d_invoice=check_shipment_invoice(shipment_code,doc_path)
@@ -1257,7 +1264,8 @@ class TISMainWindow(QMainWindow):
         l_msg_error=[]
         l_msg_success=[]
         shipment_code=self.ui.comb_shipmenttool_shipment.currentText()
-        doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('..'))
+        #doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder',os.path.abspath('..'))
+        doc_path=QFileDialog.getExistingDirectory(self,'Select the shippment document folder')
         if not doc_path:
             return
         validate_result,d_packing_list=check_shipment_packing_list(shipment_code,doc_path)
@@ -1298,7 +1306,8 @@ class TISMainWindow(QMainWindow):
         qm.question(self,'Check shipping document','Finish checking, please paste the result to your email')
 
     def load_bak_packing_list(self):
-        doc_path=QFileDialog.getExistingDirectory(self,'Select folder of bak packing list db',os.path.abspath('..'))
+        #doc_path=QFileDialog.getExistingDirectory(self,'Select folder of bak packing list db',os.path.abspath('..'))
+        doc_path=QFileDialog.getExistingDirectory(self,'Select folder of bak packing list db')
         load_packing_db_back(doc_path)
 
     def statistic_style(self):
@@ -1306,6 +1315,7 @@ class TISMainWindow(QMainWindow):
         colour=self.ui.comb_colour_statistic.currentText()
         try:
             l_invoice_size_quantity,msg_list=get_style_size_quantity(style,colour)
+            pass
         except Exception as e:
             logger.error('error when get_style_size_quantity: {0}'.format(e))
         email_msg=''
@@ -1322,6 +1332,7 @@ class TISMainWindow(QMainWindow):
             plot_way='I'
         try:
             plot_size_quantity_change(l_invoice_size_quantity,style,colour,plot_way)
+            pass
         except Exception as e:
             logger.error('error when plot : {0}'.format(e))
 

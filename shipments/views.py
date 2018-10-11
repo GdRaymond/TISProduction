@@ -36,7 +36,8 @@ def get_all_shipment():
 
 def get_next_month_warehouse():
     today=datetime.date.today()
-    next_month_date=today+dateutil.relativedelta.relativedelta(months=+1)
+    #next_month_date=today+dateutil.relativedelta.relativedelta(months=+1)
+    next_month_date=today+dateutil.relativedelta.relativedelta(months=+2) #20181003 modify to 2 to get orders due XMAS
     firtday,days=calendar.monthrange(next_month_date.year,next_month_date.month)
     last_day_next_month=datetime.date(year=next_month_date.year,month=next_month_date.month,day=days)
     logger.debug(' get the last day of next month is {0}'.format(last_day_next_month))
@@ -80,7 +81,7 @@ def cal_shipment_volume(shipment):
     shipment_v['volume']=volumes
     shipment_v['weight']=weights
     shipment_v['total_quantity']=quantities
-    if shipment.mode=='Sea':
+    if shipment.mode.strip().upper()=='SEA':
         if volumes>=62:
             shipment_v['container']='Need Split'
         elif volumes>44:

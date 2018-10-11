@@ -12,6 +12,13 @@ def create_my_search():
     transaction.commit()
     logger.debug(' created my_search virtual table')
 
+def clear_my_search():
+    cursor=connection.cursor()
+    #CREATE VIRTUAL TABLE my_search using FTS3(slug, body);
+    cursor.execute('delete from my_search')
+    transaction.commit()
+    logger.debug(' clear all index in my_search')
+
 
 def add_index(content):
     '''
