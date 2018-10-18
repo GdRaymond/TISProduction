@@ -648,8 +648,11 @@ class TIS_Excel():
         logger.info('  get order_list, total {0} rows'.format(len(order_list)))
         if signal_display:
             signal_display.emit({'msg':'  get order_list, total {0} rows'.format(len(order_list)),'level':'INFO'})
-        #Before update or add order, clear the sample_check_table
+        #Before update or add order, clear the sample_check_table,clear orders , clear shipment
         clear_sample_check()
+        Order.objects.all().delete()
+        Shipment.objects.all().delete()
+
 
         for order_line in order_list:
             logger.info('   start parse order_line {0}'.format(order_line))

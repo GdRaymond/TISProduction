@@ -46,7 +46,8 @@ def search_index(key_word):
     :return: list of dict which contain {'table_name','obj_id'}
     '''
     table_l=[]
-    sql_str="select table_name,obj_id from my_search where my_search match '{0}'".format(key_word)
+    key_word=key_word.replace('-',' ') #when search 'JF-NOV' will get result contain JF OR NOV, when search 'JF NOV', result containt both
+    sql_str="select table_name,obj_id from my_search where text match '{0}'".format(key_word)
     logger.debug(' the sql_str is:{0}'.format(sql_str))
     try:
         cursor=connection.cursor()

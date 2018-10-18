@@ -279,6 +279,7 @@ def calculate_volumes(sender,created,instance,**kwargs):
 def clear_sample_check():
     try:
         result=SampleCheck.objects.all().delete()
+        result=FabricTrim.objects.all().delete()
         logger.debug('  finished delete all garment check {0}'.format(len(result)))
     except Exception as e:
         logger.debug('  error when saveing garment check {0}'.format(e))
