@@ -19,6 +19,9 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabShipment">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -45,6 +48,9 @@
       </property>
      </widget>
      <widget class="QPushButton" name="btn_open">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>660</x>
@@ -58,6 +64,9 @@
       </property>
      </widget>
      <widget class="QPushButton" name="btnTest">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>740</x>
@@ -70,33 +79,10 @@
        <string>TestButton</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnCopy">
-      <property name="geometry">
-       <rect>
-        <x>450</x>
-        <y>10</y>
-        <width>91</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>CopyToFinance</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="btnRequisition">
-      <property name="geometry">
-       <rect>
-        <x>370</x>
-        <y>10</y>
-        <width>75</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Requisition</string>
-      </property>
-     </widget>
      <widget class="QPushButton" name="btnInitProducts">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -110,6 +96,9 @@
       </property>
      </widget>
      <widget class="QPushButton" name="btn_load_bak_packinglist">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>550</x>
@@ -891,7 +880,7 @@
         <x>20</x>
         <y>20</y>
         <width>251</width>
-        <height>81</height>
+        <height>141</height>
        </rect>
       </property>
       <property name="title">
@@ -903,7 +892,7 @@
          <x>30</x>
          <y>30</y>
          <width>191</width>
-         <height>23</height>
+         <height>31</height>
         </rect>
        </property>
        <property name="text">
@@ -936,14 +925,27 @@
         </property>
        </widget>
       </widget>
+      <widget class="QPushButton" name="btnRequisition">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>90</y>
+         <width>191</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Get Size Breakup From Requisition</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_9">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>120</y>
+        <y>190</y>
         <width>251</width>
-        <height>221</height>
+        <height>191</height>
        </rect>
       </property>
       <property name="title">
@@ -973,6 +975,19 @@
        </property>
        <property name="text">
         <string>2 - Update Shipment volume</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnCopy">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>130</y>
+         <width>201</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>3 - Copy Order To Finance Sheet</string>
        </property>
       </widget>
      </widget>
