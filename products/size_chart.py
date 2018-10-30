@@ -14,10 +14,11 @@ style_type={'RM1000':'male_shirt','RM1000S':'male_shirt','RM100CF':'male_shirt',
             'RMPC008':'male_shirt','RMPC009':'male_shirt','RMPC010':'male_shirt','RMPC011':'male_shirt','RMPC012':'male_shirt',
             'RMPC008S':'male_shirt','RMPC009S':'male_shirt','RMPC010S':'male_shirt','RMPC011S':'male_shirt','RMPC012S':'male_shirt',
             'RMPC017':'male_shirt','RMPC019':'male_shirt','RMPC021':'male_shirt','RMPC023':'male_shirt','RMPC024':'male_shirt',
-            'RMPC017S':'male_shirt',
+            'RMPC017S':'male_shirt','RMPC026':'male_shirt','RMPC028':'male_shirt','RMPC031':'male_shirt',
                 
             'RM208V2R':'female_shirt','RM208V3R':'female_shirt','RM300CF':'female_shirt','RMPC013':'female_shirt',
             'RMPC020':'female_shirt','RMPC022':'female_shirt','RMPC025':'female_shirt','RMPC006':'female_shirt','RMPC018':'female_shirt',
+            'RMPC027':'female_shirt','RMPC029':'female_shirt',
             'RM4050R':'kids_shirt','RM400CF':'kids_shirt',
             
             'RM1004':'male_trousers','RM1004R':'male_trousers','RM1002':'male_trousers','RM1002R':'male_trousers',
@@ -41,12 +42,14 @@ style_type={'RM1000':'male_shirt','RM1000S':'male_shirt','RM100CF':'male_shirt',
 
              #ABF Style
             'UU52  ABF POLO SS':'male_shirt','ABF POLO UU52':'male_shirt',
-            'UL30':'ABF_trousers','UL40':'ABF_trousers','UL40-DDU':'ABF_trousers','ML30':'ABF_trousers','UL33':'ABF_trousers',
-            'FU30':'female_shirt','FU36':'female_shirt','FU38':'female_shirt','FU37':'female_shirt','FU39':'female_shirt','FU06':'female_shirt',
+            'UL30':'ABF_trousers','UL40':'ABF_trousers','UL40-DDU':'ABF_trousers','UL42-DDU':'ABF_trousers',
+            'ML30':'ABF_trousers','UL33':'ABF_trousers',
+            'FU30':'female_shirt','FU36':'female_shirt','FU38':'female_shirt','FU37':'female_shirt','FU39':'female_shirt',
+            'FU06':'female_shirt',
             'MU50':'male_shirt','MU52':'male_shirt','MU51':'male_shirt','MU53':'male_shirt','MU30':'male_shirt',
             'UU77':'ABF_unisex_shirt','UU74':'ABF_unisex_shirt','UU54':'ABF_unisex_shirt','UU61':'ABF_unisex_shirt',
             'UU53':'male_shirt','UU73':'male_shirt','UU61-V':'ABF_unisex_shirt','UU61V':'ABF_unisex_shirt',
-            'FL13':'female_slacks','FL21':'female_slacks','FL24':'female_slacks','FL24-DDU':'female_slacks',
+            'FL13':'female_slacks','FL21':'female_slacks','FL24':'female_slacks','FL24-DDU':'female_slacks','FL26-DDU':'female_slacks',
 
             #QFES SES RFS
             'SESSPM':'male_shirt','SESSPF':'male_shirt','SESTPM':'male_shirt','SESTPF':'male_shirt',

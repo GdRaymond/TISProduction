@@ -145,7 +145,8 @@ def get_general_info(style,colour,etd_dict=None):
     except Exception as e:
         logger.error(' Can not get the etd factory %s error-%s' %(supplier,e))
         return None
-    eta_date=etd_date+datetime.timedelta(days=tt_day[general_info['supplier']])
+    #eta_date=etd_date+datetime.timedelta(days=tt_day[general_info['supplier']])
+    eta_date=etd_date
     del_date=eta_date+datetime.timedelta(days=3)
     mon=etd_date.strftime("%B").upper()[0:3]
     general_info['ship_mon']="'"+mon+'/'+etd_date.strftime("%Y")
