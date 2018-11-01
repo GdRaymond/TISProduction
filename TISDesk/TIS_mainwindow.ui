@@ -37,16 +37,6 @@
      <attribute name="title">
       <string>System</string>
      </attribute>
-     <widget class="QTextBrowser" name="textBrowser">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>40</y>
-        <width>1311</width>
-        <height>591</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QPushButton" name="btn_open">
       <property name="enabled">
        <bool>false</bool>
@@ -990,6 +980,16 @@
         <string>3 - Copy Order To Finance Sheet</string>
        </property>
       </widget>
+     </widget>
+     <widget class="QTextBrowser" name="textBrowser">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>20</y>
+        <width>721</width>
+        <height>601</height>
+       </rect>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_4">
