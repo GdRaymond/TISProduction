@@ -5,7 +5,7 @@ import xlrd
 from excelway.read_excel_by_xlrd import  excel_read_everycell
 from TISProduction import tis_log
 import datetime
-from products import size_chart,product_price
+from products import size_chart,product_price,models
 
 
 """
@@ -42,6 +42,7 @@ def read_eachline(cell_list=[], filename='', sheetname=''):
     order = {}
     nrows = len(cell_list)
     ncols = len(cell_list[0])
+    logger.debug('combined cell_list is {0}-{1}'.format(nrows,cell_list))
     for rownum in range(1, nrows):
         if rownum==10:
             logger.debug('parse row {0}'.format(rownum))
@@ -49,8 +50,8 @@ def read_eachline(cell_list=[], filename='', sheetname=''):
         # read each cell required
         current_row = cell_list[rownum]
         code = current_row[0]
-        if not code:
-            continue #2018-06-26 upgrade to get requisition wholly, there will be blank line
+        if not code or code=='Code':
+            continue #2018-06-26 upgrade to get requisition wholly, there will be blank line, 2018-11-15 upgrade to get all requsitons , so there will be more title
         description = current_row[1]
         quantity = current_row[3]
         price = current_row[4]
@@ -96,6 +97,13 @@ def read_eachline(cell_list=[], filename='', sheetname=''):
             logger.error('can not find this style')
             continue
 
+        #get fabric content for sorted purpose
+        fabric=models.Fabric.objects.get(product__style_no__iexact=style)
+        if not fabric:
+            fabric_content='Unkonw'
+        else:
+            fabric_content='f-{0}'.format(fabric.nickname)
+
         # assemble the order
         style_value = order.get(style)
         if style_value is None:  # for the 1st line, assemble the new style
@@ -109,6 +117,7 @@ def read_eachline(cell_list=[], filename='', sheetname=''):
             else:
                 colour_value[colour][size] = quantity
             style_value['colour'] = colour_value
+        style_value['fabric']=fabric_content
         order[style] = style_value
     logger.debug('parsed order:{0}'.format(order))
 
@@ -120,7 +129,7 @@ parse file name and return the genenral info
 general_info={'supplier':,'ship_mon','freight_way','etd_date','eta_date','del_date','order_date'}
 """
 def get_general_info(style,colour,etd_dict=None):
-    tt_day={'TANHOO':30,'AUWIN':13,'JIN FENG':11,'SMARTEX':30,'ELIEL':11,'GUANGZHOU':13,'SHANGYU':11}
+    tt_day={'TANHOO':35,'AUWIN':13,'JIN FENG':11,'SMARTEX':35,'ELIEL':11,'GUANGZHOU':13,'SHANGYU':11}
     default_product_price=product_price.product_price.get(style,None)
     logger.debug('default_product_price is {0}'.format(default_product_price))
     if default_product_price is None:
@@ -145,8 +154,8 @@ def get_general_info(style,colour,etd_dict=None):
     except Exception as e:
         logger.error(' Can not get the etd factory %s error-%s' %(supplier,e))
         return None
-    #eta_date=etd_date+datetime.timedelta(days=tt_day[general_info['supplier']])
-    eta_date=etd_date
+    eta_date=etd_date+datetime.timedelta(days=tt_day.get(general_info['supplier'],0))
+    #eta_date=etd_date
     del_date=eta_date+datetime.timedelta(days=3)
     mon=etd_date.strftime("%B").upper()[0:3]
     general_info['ship_mon']="'"+mon+'/'+etd_date.strftime("%Y")
@@ -157,8 +166,119 @@ def get_general_info(style,colour,etd_dict=None):
 
     return general_info
 
+
 """
 write to the relavant csv
+
+"""
+"""
+
+def save_to_csv(order_qty, etd_dict, file_path):
+    size_chart = {
+        'shirts': ['2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', '6XL', '7XL', '8XL', '9XL',
+                   '10XL'],
+
+        'male_shirt': ['2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', '6XL', '7XL', '8XL', '9XL',
+                       '10XL'],
+
+        'female_shirt': ['6', '8', '10', '12', '14', '16', '18', '20', '22', '24', '26', '-', '-', '-', '-'],
+
+        'kids_shirt': ['Y0', 'Y1-2', 'Y3-4', 'Y5-6', 'Y7-8', 'Y9-10', 'Y11-12', 'Y13-14', '-', '-', '-', '-', '-', '-',
+                       '-'],
+
+        'male_trousers': ['67R', '72R', '77R', '82R', '87R', '92R', '97R', '102R', '107R', '112R', '117R', '122R',
+                          '127R', '132R',
+                          '87S', '92S', '97S', '102S', '107S', '112S', '117S', '122S', '127S', '132S', '74L', '79L',
+                          '84L', '89L', '94L'],
+
+        'trousers': ['67R', '72R', '77R', '82R', '87R', '92R', '97R', '102R', '107R', '112R', '117R', '122R', '127R',
+                     '132R',
+                     '87S', '92S', '97S', '102S', '107S', '112S', '117S', '122S', '127S', '132S', '74L', '79L', '84L',
+                     '89L', '94L'],
+        'female_slacks': ['6', '8', '10', '12', '14', '16', '18', '20', '22', '24', '-', '-', '-', '-',
+                          '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
+
+        'shorts': ['67', '72', '77', '82', '87', '92', '97', '102', '107', '112', '117', '122', '127', '132',
+                   '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
+    }
+    files = []
+    for style in order_qty:
+        style_value = order_qty.get(style)
+        garment_type = style_value.get('garment_type')
+        description = style_value.get('description').replace(',', ' ')  # as target is .csv, the ',' need to be replace
+        sheet_type = 'shirts'  # all shirts in one sheet
+        if garment_type in ['male_trousers', 'female_slacks', 'shorts']:
+            sheet_type = 'trousers'
+        filename = file_path + '/{0:%Y} {0:%m} {0:%d} - {1}.csv'.format(datetime.date.today(), sheet_type)
+        files.append(filename)
+        logger.debug(' Start open file %s' % filename)
+        sheet_size_title = size_chart.get(sheet_type)
+        size_title = size_chart.get(garment_type)
+
+        # if it is new file, write the title
+        if not os.path.isfile(filename):
+            title = ['TIS O/N', 'ABM Internal O/N', 'ST', 'FTY', 'Ship MON', 'Style NO.', 'Commodity', 'Colours',
+                     'Units Ordered']
+            title.extend(sheet_size_title)
+            title.extend(
+                ['Freight Way', 'Shipment Date', 'ETA Date', 'Del to Ritemate Warehouse', 'order & inform to factory',
+                 'Invoice Ref No.'])
+            try:
+                with open(filename, 'w') as data:
+                    for colnum in range(len(title) - 1):
+                        print('%s,' % title[colnum], file=data, end='')
+                    print(title[len(title) - 1], file=data)  # for the last column without ',' following
+            except Exception as err:
+                logger.error('Can not open file %s,  error-%s' % (filename, err))
+                continue
+
+        # assemble content
+        # sorted colour
+        logger.debug('style_value={0}'.format(style_value))
+        colours = sorted([colour for colour in style_value.get('colour')])
+        logger.debug('sorted colours is {0}'.format(colours))
+        for colour in colours:
+            # assembel size content and sum the qty total
+            colour_value = style_value.get('colour').get(colour)
+            logger.debug('start assemble colour {0},with value {1}'.format(colour, colour_value))
+            size_content = []
+            total_qty = 0
+            for size in size_title:
+                size_value = colour_value.get(size)
+                if size_value is not None:
+                    size_content.append(size_value)
+                    total_qty += int(float(size_value))
+                else:
+                    size_content.append('')
+            logger.debug('size_content is {0}'.format(size_content))
+
+            '''
+            parse file name and return the genenral info
+            general_info={'fty':,'ship_mon','freight_way','etd_date','eta_date',del_date',order_date'}
+            '''
+            # assemble content
+            general_info = get_general_info(style, colour, etd_dict)
+            logger.debug('general_info is {0}'.format(general_info))
+            content = ['', '', '', general_info.get('supplier'), general_info.get('ship_mon'), style, description,
+                       colour, total_qty]
+            content.extend(size_content)
+            content.extend([general_info.get('freight_way'), general_info.get('etd_date'), general_info.get('eta_date')
+                               , general_info.get('del_date'), general_info.get('order_date'), ''])
+            logger.debug('assembled content is {0}'.format(content))
+            # write the content
+            try:
+                with open(filename, 'a') as data:
+                    for colnum in range(len(content) - 1):
+                        print('%s,' % content[colnum], file=data, end='')
+                    print(content[len(content) - 1], file=data)
+            except Exception as err:
+                logger.error('Can not open file %s,  error-%s' % (filename, err))
+                continue
+    return files
+"""
+
+"""
+write to the relavant csv, sorted by factory, fabric , style, colour 2018.11.15
 
 """
 def save_to_csv(order_qty,etd_dict,file_path):
@@ -184,14 +304,19 @@ def save_to_csv(order_qty,etd_dict,file_path):
                     '-','-','-','-','-','-','-','-','-','-','-','-','-','-','-']
         }
     files=[]
+    lists=[]
+    list_shirts=[]
+    list_trousers=[]
     for style in order_qty:
         style_value=order_qty.get(style)
         garment_type=style_value.get('garment_type')
         description=style_value.get('description').replace(',',' ') #as target is .csv, the ',' need to be replace
+        fabric=style_value.get('fabric')
         sheet_type='shirts' #all shirts in one sheet
         if garment_type in ['male_trousers','female_slacks','shorts']:
             sheet_type='trousers'
         filename=file_path+'/{0:%Y} {0:%m} {0:%d} - {1}.csv'.format(datetime.date.today(),sheet_type)
+        list_current=locals()['list_'+sheet_type]
         files.append(filename)
         logger.debug(' Start open file %s'%filename)
         sheet_size_title=size_chart.get(sheet_type)
@@ -202,6 +327,7 @@ def save_to_csv(order_qty,etd_dict,file_path):
             title=['TIS O/N','ABM Internal O/N','ST','FTY','Ship MON','Style NO.','Commodity','Colours','Units Ordered']
             title.extend(sheet_size_title)
             title.extend(['Freight Way','Shipment Date','ETA Date','Del to Ritemate Warehouse','order & inform to factory','Invoice Ref No.'])
+            title.extend(['Fabric'])
             try:
                 with open(filename,'w') as data:
                     for colnum in range(len(title)-1):
@@ -242,17 +368,47 @@ def save_to_csv(order_qty,etd_dict,file_path):
             content.extend(size_content)
             content.extend([general_info.get('freight_way'),general_info.get('etd_date'),general_info.get('eta_date')
                             ,general_info.get('del_date'),general_info.get('order_date'),''])
+            content.extend([fabric])
             logger.debug('assembled content is {0}'.format(content))
+            list_current.append(content) #append this line to the corresponding list (list_shirts or list_trousers)
+            logger.debug('current list={0}'.format(list_current))
             #write the content
-            try:
-                with open(filename,'a') as data:
-                    for colnum in range(len(content)-1):
-                        print('%s,'%content[colnum],file=data,end='')
-                    print(content[len(content)-1],file=data)
-            except Exception as err:
-                logger.error('Can not open file %s,  error-%s'%(filename,err))
-                continue
-    return files        
+    #sort the list by factory, fabric, style, colour
+    from operator import itemgetter
+#    sorted_list_shirts=sorted(list_shirts,key=itemgetter(3,5,7)) #coloum 3 is factory, column5 is style , colour 7 is colour
+    sorted_list_shirts=sorted(list_shirts,key=itemgetter(3,30,5,7)) #coloum 3 is factory, column5 is style , colour 7 is colour
+    logger.debug('After sorted, the list_shirts is {0}'.format(sorted_list_shirts))
+    sorted_list_trousers = sorted(list_trousers,key=itemgetter(3,5,7))  # coloum 3 is factory, column5 is style , colour 7 is colour
+    logger.debug('After sorted, the list_trousers is {0}'.format(sorted_list_trousers))
+
+    #assign TIS No.
+
+
+    #write to csv
+    filename=file_path+'/{0:%Y} {0:%m} {0:%d} - shirts.csv'.format(datetime.date.today())
+    for line_no,line in enumerate(sorted_list_shirts):
+        try:
+            with open(filename, 'a') as data:
+                for colnum in range(len(line)-1):
+                    print('%s,' % line[colnum], file=data, end='')
+                print(line[len(line) - 1], file=data)
+        except Exception as err:
+            logger.error('Can not write shirts line %s,  error-%s' % (line_no, err))
+            continue
+
+
+    filename=file_path+'/{0:%Y} {0:%m} {0:%d} - trousers.csv'.format(datetime.date.today())
+    for line_no,line in enumerate(sorted_list_trousers):
+        try:
+            with open(filename, 'a') as data:
+                for colnum in range(len(line)-1):
+                    print('%s,' % line[colnum], file=data, end='')
+                print(line[len(line) - 1], file=data)
+        except Exception as err:
+            logger.error('Can not write trousers line %s,  error-%s' % (line_no, err))
+            continue
+
+    return files
 
 """
 

@@ -593,6 +593,7 @@ class TIS_Excel():
         file_position=len(file_path)+1
         files=glob.glob(file_path+'/*.xlsx')
         logger.debug('start to read requisition files in {0},total {1} files'.format(file_path,len(files)))
+        cell_list=[]
         for file in files:
             if file.startswith('~',file_position):
                 continue
@@ -600,15 +601,23 @@ class TIS_Excel():
             if excel_content is None:
                 continue
             logger.debug('Start reading file {0}, total {1} sheets'.format(file,len(excel_content.get('sheets'))))
+
             for sheetname in excel_content.get('sheets'):
                 logger.debug('-Start to check the sheet %s'%sheetname)
-                result=parse_requisiton.parse_requisition(cell_list=excel_content.get('sheets').get(sheetname), \
-                                                    filename=excel_content.get('filename'), \
+                ''' #old way is to parse every sheet in every file
+                result=parse_requisiton.parse_requisition(cell_list=excel_content.get('sheets').get(sheetname),
+                                                    filename=excel_content.get('filename'), 
                                                     sheetname=sheetname,etd_dict=etd_dict,file_path=file_path)
-                if result:
-                    logger.debug(result)
-                    logger.debug('--Correct')
+                '''
+                #new way is combine all sheet and parse one time
+                cell_list.extend(excel_content.get('sheets').get(sheetname))
             logger.debug('-Finish file')
+
+        result = parse_requisiton.parse_requisition(cell_list,filename='all_file',sheetname='all_sheet', etd_dict=etd_dict, file_path=file_path)
+        if result:
+            logger.debug(result)
+            logger.debug('--Correct')
+
 
     @staticmethod
     def parse_testreport(content):

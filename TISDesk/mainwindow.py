@@ -288,9 +288,9 @@ class TISMainWindow(QMainWindow):
         self.ui.textBrowser.append(str(product_price))
 
     def generate_order_from_requisition(self):
-        etd_tanhoo=datetime.datetime(year=1900,month=1,day=1)
-        etd_auwin=datetime.datetime(year=1900,month=1,day=1)
-        etd_eliel=datetime.datetime(year=1900,month=1,day=1)
+        etd_tanhoo=self.ui.dateE_Req_Tanhoo.date().toPyDate()
+        etd_auwin=self.ui.dateE_Req_Auwin.date().toPyDate()
+        etd_eliel=self.ui.dateE_Req_ELIEL.date().toPyDate()
         etd_dict={'TANHOO':etd_tanhoo,'AUWIN':etd_auwin,'ELIEL':etd_eliel}
         requisition_path = QFileDialog.getExistingDirectory(self)
         print(requisition_path)

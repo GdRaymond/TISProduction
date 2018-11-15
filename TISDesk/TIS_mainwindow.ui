@@ -31,7 +31,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -870,7 +870,7 @@
         <x>20</x>
         <y>20</y>
         <width>251</width>
-        <height>141</height>
+        <height>81</height>
        </rect>
       </property>
       <property name="title">
@@ -889,51 +889,12 @@
         <string>CreateNewOrder-Manually</string>
        </property>
       </widget>
-      <widget class="QGroupBox" name="groupBox_8">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>160</y>
-         <width>251</width>
-         <height>161</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>New Order</string>
-       </property>
-       <widget class="QPushButton" name="btn_new_order_2">
-        <property name="geometry">
-         <rect>
-          <x>30</x>
-          <y>30</y>
-          <width>191</width>
-          <height>23</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>CreateNewOrder-Manually</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QPushButton" name="btnRequisition">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>90</y>
-         <width>191</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Get Size Breakup From Requisition</string>
-       </property>
-      </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_9">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>190</y>
+        <y>440</y>
         <width>251</width>
         <height>191</height>
        </rect>
@@ -991,6 +952,142 @@
        </rect>
       </property>
      </widget>
+     <widget class="QGroupBox" name="groupBox_8">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>120</y>
+        <width>251</width>
+        <height>301</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Requisition</string>
+      </property>
+      <widget class="QPushButton" name="btnRequisition">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>250</y>
+         <width>191</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Get Size Breakup From Requisition</string>
+       </property>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_10">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>221</width>
+         <height>121</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>ETD</string>
+       </property>
+       <widget class="QDateEdit" name="dateE_Req_Tanhoo">
+        <property name="geometry">
+         <rect>
+          <x>80</x>
+          <y>20</y>
+          <width>110</width>
+          <height>22</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_14">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>47</width>
+          <height>13</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Tanhoo</string>
+        </property>
+       </widget>
+       <widget class="QDateEdit" name="dateE_Req_Auwin">
+        <property name="geometry">
+         <rect>
+          <x>80</x>
+          <y>50</y>
+          <width>110</width>
+          <height>22</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_15">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>50</y>
+          <width>47</width>
+          <height>13</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Auwin</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_16">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>80</y>
+          <width>47</width>
+          <height>13</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>ELIEL</string>
+        </property>
+       </widget>
+       <widget class="QDateEdit" name="dateE_Req_ELIEL">
+        <property name="geometry">
+         <rect>
+          <x>80</x>
+          <y>80</y>
+          <width>110</width>
+          <height>22</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QLineEdit" name="lineE_Req_TISNO">
+       <property name="geometry">
+        <rect>
+         <x>92</x>
+         <y>159</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_17">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>160</y>
+         <width>71</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Start TIS NO.</string>
+       </property>
+      </widget>
+     </widget>
+     <zorder>groupBox_8</zorder>
+     <zorder>groupBox_6</zorder>
+     <zorder>groupBox_9</zorder>
+     <zorder>textBrowser</zorder>
+     <zorder>groupBox_10</zorder>
     </widget>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
