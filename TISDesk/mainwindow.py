@@ -22,6 +22,8 @@ from invoice.inv_pack import check_shipment_invoice,check_shipment_packing_list\
     ,check_shipment_compare_invoice_packing,load_packing_db_back,save_packing_list
 from invoice.statistic import get_style_size_quantity,plot_size_quantity_change,change_to_season
 from invoice.models import Actual_quantity
+from django.db.models import Max
+import dateutil
 
 
 logger=tis_log.get_tis_logger()
@@ -113,6 +115,7 @@ class TISMainWindow(QMainWindow):
         self.ui.btn_load_bak_packinglist.clicked.connect(self.load_bak_packing_list)
         self.ui.btn_statistic_style.clicked.connect(self.statistic_style)
         self.ui.comb_style_statistic.currentTextChanged.connect(self.update_statistic_colour)
+        self.ui.btn_req_predict.clicked.connect(self.predict_req_etd)
 
     def adjust_size(self):
         self.ui.app=QApplication.instance()
@@ -1339,3 +1342,34 @@ class TISMainWindow(QMainWindow):
 
 
 
+    def predict_req_etd(self):
+        '''
+        get the ETD for supplier next shipment according to last shipment date adding 4 weeks
+        get the current TIS NO. maximum No.
+        :return:
+        '''
+        last_etd=Shipment.objects.filter(supplier__iexact='Tanhoo').aggregate(Max('etd'))
+        logger.debug('Tanhoo last etd is {0} - {1}'.format(last_etd,last_etd.get('etd__max')))
+        new_etd_Tanhoo=last_etd.get('etd__max')+dateutil.relativedelta.relativedelta(days=+28)
+        self.ui.dateE_Req_Tanhoo.setDate(new_etd_Tanhoo)
+
+        #last_etd=Shipment.objects.filter(supplier__iexact='AUWIN').aggregate(Max('etd'))
+        #logger.debug('Tanhoo last etd is {0} - {1}'.format(last_etd,last_etd.get('etd__max')))
+        #new_etd_auwin=last_etd.get('etd__max')+dateutil.relativedelta.relativedelta(days=+28)
+        if new_etd_Tanhoo.day>14:
+            new_etd_auwin =new_etd_Tanhoo+dateutil.relativedelta.relativedelta(days=-4)
+        else:
+            new_etd_auwin = new_etd_Tanhoo + dateutil.relativedelta.relativedelta(days=+3)
+        self.ui.dateE_Req_Auwin.setDate(new_etd_auwin)
+
+        #last_etd=Shipment.objects.filter(supplier__iexact='ELIEL').aggregate(Max('etd'))
+        #logger.debug('Tanhoo last etd is {0} - {1}'.format(last_etd,last_etd.get('etd__max')))
+        #new_etd=last_etd.get('etd__max')+dateutil.relativedelta.relativedelta(days=+28)
+        if new_etd_Tanhoo.day>14:
+            new_etd_eliel=new_etd_Tanhoo+dateutil.relativedelta.relativedelta(days=-2)
+        else:
+            new_etd_eliel=new_etd_Tanhoo+dateutil.relativedelta.relativedelta(days=+5)
+        self.ui.dateE_Req_ELIEL.setDate(new_etd_eliel)
+
+        last_TISNO=Order.objects.all().aggregate(Max('tis_no'))
+        self.ui.lineE_Req_TISNO.setText(last_TISNO.get('tis_no__max'))
