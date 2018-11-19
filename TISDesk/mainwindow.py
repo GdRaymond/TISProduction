@@ -292,11 +292,12 @@ class TISMainWindow(QMainWindow):
         etd_auwin=self.ui.dateE_Req_Auwin.date().toPyDate()
         etd_eliel=self.ui.dateE_Req_ELIEL.date().toPyDate()
         etd_dict={'TANHOO':etd_tanhoo,'AUWIN':etd_auwin,'ELIEL':etd_eliel}
+        last_tisno=self.ui.lineE_Req_TISNO.text()
         requisition_path = QFileDialog.getExistingDirectory(self)
         print(requisition_path)
         qm=QMessageBox()
         try:
-            TIS_Excel.generate_from_requisition(requisition_path,etd_dict)
+            TIS_Excel.generate_from_requisition(requisition_path,etd_dict,last_tisno)
             qm.question(self,'Finish','Finish parsing the requisition file. Please copy the shirt and trousers csv file to Ritemate size breakup spreadsheet.',qm.Ok)
         except Exception as e:
             logger.error('error parse: {0}'.format(e))

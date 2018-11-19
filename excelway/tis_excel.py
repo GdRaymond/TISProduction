@@ -589,7 +589,7 @@ class TIS_Excel():
         return price_dict
 
     @staticmethod
-    def generate_from_requisition(file_path,etd_dict):
+    def generate_from_requisition(file_path,etd_dict,last_tisno='TIS18-SO5000'):
         file_position=len(file_path)+1
         files=glob.glob(file_path+'/*.xlsx')
         logger.debug('start to read requisition files in {0},total {1} files'.format(file_path,len(files)))
@@ -613,7 +613,7 @@ class TIS_Excel():
                 cell_list.extend(excel_content.get('sheets').get(sheetname))
             logger.debug('-Finish file')
 
-        result = parse_requisiton.parse_requisition(cell_list,filename='all_file',sheetname='all_sheet', etd_dict=etd_dict, file_path=file_path)
+        result = parse_requisiton.parse_requisition(cell_list,filename='all_file',sheetname='all_sheet', etd_dict=etd_dict, file_path=file_path,last_tisno=last_tisno)
         if result:
             logger.debug(result)
             logger.debug('--Correct')

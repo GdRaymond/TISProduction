@@ -6,7 +6,7 @@ from excelway.read_excel_by_xlrd import  excel_read_everycell
 from TISProduction import tis_log
 import datetime
 from products import size_chart,product_price,models
-
+from collections import OrderedDict
 
 """
 The diction of packing_lis is as below:
@@ -281,7 +281,7 @@ def save_to_csv(order_qty, etd_dict, file_path):
 write to the relavant csv, sorted by factory, fabric , style, colour 2018.11.15
 
 """
-def save_to_csv(order_qty,etd_dict,file_path):
+def save_to_csv(order_qty,etd_dict,file_path,last_tisno='TIS18-SO5000'):
     size_chart={
         'shirts': ['2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', '6XL', '7XL', '8XL', '9XL',
                        '10XL'],
@@ -376,17 +376,19 @@ def save_to_csv(order_qty,etd_dict,file_path):
     #sort the list by factory, fabric, style, colour
     from operator import itemgetter
 #    sorted_list_shirts=sorted(list_shirts,key=itemgetter(3,5,7)) #coloum 3 is factory, column5 is style , colour 7 is colour
-    sorted_list_shirts=sorted(list_shirts,key=itemgetter(3,30,5,7)) #coloum 3 is factory, column5 is style , colour 7 is colour
+    sorted_list_shirts=sorted(list_shirts,key=itemgetter(3,30,5,7)) #coloum 3 is factory, column5 is style , column 7 is colour, colum 30 is fabric
     logger.debug('After sorted, the list_shirts is {0}'.format(sorted_list_shirts))
-    sorted_list_trousers = sorted(list_trousers,key=itemgetter(3,5,7))  # coloum 3 is factory, column5 is style , colour 7 is colour
+    sorted_list_trousers = sorted(list_trousers,key=itemgetter(3,44,5,7))  # coloum 3 is factory, column5 is style , colour 7 is colour, column 44 is fabric
     logger.debug('After sorted, the list_trousers is {0}'.format(sorted_list_trousers))
 
     #assign TIS No.
+    d_new_tisno,assigned_list_shirts,assigned_list_trousers=assign_tisno(sorted_list_shirts,sorted_list_trousers,last_tisno)
+    logger.debug('The new TISNo. dict is {0}'.format(d_new_tisno))
 
 
     #write to csv
     filename=file_path+'/{0:%Y} {0:%m} {0:%d} - shirts.csv'.format(datetime.date.today())
-    for line_no,line in enumerate(sorted_list_shirts):
+    for line_no,line in enumerate(assigned_list_shirts):
         try:
             with open(filename, 'a') as data:
                 for colnum in range(len(line)-1):
@@ -398,7 +400,7 @@ def save_to_csv(order_qty,etd_dict,file_path):
 
 
     filename=file_path+'/{0:%Y} {0:%m} {0:%d} - trousers.csv'.format(datetime.date.today())
-    for line_no,line in enumerate(sorted_list_trousers):
+    for line_no,line in enumerate(assigned_list_trousers):
         try:
             with open(filename, 'a') as data:
                 for colnum in range(len(line)-1):
@@ -410,12 +412,69 @@ def save_to_csv(order_qty,etd_dict,file_path):
 
     return files
 
+def get_o_dict(list_garment):
+    o_dict=OrderedDict()
+    for line in list_garment:
+        supplier=line[3]
+        style=line[5]
+        if supplier not in o_dict: #when come accross new supplier , then add one item
+            value=[style] #create the new value list with style for the new supplier first time : ['RM1050']
+            o_dict[supplier]=value #{'Auwin':['RM1050R']}
+        else: #when the supplier is already exist, then add the style to the value list
+            value=o_dict.get(supplier) #['RM1050R']
+            if style not in value: #when come accross the new style for this supplier, then add to the list
+                value.append(style) #['RM1050R','RM107V2']
+                o_dict[supplier]=value ##{'Auwin':['RM1050R','RM107V2']}
+    return o_dict
+
+"""
+Assign TISNO. for size breakup shirts and pants, required the successive No. to shirts and pants for one supplier.
+"""
+def assign_tisno(list_shirts,list_trousers,last_no='TIS18-SO5000'):
+    #build 2 new ordereddict to store the list with only supplier and style distinct
+    o_dict_shirts=get_o_dict(list_shirts)
+    logger.debug('the o_dict_shirts is {0}'.format(o_dict_shirts))
+    o_dict_trousers=get_o_dict(list_trousers)
+    logger.debug('the o_dict_trousers is {0}'.format(o_dict_trousers))
+
+    #combine 2 o_dict with same supplier
+    for supplier,value in o_dict_trousers.items(): #iterate trousers
+        if supplier in o_dict_shirts: #if the supplier of trouser alread in shirt, just append the style of trouser to shirts
+            o_dict_shirts[supplier].extend(o_dict_trousers.get(supplier))
+        else: #otherwise, then create a supplier in the last of the o_dict_shirts. For example , Tanhoo only make trousers not shirts, then there is no supplier in shirts
+            o_dict_shirts[supplier]=o_dict_trousers.get(supplier)
+    logger.debug('after combine the o_dict is {0}'.format(o_dict_shirts))
+
+    #calculate TISNO to a OrderedDict with 1 increasment to every style
+    tis_prefix=last_no[:8]
+    current_no=int(last_no[8:])
+    assigned_dict=OrderedDict()
+    for supplier,l_style in o_dict_shirts.items():
+        for style in l_style:
+            current_no+=1
+            assigned_dict['{0}+{1}'.format(supplier,style)]='{0}{1}'.format(tis_prefix,current_no)#assigned_dict['TANHOO+RM1040R']='TIS18-SO5003'
+
+    #assign the TISNO to the list of shirts and trousers
+    for line_no,line in enumerate(list_shirts):
+        key='{0}+{1}'.format(line[3],line[5]) #key='TANHOO+RM1040R'
+        tis_no=assigned_dict.get(key) #tis_no='TIS18-SO5003'
+        list_shirts[line_no][0]=tis_no
+
+    for line_no,line in enumerate(list_trousers):
+        key='{0}+{1}'.format(line[3],line[5]) #key='TANHOO+RM1004R'
+        tis_no=assigned_dict.get(key) #tis_no='TIS18-SO5009'
+        list_trousers[line_no][0]=tis_no
+
+    return assigned_dict,list_shirts,list_trousers
+
+
+
 """
 
 """
-def parse_requisition(cell_list=[],filename='',sheetname='',etd_dict={},file_path=''):
+def parse_requisition(cell_list=[],filename='',sheetname='',etd_dict={},file_path='',last_tisno='TIS18-SO5000'):
     order=read_eachline(cell_list=cell_list,filename=filename,sheetname=sheetname)
-    result=save_to_csv(order,etd_dict,file_path=file_path)
+    result=save_to_csv(order,etd_dict,file_path=file_path,last_tisno=last_tisno)
     return result
         
 
