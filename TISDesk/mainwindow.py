@@ -123,11 +123,17 @@ class TISMainWindow(QMainWindow):
         logger.debug('screen_resolution ={0} x {1}'.format(screen_resolution.width(),screen_resolution.height()))
         self.ui.hw_ratio=768/1366 #height / width
         self.ui.ratio_wid=screen_resolution.width()/1366
+        #self.ui.ratio_wid=1920/1366
         if self.ui.ratio_wid<1:
             self.ui.ratio_wid=1
         self.ui.ratio_height=screen_resolution.height()/768
+        #self.ui.ratio_height=1080/768
         if self.ui.ratio_height<1:
             self.ui.ration_height=1
+        #self.resize(self.ui.centralwidget.width()*self.ui.ratio_wid,self.ui.centralwidget.height()*self.ui.ratio_height)
+        #self.setMaximumSize(self.ui.centralwidget.width()*self.ui.ratio_wid,self.ui.centralwidget.height()*self.ui.ratio_height)
+        #self.setMaximumSize(1920,1080)
+        self.showMaximized()#correct 20181122
         self.ui.centralwidget.resize(self.ui.centralwidget.width()*self.ui.ratio_wid,self.ui.centralwidget.height()*self.ui.ratio_height)
         for q_widget in self.ui.centralwidget.findChildren(QWidget):
             q_widget.resize(q_widget.width()*self.ui.ratio_wid,q_widget.height()*self.ui.ratio_height)
