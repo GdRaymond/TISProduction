@@ -100,9 +100,11 @@ def read_eachline(cell_list=[], filename='', sheetname=''):
         #get fabric content for sorted purpose
         fabric=models.Fabric.objects.get(product__style_no__iexact=style)
         if not fabric:
-            fabric_content='Unkonw'
+            fabric_nickname='Unknown'
+            fabric_content='Unknown'
         else:
-            fabric_content='f-{0}'.format(fabric.nickname)
+            fabric_nickname = 'f-{0}'.format(fabric.nickname)
+            fabric_content='{0}'.format(fabric.fabric)
 
         # assemble the order
         style_value = order.get(style)
@@ -117,7 +119,8 @@ def read_eachline(cell_list=[], filename='', sheetname=''):
             else:
                 colour_value[colour][size] = quantity
             style_value['colour'] = colour_value
-        style_value['fabric']=fabric_content
+        style_value['fabric']=fabric_nickname
+        style_value['fabric_content']=fabric_content
         order[style] = style_value
     logger.debug('parsed order:{0}'.format(order))
 
@@ -312,6 +315,7 @@ def save_to_csv(order_qty,etd_dict,file_path,last_tisno='TIS18-SO5000'):
         garment_type=style_value.get('garment_type')
         description=style_value.get('description').replace(',',' ') #as target is .csv, the ',' need to be replace
         fabric=style_value.get('fabric')
+        fabric_content=style_value.get('fabric_content')
         sheet_type='shirts' #all shirts in one sheet
         if garment_type in ['male_trousers','female_slacks','shorts']:
             sheet_type='trousers'
@@ -327,7 +331,7 @@ def save_to_csv(order_qty,etd_dict,file_path,last_tisno='TIS18-SO5000'):
             title=['TIS O/N','ABM Internal O/N','ST','FTY','Ship MON','Style NO.','Commodity','Colours','Units Ordered']
             title.extend(sheet_size_title)
             title.extend(['Freight Way','Shipment Date','ETA Date','Del to Ritemate Warehouse','order & inform to factory','Invoice Ref No.'])
-            title.extend(['Fabric'])
+            title.extend(['Fabric','Fabric_content'])
             try:
                 with open(filename,'w') as data:
                     for colnum in range(len(title)-1):
@@ -368,11 +372,13 @@ def save_to_csv(order_qty,etd_dict,file_path,last_tisno='TIS18-SO5000'):
             content.extend(size_content)
             content.extend([general_info.get('freight_way'),general_info.get('etd_date'),general_info.get('eta_date')
                             ,general_info.get('del_date'),general_info.get('order_date'),''])
-            content.extend([fabric])
+            content.extend([fabric,fabric_content])
             logger.debug('assembled content is {0}'.format(content))
             list_current.append(content) #append this line to the corresponding list (list_shirts or list_trousers)
             logger.debug('current list={0}'.format(list_current))
             #write the content
+
+
     #sort the list by factory, fabric, style, colour
     from operator import itemgetter
 #    sorted_list_shirts=sorted(list_shirts,key=itemgetter(3,5,7)) #coloum 3 is factory, column5 is style , colour 7 is colour
@@ -386,7 +392,7 @@ def save_to_csv(order_qty,etd_dict,file_path,last_tisno='TIS18-SO5000'):
     logger.debug('The new TISNo. dict is {0}'.format(d_new_tisno))
 
 
-    #write to csv
+    #write sizebreakup to csv
     filename=file_path+'/{0:%Y} {0:%m} {0:%d} - shirts.csv'.format(datetime.date.today())
     for line_no,line in enumerate(assigned_list_shirts):
         try:
@@ -409,6 +415,87 @@ def save_to_csv(order_qty,etd_dict,file_path,last_tisno='TIS18-SO5000'):
         except Exception as err:
             logger.error('Can not write trousers line %s,  error-%s' % (line_no, err))
             continue
+
+    #generate tracing sheet
+    #combine the shirt list with trousers list and sort by supplier
+    list_tracing=[]
+    for line_no,line in enumerate(assigned_list_shirts):
+        line_tracing=['','Ritemate']
+        line_tracing.append(line[3]) #AUWIN
+        line_tracing.append(line[5]) #RM1050R
+        line_tracing.append(line[0]) #TIS18-SO5092
+        line_tracing.append('') # ABM No.
+        line_tracing.append('') # Ship code
+        line_tracing.append(line[25]) # ETD 14/05/2019
+        line_tracing.append(line[26]) #ETA 27/05/2019
+        line_tracing.append(line[27]) #DEL 30/05/2019
+        line_tracing.append('') #ABM Instore
+        line_tracing.append('') #CTM No.
+        line_tracing.append(line[6]) #2 Tone Open Front shirt
+        line_tracing.append(line[7]) #Blu/Navy
+        line_tracing.append(line[8]) #1240
+        line_tracing.append('Sea') #Freight mode
+        line_tracing.append('') #FOB Port
+        line_tracing.append('Brisbane') #ETA Port
+        line_tracing.append(line[28]) #today
+        line_tracing.append('') #PP sample
+        line_tracing.append('') #Shipping sample
+        line_tracing.append('') # Test report
+        line_tracing.append('"{0}"'.format(line[31])) #14x7 100%cotton ...., add "" to avoid comma, split by csv
+        line_tracing.extend(['-','-','-','-']) #volume and 3M
+        list_tracing.append(line_tracing)
+
+    for line_no,line in enumerate(assigned_list_trousers):
+        line_tracing=['','Ritemate']
+        line_tracing.append(line[3]) #AUWIN
+        line_tracing.append(line[5]) #RM1002
+        line_tracing.append(line[0]) #TIS18-SO5103
+        line_tracing.append('') # ABM No.
+        line_tracing.append('') # Ship code
+        line_tracing.append(line[39]) # ETD 14/05/2019
+        line_tracing.append(line[40]) #ETA 27/05/2019
+        line_tracing.append(line[41]) #DEL 30/05/2019
+        line_tracing.append('') #ABM Instore
+        line_tracing.append('') #CTM No.
+        line_tracing.append(line[6]) #drill trousers
+        line_tracing.append(line[7]) #Navy
+        line_tracing.append(line[8]) #1000
+        line_tracing.append('Sea') #Freight mode
+        line_tracing.append('') #FOB Port
+        line_tracing.append('Brisbane') #ETA Port
+        line_tracing.append(line[42]) #today
+        line_tracing.append('') #PP sample
+        line_tracing.append('') #Shipping sample
+        line_tracing.append('') # Test report
+        line_tracing.append('"{0}"'.format(line[45])) #14x7 100%cotton ...., add "" to avoid comma, split by csv
+        line_tracing.extend(['-','-','-','-']) #volume and 3M
+        list_tracing.append(line_tracing)
+
+    sorted_list_tracing=sorted(list_tracing,key=itemgetter(4,3,13)) #sorted by TISNO->STYLE->COLOUR
+    logger.debug('sorted tracing list is {0}'.format(sorted_list_tracing))
+
+    title = ['','Customer','Supplier','Style NO.','TIS O/N', 'ABM Internal O/N', 'ShipCode', 'Shipment Date', 'ETA Date', 'Del to RM Warehouse','ABM InStore','CTM O/N','Commodity','Colours','Quantity','Freight','FOBPort','ETAPort','OrderDate','PPSample','ShippingSample','TestReport','Fabric']
+    filename=file_path+'/{0:%Y} {0:%m} {0:%d} - tracing.csv'.format(datetime.date.today())
+    #write title
+    try:
+        with open(filename, 'w') as data:
+            for colnum in range(len(title) - 1):
+                print('%s,' % title[colnum], file=data, end='')
+            print(title[len(title) - 1], file=data)  # for the last column without ',' following
+    except Exception as err:
+        logger.error('Can not open file %s,  error-%s' % (filename, err))
+
+    #write content
+    for line_no,line in enumerate(sorted_list_tracing):
+        try:
+            with open(filename, 'a') as data:
+                for colnum in range(len(line)-1):
+                    print('%s,' % line[colnum], file=data, end='')
+                print(line[len(line) - 1], file=data)
+        except Exception as err:
+            logger.error('Can not write tracing line %s,  error-%s' % (line_no, err))
+            continue
+
 
     return files
 
@@ -464,6 +551,10 @@ def assign_tisno(list_shirts,list_trousers,last_no='TIS18-SO5000'):
         key='{0}+{1}'.format(line[3],line[5]) #key='TANHOO+RM1004R'
         tis_no=assigned_dict.get(key) #tis_no='TIS18-SO5009'
         list_trousers[line_no][0]=tis_no
+
+    #write dict for tracing sheet with key as supplier
+    dict_tracing=OrderedDict()
+
 
     return assigned_dict,list_shirts,list_trousers
 

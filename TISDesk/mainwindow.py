@@ -794,6 +794,7 @@ class TISMainWindow(QMainWindow):
             for line in f:
                 if line.startswith('Container'):
                     con_no=line.split(' ')[1][0] #from Container 1: ETD: June 12th   1 X 40'HQ , get '1:' , get '1'
+                    logger.debug('  start to read container {0}'.format(con_no))
                     continue
                 target_items=line.strip().split('\t') #['SO4436','RM107V2','O/N','660','33','1.35']
                 if len(target_items)<=1:
