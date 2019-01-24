@@ -625,7 +625,7 @@ class TIS_Excel():
         lines=content.split('\n')
         reports=[]
         for line in lines:
-            match=re.search(r'(\d{4})\s+(\d{2})\s+(\d{2}).*(NQA\d+|CS\d+)(.*)',line,re.I)
+            match=re.search(r'(\d{4})\s+(\d{2})\s+(\d{2}).*(NQA\d+|CS\d+|UP\d+)(.*)',line,re.I)
             if match:
                 logger.debug('  matched')
                 report={}

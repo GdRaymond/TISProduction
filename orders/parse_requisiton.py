@@ -135,15 +135,15 @@ def get_general_info(style,colour,etd_dict=None):
     tt_day={'TANHOO':35,'AUWIN':13,'JIN FENG':11,'SMARTEX':35,'ELIEL':11,'GUANGZHOU':13,'SHANGYU':11}
     default_product_price=product_price.product_price.get(style,None)
     logger.debug('default_product_price is {0}'.format(default_product_price))
-    if default_product_price is None:
-        return {'factory':'','ship_mon':'','freight_way':'','etd_date':'','eta_date':'','del_date':'','order_date':''}
+    if default_product_price is None: #set the Auwin as the new product supplier
+        return {'factory':'AUWIN','ship_mon':'','freight_way':'Sea','etd_date':'','eta_date':'','del_date':'','order_date':''}
     default_colour=default_product_price.get('purchase').get(colour)
     logger.debug('1st default_colour is {0}'.format(default_colour))
     if default_colour is None:
         default_colour=default_product_price.get('purchase').get('Assorted')
         logger.debug('2nd default_colour is {0}'.format(default_colour))
-        if default_colour is None:
-            return {'factory': '', 'ship_mon': '', 'freight_way': '', 'etd_date': '', 'eta_date': '', 'del_date': '',
+        if default_colour is None:#set the Auwin as the new product supplier
+            return {'factory': 'AUWIN', 'ship_mon': '', 'freight_way': 'Sea', 'etd_date': '', 'eta_date': '', 'del_date': '',
                     'order_date': ''}
     supplier=default_colour.get('supplier').upper()
     #elements=filename.split('-')
@@ -382,9 +382,57 @@ def save_to_csv(order_qty,etd_dict,file_path,last_tisno='TIS18-SO5000'):
     #sort the list by factory, fabric, style, colour
     from operator import itemgetter
 #    sorted_list_shirts=sorted(list_shirts,key=itemgetter(3,5,7)) #coloum 3 is factory, column5 is style , colour 7 is colour
-    sorted_list_shirts=sorted(list_shirts,key=itemgetter(3,30,5,7)) #coloum 3 is factory, column5 is style , column 7 is colour, colum 30 is fabric
+    try:
+        sorted_list_shirts=sorted(list_shirts,key=itemgetter(3,30,5,7)) #coloum 3 is factory, column5 is style , column 7 is colour, colum 30 is fabric
+    except Exception as e:
+        logger.error('Error when sorted_list_shirts: {0}'.format(e))
+        errors=[]
+        for line in list_shirts:
+            error=''
+            if not line[3]:
+                error+='-factory None; '
+            if not line[30]:
+                error+='-fabric None; '
+            if not line[5]:
+                error+='-style None; '
+            if not line[7]:
+                error+='-colour None'
+            if error!='':
+                error=line[5]+line[7]+error
+                errors.append(error)
+        if errors:
+            logger.error('Find below errors:')
+            for error in errors:
+                logger.error(error)
+        else:
+            logger.error('Can not identify which line with error ')
+
     logger.debug('After sorted, the list_shirts is {0}'.format(sorted_list_shirts))
-    sorted_list_trousers = sorted(list_trousers,key=itemgetter(3,44,5,7))  # coloum 3 is factory, column5 is style , colour 7 is colour, column 44 is fabric
+    try:
+        sorted_list_trousers = sorted(list_trousers,key=itemgetter(3,44,5,7))  # coloum 3 is factory, column5 is style , colour 7 is colour, column 44 is fabric
+    except Exception as e:
+        logger.error('Error when sorted_list_shirts: {0}'.format(e))
+        errors=[]
+        for line in list_shirts:
+            error=''
+            if not line[3]:
+                error+='-factory None; '
+            if not line[44]:
+                error+='-fabric None; '
+            if not line[5]:
+                error+='-style None; '
+            if not line[7]:
+                error+='-colour None'
+            if error!='':
+                error=line[5]+'/'+line[7]+error
+                errors.append(error)
+        if errors:
+            logger.error('Find below errors:')
+            for error in errors:
+                logger.error(error)
+        else:
+            logger.error('Can not identify which line with error ')
+
     logger.debug('After sorted, the list_trousers is {0}'.format(sorted_list_trousers))
 
     #assign TIS No.
