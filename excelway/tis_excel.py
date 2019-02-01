@@ -380,6 +380,9 @@ class TIS_Excel():
 
         finance_last_row=self.ws_finance.UsedRange.Rows.Count
         finance_last_orderno=self.ws_finance.Range('E{0}'.format(finance_last_row)).Text
+        while finance_last_orderno=='': #2019.02.01, sometimes the excel will read more blank lines,so need go back to last real order
+            finance_last_row-=1
+            finance_last_orderno = self.ws_finance.Range('E{0}'.format(finance_last_row)).Text
         logger.debug('The last order No. is {0}'.format(finance_last_orderno))
         print(consol_order.keys())
         try:

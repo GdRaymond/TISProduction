@@ -26,12 +26,12 @@ style_type={'RM1000':'male_shirt','RM1000S':'male_shirt','RM100CF':'male_shirt',
             'RM8080':'male_trousers','RM411CP':'male_trousers','RMPC014':'male_trousers','RM1004RLW':'male_trousers',
             'RM106DJ':'male_trousers','RM106DJR':'male_trousers','RM110SD':'male_trousers','RM110SDR':'male_trousers',
             'RM1008L':'male_trousers','RM1008M':'male_trousers','RM1008L':'male_trousers','RMPC016':'male_trousers',
-            'RM908CR':'male_trousers','RM909AR':'male_trousers','RM908FR':'male_trousers',
+            'RM908CR':'male_trousers','RM909AR':'male_trousers','RM908FR':'male_trousers','RM1004LW':'maile_trousers',
 
             'RMPC015':'female_slacks','RM220LSD':'female_slacks',
 
             'RM1004S':'shorts','RM1002S':'shorts','RM33EWLS':'shorts','RM301EWS':'shorts','RM4040':'shorts','RM2020':'shorts',
-            'RM112TSD':'shorts','RM411CS':'shorts',
+            'RM112TSD':'shorts','RM411CS':'shorts','RMPC033':'shorts','RMPC034':'shorts',
 
             #QPS Style
             'QPSPL':'male_shirt','QPS polar fleece':'male_shirt','QPS PL':'male_shirt','CYDC PL':'male_shirt',
