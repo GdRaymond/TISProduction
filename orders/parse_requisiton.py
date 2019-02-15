@@ -37,7 +37,7 @@ logger=tis_log.get_tis_logger()
         }
 """
 
-
+msg=tis_log.MessageList()
 def read_eachline(cell_list=[], filename='', sheetname=''):
     order = {}
     nrows = len(cell_list)
@@ -62,7 +62,8 @@ def read_eachline(cell_list=[], filename='', sheetname=''):
         size_code = code.split('.')[2]
         size = size_chart.get_size_from_code(size_code)
         if size is None:
-            logger.error('-%s-%s- can not find size code - %s' % (filename, sheetname, size_code))
+            #logger.error('-%s-%s- can not find size code - %s' % (filename, sheetname, size_code))
+            msg.save_msg(msg='-%s-%s- can not find size code - %s' % (filename, sheetname, size_code),type='E')
         # parse description Cargo Trouser Navy 77R,
         # for 2 XL,3 XL,2 XS etc, there is space between digit and text, such as 2 Tone Open Front Shirt L/S 3MTape Orange/Navy 2 XL ,
         ele_description = description.split(' ')
@@ -94,11 +95,17 @@ def read_eachline(cell_list=[], filename='', sheetname=''):
 
         garment_type = size_chart.get_garment_type(style)
         if garment_type is None:
-            logger.error('can not find this style')
+            #logger.error('can not find this style')
+            msg.save_msg(msg='can not find this style {0} in size_chart, please edit manually'.format(style),type='E')
             continue
 
         #get fabric content for sorted purpose
-        fabric=models.Fabric.objects.get(product__style_no__iexact=style)
+        try:
+            fabric=models.Fabric.objects.get(product__style_no__iexact=style)
+        except Exception as e:
+            #logger.error('error when get fabric for row No. {0} - {1}, then fabirc will be Unknow'.format(rownum,current_row))
+            msg.save_msg(msg='fabric for {0} is unknow, please adjust the manually edit in tracking spreadsheet '.format(style),type='E')
+            #continue
         if not fabric:
             fabric_nickname='Unknown'
             fabric_content='Unknown'
@@ -136,14 +143,17 @@ def get_general_info(style,colour,etd_dict=None):
     default_product_price=product_price.product_price.get(style,None)
     logger.debug('default_product_price is {0}'.format(default_product_price))
     if default_product_price is None: #set the Auwin as the new product supplier
-        return {'factory':'AUWIN','ship_mon':'','freight_way':'Sea','etd_date':'','eta_date':'','del_date':'','order_date':''}
+        msg.save_msg(msg='{0} is new product, set the supplier as AUWIN by default, please adjust accordingly'.format(style))
+        return {'supplier':'AUWIN','ship_mon':'','freight_way':'Sea','etd_date':'','eta_date':'','del_date':'','order_date':''}
     default_colour=default_product_price.get('purchase').get(colour)
     logger.debug('1st default_colour is {0}'.format(default_colour))
     if default_colour is None:
         default_colour=default_product_price.get('purchase').get('Assorted')
         logger.debug('2nd default_colour is {0}'.format(default_colour))
         if default_colour is None:#set the Auwin as the new product supplier
-            return {'factory': 'AUWIN', 'ship_mon': '', 'freight_way': 'Sea', 'etd_date': '', 'eta_date': '', 'del_date': '',
+            msg.save_msg(
+                msg='{0} is new colour, set the supplier as AUWIN by default, please adjust accordingly'.format(style))
+            return {'supplier': 'AUWIN', 'ship_mon': '', 'freight_way': 'Sea', 'etd_date': '', 'eta_date': '', 'del_date': '',
                     'order_date': ''}
     supplier=default_colour.get('supplier').upper()
     #elements=filename.split('-')
@@ -352,6 +362,7 @@ def save_to_csv(order_qty,etd_dict,file_path,last_tisno='TIS18-SO5000'):
             logger.debug('start assemble colour {0},with value {1}'.format(colour,colour_value))
             size_content=[]
             total_qty=0
+            logger.debug('size title is {0}'.format(size_title))
             for size in size_title:
                 size_value=colour_value.get(size)
                 if size_value is not None:
@@ -614,7 +625,7 @@ def assign_tisno(list_shirts,list_trousers,last_no='TIS18-SO5000'):
 def parse_requisition(cell_list=[],filename='',sheetname='',etd_dict={},file_path='',last_tisno='TIS18-SO5000'):
     order=read_eachline(cell_list=cell_list,filename=filename,sheetname=sheetname)
     result=save_to_csv(order,etd_dict,file_path=file_path,last_tisno=last_tisno)
-    return result
+    return result,msg
         
 
     

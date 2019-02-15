@@ -306,11 +306,13 @@ class TISMainWindow(QMainWindow):
         print(requisition_path)
         qm=QMessageBox()
         try:
-            TIS_Excel.generate_from_requisition(requisition_path,etd_dict,last_tisno)
-            qm.question(self,'Finish','Finish parsing the requisition file. Please copy the shirt and trousers csv file to Ritemate size breakup spreadsheet.',qm.Ok)
+            files,msg=TIS_Excel.generate_from_requisition(requisition_path,etd_dict,last_tisno)
+            email_msg=list(set(msg.l_msg_error))
+            clipboard.write('\n'.join(email_msg))
+            qm.question(self,'Finish','Finish parsing the requisition file. Please copy the shirt and trousers csv file to Ritemate size breakup spreadsheet.\n And please see below error messages:\n{0}\n...\nTo see all messages, please click ctr+v to paste on notepad++'.format('\n'.join(email_msg[:2])),qm.Ok)
         except Exception as e:
             logger.error('error parse: {0}'.format(e))
-            qm.question(self,'Error','System wrong, some new size name created in ABM can not be identified',qm.Ok)
+            qm.question(self,'Error','System wrong, can not gennerate order from requsition today',qm.Ok)
 
 
     def create_order_trace(self):

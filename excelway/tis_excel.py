@@ -616,10 +616,12 @@ class TIS_Excel():
                 cell_list.extend(excel_content.get('sheets').get(sheetname))
             logger.debug('-Finish file')
 
-        result = parse_requisiton.parse_requisition(cell_list,filename='all_file',sheetname='all_sheet', etd_dict=etd_dict, file_path=file_path,last_tisno=last_tisno)
+        result,msg = parse_requisiton.parse_requisition(cell_list,filename='all_file',sheetname='all_sheet', etd_dict=etd_dict, file_path=file_path,last_tisno=last_tisno)
         if result:
             logger.debug(result)
             logger.debug('--Correct')
+            return result,msg
+        return msg
 
 
     @staticmethod

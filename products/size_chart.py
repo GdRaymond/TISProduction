@@ -2,13 +2,13 @@ import re
 style_type={'RM1000':'male_shirt','RM1000S':'male_shirt','RM100CF':'male_shirt','RM100CFS':'male_shirt',
             'RM1050':'male_shirt','RM1050S':'male_shirt','RM1050R':'male_shirt','RM1050RS':'male_shirt',
             'RM105CF':'male_shirt','RM105CFS':'male_shirt','RM105CFR':'male_shirt',
-            'RM104CFR':'male_shirt','RM1040R':'male_shirt','RM104CF':'male_shirt','RM104CFR':'male_shirt',       
+            'RM104CFR':'male_shirt','RM1040R':'male_shirt','RM104CF':'male_shirt',
             'RM106XR':'male_shirt','RM107V2':'male_shirt','RM107V2S':'male_shirt','RM107V2R':'male_shirt','RM107V2RS':'male_shirt',
             'RM108V3':'male_shirt','RM108V3R':'male_shirt','RM109VXR':'male_shirt',
             'RM4245':'male_shirt','RM4245T':'male_shirt','RM2346':'male_shirt','RM2346S':'male_shirt','RM3122':'male_shirt',
             'RM6012':'male_shirt','RM6012R':'male_shirt',
             'RM5071R':'male_shirt','RM73N1R':'male_shirt','RM7654R':'male_shirt',
-            'RM157V2':'male_shirt','RM157V2R':'male_shirt',
+            'RM157V2':'male_shirt','RM157V2R':'male_shirt','RMPC004':'male_shirt','RMPC004S':'male_shirt',
 
             'RM200CF':'male_shirt','RM200CFS':'male_shirt','RM500BT':'male_shirt','RM500BTS':'male_shirt','RMPC007':'male_shirt',
             'RMPC008':'male_shirt','RMPC009':'male_shirt','RMPC010':'male_shirt','RMPC011':'male_shirt','RMPC012':'male_shirt',
@@ -19,14 +19,15 @@ style_type={'RM1000':'male_shirt','RM1000S':'male_shirt','RM100CF':'male_shirt',
                 
             'RM208V2R':'female_shirt','RM208V3R':'female_shirt','RM300CF':'female_shirt','RMPC013':'female_shirt',
             'RMPC020':'female_shirt','RMPC022':'female_shirt','RMPC025':'female_shirt','RMPC006':'female_shirt','RMPC018':'female_shirt',
-            'RMPC027':'female_shirt','RMPC029':'female_shirt','RMPCAC02':'female_shirt',
-            'RM4050R':'kids_shirt','RM400CF':'kids_shirt',
+            'RMPC027':'female_shirt','RMPC029':'female_shirt','RMPCAC02':'female_shirt','RMPC005':'female_shirt','RMPC005S':'female_shirt',
+            'RM4050R':'kids_shirt','RM400CF':'kids_shirt','RM600BT':'female_shirt','RMPC003':'female_shirt',
             
             'RM1004':'male_trousers','RM1004R':'male_trousers','RM1002':'male_trousers','RM1002R':'male_trousers',
             'RM8080':'male_trousers','RM411CP':'male_trousers','RMPC014':'male_trousers','RM1004RLW':'male_trousers',
             'RM106DJ':'male_trousers','RM106DJR':'male_trousers','RM110SD':'male_trousers','RM110SDR':'male_trousers',
-            'RM1008L':'male_trousers','RM1008M':'male_trousers','RM1008L':'male_trousers','RMPC016':'male_trousers',
-            'RM908CR':'male_trousers','RM909AR':'male_trousers','RM908FR':'male_trousers','RM1004LW':'maile_trousers',
+            'RM1008L':'male_trousers','RM1008M':'male_trousers','RMPC016':'male_trousers',
+            'RM908CR':'male_trousers','RM909AR':'male_trousers','RM908FR':'male_trousers',
+            'RM1004LW':'male_trousers',
 
             'RMPC015':'female_slacks','RM220LSD':'female_slacks',
 
@@ -34,8 +35,12 @@ style_type={'RM1000':'male_shirt','RM1000S':'male_shirt','RM100CF':'male_shirt',
             'RM112TSD':'shorts','RM411CS':'shorts','RMPC033':'shorts','RMPC034':'shorts',
 
             #QPS Style
-            'QPSPL':'male_shirt','QPS polar fleece':'male_shirt','QPS PL':'male_shirt','CYDC PL':'male_shirt',
-            'SESPL':'male_shirt','RFSPL-SS':'male_shirt','CRPL-SS':'male_shirt',
+            'QPSPL':'male_shirt','QPS polar fleece':'male_shirt','QPS PL':'male_shirt',
+            'SESPL':'male_shirt','RFSPL-SS':'male_shirt','CRPL-SS':'male_shirt','QPS SS TIP':'male_shirt','QPS LS PLO':'male_shirt',
+            'QPS PoloSS':'male_shirt','QPS PoloLS':'male_shirt','QPS Fleece Reg':'male_shirt','QPS Fleece Sto':'male_shirt',
+            'QPS Fleece Lon':'male_shirt',
+            'QPS AWHO':'male_shirt','QPS SS PLO':'male_shirt','QPS SS PRO':'male_shirt','QPS SS PD':'male_shirt','QPS LS TIP':'male_shirt',
+            'QPS LS PRO':'male_shirt','QPS LS PD':'male_shirt','QPS AWLS':'male_shirt','QPS COM':'male_shirt',
             'QPSTO':'QPS_operation_trousers','QPSSO':'QPS_operation_trousers','QPSDTM':'QPS_operation_trousers',
             'QFESDTM':'QPS_operation_trousers',
             'QPSFO':'female_slacks','QPSDSF':'female_slacks','QFESDSF':'female_slacks',
@@ -54,14 +59,14 @@ style_type={'RM1000':'male_shirt','RM1000S':'male_shirt','RM100CF':'male_shirt',
 
             #QFES SES RFS
             'SESSPM':'male_shirt','SESSPF':'male_shirt','SESTPM':'male_shirt','SESTPF':'male_shirt',
-            'SESOU':'male_trousers',
+            'SESOU':'male_trousers','QFES PL-W':'female_shirt','QFES PL-M':'female_shirt',
 
              #VP Style
             'VPSSM01':'VP_male_shirt','VPLSM01':'VP_male_shirt',
             'VPSSF01':'female_shirt','VPLSF01':'female_shirt',
 
             #CYDC
-            'CYDCPL':'male_shirt','CYDC PL':'male_shirt','CYDCPL':'male_shirt',
+            'CYDCPL':'male_shirt','CYDC PL':'male_shirt',
             'CYDC Short':'CYDC_trousers','CYDC Trousers':'CYDC_trousers','CYDC Slacks':'female_slacks',
             
              #Indent
